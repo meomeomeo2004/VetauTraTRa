@@ -15,7 +15,7 @@ import utils.Environment;
  */
 public class DBContext {
 
-    private Connection connection;
+    protected Connection connection;
     private Environment environment = Environment.getInstance();
 
     public DBContext() {
