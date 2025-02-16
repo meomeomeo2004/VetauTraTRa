@@ -4,47 +4,26 @@
  */
 package model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  *
  * @author ASUS
  */
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cabin {
     private int id;
-    private String name;
+    private String cabin_name;
+    private String cabinclass;
+    private int numseat;
     private String imgUrl;
-
-    public Cabin(int id, String name, String imgUrl) {
-        this.id = id;
-        this.name = name;
-        this.imgUrl = imgUrl;
-    }
-
-    public Cabin() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-
+    private int trainid;
 }

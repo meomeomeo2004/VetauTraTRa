@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor // ==> tat ca thuoc tinh deu duoc set gia tri
-@NoArgsConstructor // ==> thuoc tinh rong
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@Builder // ==> thich set gia tri nao thi set
+@Builder
 /**
  *
  * @author dtam6
@@ -24,12 +24,8 @@ import lombok.ToString;
 public class User {
 
     private int id;
-    private String fullName;
     private String email;
-    private String phoneNumber;
-    private String address;
+    private String password;
     private String role;
-    private int status;
-    private String imgUrl;
 
 }

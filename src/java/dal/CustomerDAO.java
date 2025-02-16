@@ -30,7 +30,7 @@ public class CustomerDAO extends DBContext {
         Customer customer = null;
         String sql = "select * from Customer where email = ? and password = ? AND status = 1";
         try {
-            PreparedStatement pre = connection().prepareStatement(sql);
+            PreparedStatement pre =connection.prepareStatement(sql);
             pre.setString(1, email);
             pre.setString(2, password);
             ResultSet rs = pre.executeQuery();
@@ -56,7 +56,7 @@ public class CustomerDAO extends DBContext {
         int n = 0;
         String sql = "UPDATE customer SET full_name = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
         try {
-            PreparedStatement pre = connection().prepareStatement(sql);
+            PreparedStatement pre =connection.prepareStatement(sql);
             int index = 1;
             pre.setString(index++, customer.getFullName());
             pre.setString(index++, customer.getEmail());
@@ -76,7 +76,7 @@ public class CustomerDAO extends DBContext {
         String sql = """
                     SELECT * FROM Customer WHERE id = ?""";
         try {
-            PreparedStatement pre = connection().prepareStatement(sql);
+            PreparedStatement pre =connection.prepareStatement(sql);
             pre.setInt(1, id);
             ResultSet rs = pre.executeQuery();
             if (rs.next()) {
@@ -109,7 +109,7 @@ public class CustomerDAO extends DBContext {
         int n = 0;
         String sql = "UPDATE Customer SET status = 0 WHERE id = ? AND password = ?";
         try {
-            PreparedStatement pre = connection().prepareStatement(sql);
+            PreparedStatement pre =connection.prepareStatement(sql);
             int index = 1;
             pre.setInt(index++, id);
             pre.setString(index++, password);
@@ -125,7 +125,7 @@ public class CustomerDAO extends DBContext {
         String sql = """
                      UPDATE customer SET password = ? WHERE id = ? AND password = ? AND status = 1 ;""";
         try {
-            PreparedStatement pre = connection().prepareStatement(sql);
+            PreparedStatement pre =connection.prepareStatement(sql);
             int index = 1;
             pre.setString(index++, newPassword);
             pre.setInt(index++, id);

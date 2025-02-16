@@ -22,7 +22,7 @@ public class UserDAO extends DBContext {
         String sql = "SELECT * FROM " + role + " WHERE email = ? AND password = ?";
 
         try {
-            PreparedStatement ps = connection().prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, email);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();

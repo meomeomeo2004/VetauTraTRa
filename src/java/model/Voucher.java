@@ -4,108 +4,33 @@
  */
 package model;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import java.sql.Timestamp;
 
-/**
- *
- * @author ASUS
- */
+
+
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Voucher {
-    private int id;
     private String codeName;
     private String code;
-    private int discountAmount;
-    private Date validFrom;
-    private Date validTo;
+    private BigDecimal discountAmount;
+    private Timestamp validFrom;
+    private Timestamp validTo;
     private int quantity;
     private int status;
-    private String createdBy;
+    private int createdBy;
 
-    public Voucher(int id, String codeName, String code, int discountAmount, Date validFrom, Date validTo, int quantity, int status, String createdBy) {
-        this.id = id;
-        this.codeName = codeName;
-        this.code = code;
-        this.discountAmount = discountAmount;
-        this.validFrom = validFrom;
-        this.validTo = validTo;
-        this.quantity = quantity;
-        this.status = status;
-        this.createdBy = createdBy;
-    }
-
-    public Voucher() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCodeName() {
-        return codeName;
-    }
-
-    public void setCodeName(String codeName) {
-        this.codeName = codeName;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public int getDiscountAmount() {
-        return discountAmount;
-    }
-
-    public void setDiscountAmount(int discountAmount) {
-        this.discountAmount = discountAmount;
-    }
-
-    public Date getValidFrom() {
-        return validFrom;
-    }
-
-    public void setValidFrom(Date validFrom) {
-        this.validFrom = validFrom;
-    }
-
-    public Date getValidTo() {
-        return validTo;
-    }
-
-    public void setValidTo(Date validTo) {
-        this.validTo = validTo;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-    
 }

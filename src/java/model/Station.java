@@ -4,46 +4,26 @@
  */
 package model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  *
  * @author ASUS
  */
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class Station {
-    private int id;
+    private String id;
     private String name;
-    private String province;
-
-    public Station(int id, String name, String province) {
-        this.id = id;
-        this.name = name;
-        this.province = province;
-    }
-
-    public Station() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-    
+    private String address;
+    private String phone;  
 }

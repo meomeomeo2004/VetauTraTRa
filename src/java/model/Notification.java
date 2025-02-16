@@ -4,58 +4,29 @@
  */
 package model;
 
+import java.security.Timestamp;
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author ASUS
  */
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Notification {
     private int id;
     private String content;
-    private Date createdAt;
+    private Timestamp createdAt;
     private int status;
-
-    public Notification(int id, String content, Date createdAt, int status) {
-        this.id = id;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.status = status;
-    }
-
-    public Notification() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
+    private int customerid;
+    private int trasactionId;
     
 }
