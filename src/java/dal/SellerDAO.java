@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import model.Route;
+import lombok.CustomLog;
 
 /**
  *
@@ -28,10 +29,7 @@ public class SellerDAO extends DBContext {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
-                list.add(new Station(rs.getString(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4)));
+                list.add(new Station());
             }
         } catch (Exception e) {
         }
@@ -170,7 +168,7 @@ public List<Route> getListRouteDeleted() {
         }
         return list;
     }
-    public void updateRoute(int trainid, String routecode,
+    public void updateRoute(int trainId, String routeCode,
             String describe, String departureDateTime, String arrivalDateTime, String departureStation,
             String arrivalStation, int id) {
         String sql = "UPDATE Route\n"
@@ -186,8 +184,8 @@ public List<Route> getListRouteDeleted() {
 
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
-            pre.setInt(1, trainid);
-            pre.setString(2, routecode);
+            pre.setInt(1, trainId);
+            pre.setString(2, routeCode);
             pre.setString(3, describe);                       
             // Chuyển đổi String sang Timestamp (DATETIME)
             SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -260,7 +258,5 @@ public List<Route> getListRouteDeleted() {
 //        System.out.println(route.getRoutecode());
 //    }
 //}
-
-
-    
+   
 }
