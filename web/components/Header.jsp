@@ -33,7 +33,7 @@
                     </li>
 
                     <c:choose>
-                        <c:when test="${not empty sessionScope.customer}">
+                        <c:when test="${not empty sessionScope.account}">
                             <li class="nav-item"><a class="nav-link" href="profile">Profile</a></li>
                             <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
                             </c:when>

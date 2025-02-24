@@ -5,11 +5,11 @@
 package dal;
 
 import model.Customer;
-import java.util.ArrayList;
-import java.util.List;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.CustomLog;
+import model.User;
 
 /**
  *
@@ -17,124 +17,126 @@ import java.util.logging.Logger;
  */
 public class CustomerDAO extends DBContext {
 
-    public static void main(String[] args) {
-        CustomerDAO customerDAO = new CustomerDAO();
-        Customer customer = Customer.builder()
-            .id(5)
-            .fullName("Customer").email("customer@email.com").phoneNumber("0123456789").address("hanoi, vietnam")
-            .build();
-        System.out.println(customerDAO.updateProfileCustomer(customer));
-    }
-
-    public Customer customerLogin(String email, String password) {
+    public User Login_Cus(String email, String password) {
         Customer customer = null;
-        String sql = "select * from Customer where email = ? and password = ? AND status = 1";
+        String sql = "SELECT * from User where email = ? and password = ?";
         try {
-            PreparedStatement pre =connection.prepareStatement(sql);
+            PreparedStatement pre = connection.prepareStatement(sql);
             pre.setString(1, email);
             pre.setString(2, password);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String fullName = rs.getString("full_name");
-//                String email = rs.getString("email");
-                String phoneNumber = rs.getString("phone_number");
-//                String password = rs.getString("password");
-                String address = rs.getString("address");
-                String role = rs.getString("role");
-                int status = rs.getInt("status");
-
-                customer = new Customer(id, fullName, email, phoneNumber, "", address, role, status);
+                return new User(rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4));
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return customer;
+        return null;
     }
 
-    public int updateProfileCustomer(Customer customer) {
+    // Cập nhật thông tin khách hàng: chỉ cập nhật các trường trong bảng Customer
+    public int updateCustomerProfile(String phone, String fullname, String address, int uid) {
         int n = 0;
-        String sql = "UPDATE customer SET full_name = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
+        String sql = """
+            UPDATE Customer c
+            JOIN User u ON  c.user_id = u.id
+            SET
+                c.phone_number = ?,
+                c.full_name = ?,
+                c.address = ?
+            WHERE c.user_id = ?;
+        """;
         try {
-            PreparedStatement pre =connection.prepareStatement(sql);
-            int index = 1;
-            pre.setString(index++, customer.getFullName());
-            pre.setString(index++, customer.getEmail());
-            pre.setString(index++, customer.getPhoneNumber());
-            pre.setString(index++, customer.getAddress());
-            pre.setInt(index++, customer.getId());
-
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, phone);
+            pre.setString(2, fullname);
+            pre.setString(3, address);
+            pre.setInt(4, uid);
             n = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
         }
         return n;
     }
 
-    public Customer getCustomerById(int id) {
+    // Lấy thông tin khách hàng theo id từ bảng Customer
+    public Customer getCustomerById(int user_id) {
         Customer customer = null;
-        String sql = """
-                    SELECT * FROM Customer WHERE id = ?""";
+        String sql = "SELECT *\n"
+            + "from Customer\n"
+            + "WHERE user_id = ?";
         try {
-            PreparedStatement pre =connection.prepareStatement(sql);
-            pre.setInt(1, id);
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, user_id);
             ResultSet rs = pre.executeQuery();
             if (rs.next()) {
-                String fullName = rs.getNString("full_name");
-                String email = rs.getString("email");
+                int id = rs.getInt("id");
                 String phoneNumber = rs.getString("phone_number");
+                String fullName = rs.getString("full_name");
                 String address = rs.getString("address");
-                String role = rs.getString("role");
                 int status = rs.getInt("status");
+                customer = new Customer(id, user_id, phoneNumber, fullName, address, status);
 
-                customer = Customer.builder()
-                    .id(id)
-                    .fullName(fullName)
-                    .email(email)
-                    .phoneNumber(phoneNumber)
-                    .address(address)
-                    .role(role)
-                    .status(status)
-                    .build();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return customer;
+    }
+
+    public boolean checkOldPassword(int userId, String oldPassword) {
+        String sql = "SELECT password FROM User WHERE id = ?";
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setInt(1, userId);
+            ResultSet rs = pre.executeQuery();
+            if (rs.next()) {
+                return rs.getString("password").equals(oldPassword);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, "Error checking old password", ex);
+        }
+        return false;
+    }
+
+    // Đổi mật khẩu – Chỉ trả về true/false, Controller sẽ xử lý message
+    public boolean changePasswordCustomer(int userId, String newPassword) {
+        String updatePasswordSQL = "UPDATE User SET password = ? WHERE id = ?";
+        boolean success = false;
+
+        try {
+            connection.setAutoCommit(false); // Bắt đầu transaction
+
+            // Tiến hành cập nhật mật khẩu
+            try (PreparedStatement updateStmt = connection.prepareStatement(updatePasswordSQL)) {
+                updateStmt.setString(1, newPassword);
+                updateStmt.setInt(2, userId);
+                int rowsUpdated = updateStmt.executeUpdate();
+                success = rowsUpdated > 0;
+            }
+
+            if (success) {
+                connection.commit(); // Commit nếu thành công
+            } else {
+                connection.rollback(); // Rollback nếu thất bại
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, "Rollback failed!", rollbackEx);
+            }
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, "Error updating password", ex);
+        } finally {
+            try {
+                connection.setAutoCommit(true); // Reset auto-commit
+            } catch (SQLException e) {
+                Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, "Failed to reset auto-commit", e);
+            }
         }
-        return customer;
-
+        return success;
     }
 
-    public int deleteCustomer(int id, String password) {
-        int n = 0;
-        String sql = "UPDATE Customer SET status = 0 WHERE id = ? AND password = ?";
-        try {
-            PreparedStatement pre =connection.prepareStatement(sql);
-            int index = 1;
-            pre.setInt(index++, id);
-            pre.setString(index++, password);
-            n = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return n;
-    }
-
-    public int changePasswordCustomer(String oldPassword, String newPassword, int id) {
-        int n = 0;
-        String sql = """
-                     UPDATE customer SET password = ? WHERE id = ? AND password = ? AND status = 1 ;""";
-        try {
-            PreparedStatement pre =connection.prepareStatement(sql);
-            int index = 1;
-            pre.setString(index++, newPassword);
-            pre.setInt(index++, id);
-            pre.setString(index++, oldPassword);
-
-            n = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return n;
-    }
 }
