@@ -16,8 +16,8 @@ import java.text.SimpleDateFormat;
 @NoArgsConstructor
 public class Route {
     private int id; 
-    private int trainid;
-    private String routecode; 
+    private int trainId;
+    private String routeCode; 
     private String description; 
     private String departureStation; 
     private String arrivalStation; 

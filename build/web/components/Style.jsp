@@ -16,3 +16,5 @@
 <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+

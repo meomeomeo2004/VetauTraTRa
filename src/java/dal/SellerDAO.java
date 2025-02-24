@@ -170,7 +170,7 @@ public List<Route> getListRouteDeleted() {
         }
         return list;
     }
-    public void updateRoute(int trainid, String routecode,
+    public void updateRoute(int trainId, String routeCode,
             String describe, String departureDateTime, String arrivalDateTime, String departureStation,
             String arrivalStation, int id) {
         String sql = "UPDATE Route\n"
@@ -186,8 +186,8 @@ public List<Route> getListRouteDeleted() {
 
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
-            pre.setInt(1, trainid);
-            pre.setString(2, routecode);
+            pre.setInt(1, trainId);
+            pre.setString(2, routeCode);
             pre.setString(3, describe);                       
             // Chuyển đổi String sang Timestamp (DATETIME)
             SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -257,7 +257,7 @@ public static void main(String[] args) {
     SellerDAO dao = new SellerDAO();  
     List<Route> list = dao.getListRoute();
     for (Route route : list) {
-        System.out.println(route.getRoutecode());
+        System.out.println(route.getRouteCode());
     }
 }
 
