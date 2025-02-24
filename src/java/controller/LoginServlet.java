@@ -1,13 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
-import dal.CustomerDAO;
 import dal.UserDAO;
+import model.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -15,7 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.User;
 
 @WebServlet({"/admin/login", "/customer/login", "/manager/login", "/seller/login", "/staff/login"})
 public class LoginServlet extends HttpServlet {
@@ -23,10 +17,10 @@ public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserDAO userDAO;
 
+    @Override
     public void init() {
         userDAO = new UserDAO();
     }
-    private final CustomerDAO CustomerDAO = new CustomerDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,7 +28,6 @@ public class LoginServlet extends HttpServlet {
         String role = request.getRequestURI().split("/")[2];
         request.setAttribute("role", role);
 
-        // Lấy email từ cookie nếu có
         String savedEmail = null;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -45,7 +38,6 @@ public class LoginServlet extends HttpServlet {
                 }
             }
         }
-
         request.setAttribute("savedEmail", savedEmail);
         request.getRequestDispatcher("../login.jsp").forward(request, response);
     }
@@ -56,29 +48,28 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String role = request.getRequestURI().split("/")[2];
-        String remember = request.getParameter("remember"); // Lấy giá trị của "Remember Me"
+        String remember = request.getParameter("remember");
 
         request.setAttribute("role", role);
 
         try {
-            User user = userDAO.authenticate(email, password, role);
-            if (user != null) {
+            User user = userDAO.Login(email, password);
+            if (user != null && user.getRole().equalsIgnoreCase(role)) {
                 HttpSession session = request.getSession();
-                session.setAttribute(role, user);
-                session.setMaxInactiveInterval(300);
+                session.setAttribute("account", user);
+                session.setMaxInactiveInterval(1800);
+
                 Cookie sessionCookie = new Cookie("JSESSIONID", session.getId());
-                sessionCookie.setMaxAge(7 * 24 * 60 * 60); // Giữ 7 ngày
+                sessionCookie.setMaxAge(7 * 24 * 60 * 60);
                 sessionCookie.setPath("/");
                 response.addCookie(sessionCookie);
 
-                // Xử lý "Remember Me"
                 if ("on".equals(remember)) {
                     Cookie emailCookie = new Cookie("email_" + role, email);
-                    emailCookie.setMaxAge(7 * 24 * 60 * 60); // 7 ngày
-                    emailCookie.setPath("/"); // Cookie có hiệu lực trên toàn hệ thống
+                    emailCookie.setMaxAge(7 * 24 * 60 * 60);
+                    emailCookie.setPath("/");
                     response.addCookie(emailCookie);
                 } else {
-                    // Xóa cookie nếu không chọn "Remember Me"
                     Cookie emailCookie = new Cookie("email_" + role, "");
                     emailCookie.setMaxAge(0);
                     emailCookie.setPath("/");
@@ -86,21 +77,18 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 if (role.equalsIgnoreCase("customer")) {
-                    response.sendRedirect("/tickettraintest1");
-                }
-                if (role.equalsIgnoreCase("seller")) {
-                    response.sendRedirect(request.getContextPath() + "/homeSellerPage.jsp");
-                }
-
+                response.sendRedirect("/tratra");
+            }
+            if (role.equalsIgnoreCase("seller")) {
+                response.sendRedirect(request.getContextPath() +"/liststation");
+            }
             } else {
-                request.setAttribute("errorMessage", "Invalid email or password.");
+                request.setAttribute("errorMessage", "Invalid email, password, or role.");
                 request.getRequestDispatcher("../login.jsp").forward(request, response);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ServletException | IOException e) {
             request.setAttribute("errorMessage", "Database error. Please try again.");
             request.getRequestDispatcher("../login.jsp").forward(request, response);
         }
     }
-
 }
