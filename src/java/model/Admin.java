@@ -25,7 +25,7 @@ import lombok.ToString;
 public class Admin {
 
     private int id;
-    private String user_id;
+    private int user_id;
     private String phoneNumber;
     private String fullname;
 

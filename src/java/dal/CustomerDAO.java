@@ -19,11 +19,7 @@ public class CustomerDAO extends DBContext {
 
     public static void main(String[] args) {
         CustomerDAO customerDAO = new CustomerDAO();
-        Customer customer = Customer.builder()
-            .id(5)
-            .fullName("Customer").email("customer@email.com").phoneNumber("0123456789").address("hanoi, vietnam")
-            .build();
-        System.out.println(customerDAO.updateProfileCustomer(customer));
+        
     }
 
     public Customer customerLogin(String email, String password) {
@@ -44,7 +40,6 @@ public class CustomerDAO extends DBContext {
                 String role = rs.getString("role");
                 int status = rs.getInt("status");
 
-                customer = new Customer(id, fullName, email, phoneNumber, "", address, role, status);
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -59,7 +54,6 @@ public class CustomerDAO extends DBContext {
             PreparedStatement pre =connection.prepareStatement(sql);
             int index = 1;
             pre.setString(index++, customer.getFullName());
-            pre.setString(index++, customer.getEmail());
             pre.setString(index++, customer.getPhoneNumber());
             pre.setString(index++, customer.getAddress());
             pre.setInt(index++, customer.getId());
@@ -90,10 +84,8 @@ public class CustomerDAO extends DBContext {
                 customer = Customer.builder()
                     .id(id)
                     .fullName(fullName)
-                    .email(email)
                     .phoneNumber(phoneNumber)
                     .address(address)
-                    .role(role)
                     .status(status)
                     .build();
             }

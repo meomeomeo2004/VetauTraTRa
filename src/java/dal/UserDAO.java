@@ -48,16 +48,6 @@ public class UserDAO extends DBContext {
                     System.out.println("Column 'status' not found: " + e.getMessage());
                 }
 
-                user = new User(
-                    rs.getInt("id"),
-                    rs.getString("full_name"),
-                    rs.getString("email"),
-                    rs.getString("phone_number"),
-                    address,
-                    rs.getString("role"),
-                    status,
-                    imgUrl
-                );
             }
         } catch (SQLException ex) {
             Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
