@@ -25,5 +25,5 @@ public class Manager {
     private String phoneNumber;
     private String fullName;  
     private int status;
-
 }
+

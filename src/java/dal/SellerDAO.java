@@ -253,13 +253,13 @@ public List<Route> getListRouteDeleted() {
         }
     }
 
-public static void main(String[] args) {
-    SellerDAO dao = new SellerDAO();  
-    List<Route> list = dao.getListRoute();
-    for (Route route : list) {
-        System.out.println(route.getRoutecode());
-    }
-}
+//public static void main(String[] args) {
+//    SellerDAO dao = new SellerDAO();  
+//    List<Route> list = dao.getListRoute();
+//    for (Route route : list) {
+//        System.out.println(route.getRoutecode());
+//    }
+//}
 
 
     

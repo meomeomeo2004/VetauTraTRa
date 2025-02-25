@@ -17,7 +17,6 @@ public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserDAO userDAO;
 
-    @Override
     public void init() {
         userDAO = new UserDAO();
     }
@@ -25,6 +24,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String role = request.getRequestURI().split("/")[2];
         request.setAttribute("role", role);
 
@@ -77,11 +77,13 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 if (role.equalsIgnoreCase("customer")) {
+
                 response.sendRedirect("/tratra");
             }
             if (role.equalsIgnoreCase("seller")) {
                 response.sendRedirect(request.getContextPath() +"/liststation");
             }
+
             } else {
                 request.setAttribute("errorMessage", "Invalid email, password, or role.");
                 request.getRequestDispatcher("../login.jsp").forward(request, response);

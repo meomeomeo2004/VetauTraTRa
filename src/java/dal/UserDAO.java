@@ -10,6 +10,7 @@ import java.util.List;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Customer;
 
 /**
  *
@@ -40,8 +41,7 @@ public class UserDAO extends DBContext {
                         rs.getString(2), 
                         rs.getString(3), 
                         rs.getString(4));
-            }
-                
+            }               
         } catch (Exception e) {
         }
         return null;
@@ -66,6 +66,33 @@ public class UserDAO extends DBContext {
         }
         return -1;
     }
+    public boolean checkPhoneNumberExist(String phoneNumber) {
+        String sql = "SELECT * FROM Customer WHERE phone_number = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, phoneNumber);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean insertCustomer(Customer customer) {
+        String sql = "INSERT INTO Customer (user_id, full_name, phone_number, address, status) VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, customer.getUser_id());
+            ps.setString(2, customer.getFullName());
+            ps.setString(3, customer.getPhoneNumber());
+            ps.setString(4, customer.getAddress());
+            ps.setInt(5, customer.getStatus());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
-
-
