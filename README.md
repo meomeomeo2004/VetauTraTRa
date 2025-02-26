@@ -11,7 +11,7 @@ Following these steps to run this project
 ### 1. Clone this repository
 
 ```bash
-git clone https://github.com/d-t-tam/TraTra.git TraTra
+git clone https://github.com/meomeomeo2004/VetauTraTRa.git
 ```
 
 ### 2. Open project
