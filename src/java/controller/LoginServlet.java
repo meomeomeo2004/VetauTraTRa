@@ -82,7 +82,9 @@ public class LoginServlet extends HttpServlet {
                 }
                 if (role.equalsIgnoreCase("seller")) {
                     response.sendRedirect(request.getContextPath() +"/homeSellerPage.jsp");
-                }
+                }if (role.equalsIgnoreCase("staff")) {
+                response.sendRedirect(request.getContextPath() +"/staff_page/staffDashboard");
+            }
 
             } else {
                 request.setAttribute("errorMessage", "Invalid email, password, or role.");
