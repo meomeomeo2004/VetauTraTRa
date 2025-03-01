@@ -134,7 +134,7 @@
                       <div class="col-md-6">
                           <label for="trainid" class="form-label">Loại Tàu</label>
                           <select class="form-select" id="trainid" name="trainid">
-                              <c:forEach items="${sessionScope.listtrain}" var="t">
+                              <c:forEach items="${train}" var="t">
                                     <option value="${t.id}">${t.trainid}</option>
                               </c:forEach>
                           </select>
@@ -166,7 +166,7 @@
                           <label for="departureStation" class="form-label">Từ Ga</label>
                           <select class="form-select" id="departureStation" name="departureStation">
                               <option selected>${r.departureStation}</option>
-                              <c:forEach items="${sessionScope.liststation}" var="o">
+                              <c:forEach items="${station}" var="o">
                                   <option value="${o.id}" >${o.name}</option>
                               </c:forEach>
                           </select>
@@ -175,7 +175,7 @@
                           <label for="arrivalStation" class="form-label">Đến Ga</label>
                           <select class="form-select" id="arrivalStation" name="arrivalStation">
                               <option selected>${r.arrivalStation}</option>
-                              <c:forEach items="${sessionScope.liststation}" var="o">
+                              <c:forEach items="${station}" var="o">
                                   <option value="${o.id}" >${o.name}</option>
                               </c:forEach>
                           </select>

@@ -47,13 +47,12 @@ public class ListStationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        SellerDAO dao = new SellerDAO();
-        HttpSession session = request.getSession();   
+        SellerDAO dao = new SellerDAO();   
         List<Station> listS = dao.getListStation();               
         List<Train> listT = dao.getListTrain();
-        session.setAttribute("liststation", listS);
-        session.setAttribute("listtrain", listT);
-        response.sendRedirect("addroute.jsp");
+        request.setAttribute("liststation", listS);
+        request.setAttribute("listtrain", listT);
+        request.getRequestDispatcher("addroute.jsp").forward(request, response);
     } 
 
 

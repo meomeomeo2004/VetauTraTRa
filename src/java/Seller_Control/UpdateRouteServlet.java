@@ -8,7 +8,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import model.Route;
+import model.Station;
+import model.Train;
 
 @WebServlet(name = "UpdateRouteServlet", urlPatterns = {"/updateroute"})
 public class UpdateRouteServlet extends HttpServlet {
@@ -38,6 +41,10 @@ public class UpdateRouteServlet extends HttpServlet {
         SellerDAO dao = new SellerDAO();
         Route a = dao.getRoutebyCode(rouid);
         request.setAttribute("r", a);
+        List<Station> liststation = dao.getListStation();               
+        List<Train> listtrain = dao.getListTrain();
+        request.setAttribute("station", liststation);
+        request.setAttribute("train", listtrain);
         request.getRequestDispatcher("updateRoute.jsp").forward(request, response);
 
     }

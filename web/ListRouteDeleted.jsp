@@ -169,8 +169,8 @@
             <div class="sidebar">
                 <h5>Menu</h5>
                 <ul>
-                    <li><a href="#">Thống Kê</a></li>
-                    <li><a href="#">Quản Lý Chuyến Tàu</a></li>
+                    <li><a href="homeSellerPage.jsp">Thống Kê</a></li>
+                    <li><a href="viewlistroute">Quản Lý Chuyến Tàu</a></li>
                     <li><a href="#">Lịch Trình</a></li>
                     <li><a href="#">Tàu</a></li>
                     <li><a href="#">Tài Khoản</a></li>
@@ -195,7 +195,7 @@
                         <tbody>
                             <c:forEach items ="${routedeleted}" var="d">
                                 <tr>
-                                    <td>${d.routecode}</td>
+                                    <td>${d.routeCode}</td>
                                     <td>${d.departureStation}</td>
                                     <td>${d.arrivalStation}</td>
                                     <td>${d.departureDate}</td>  <!-- Lấy ngày đi -->

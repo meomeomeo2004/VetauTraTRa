@@ -44,7 +44,6 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         SellerDAO dao = new SellerDAO();
         List<Route> list = dao.getListRoute();
         request.setAttribute("listroute", list);
-
         request.getRequestDispatcher("manageroute.jsp").forward(request, response);
 }
 

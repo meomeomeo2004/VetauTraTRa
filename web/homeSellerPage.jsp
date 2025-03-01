@@ -96,7 +96,7 @@
         <div class="sidebar">
             <h5>Menu</h5>
             <ul>
-                <li><a href="#">Thống Kê</a></li>
+                <li><a href="homeSellerPage.jsp">Thống Kê</a></li>
                 <li><a href="viewlistroute">Quản Lý Chuyến Tàu</a></li>
                 <li><a href="#">Lịch Trình</a></li>
                 <li><a href="#">Tàu</a></li>
