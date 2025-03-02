@@ -163,7 +163,7 @@
                         <input type="checkbox" name="remember">
                         Remember me
                     </label>
-                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <a href="../requestPassword" class="forgot-password">Forgot Password?</a>
                 </div>
                 <button type="submit" class="login-button">LOGIN</button>
                 <span style="display: block;text-align: center; margin-top: 5px; color: red">${errorMessage}</span>
