@@ -1,4 +1,4 @@
-package seller;
+package Seller_Control;
 
 import dal.SellerDAO;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import model.Route;
 public class UpdateRouteServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -32,7 +32,7 @@ public class UpdateRouteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         String id = request.getParameter("routeid");
         int rouid = Integer.parseInt(id);
         SellerDAO dao = new SellerDAO();
@@ -44,7 +44,7 @@ public class UpdateRouteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         SellerDAO dao = new SellerDAO();
         String traid = request.getParameter("trainid");
         String roucode = request.getParameter("routecode");
