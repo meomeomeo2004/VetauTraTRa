@@ -20,7 +20,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-
 public class Train {
     private int id;
     private String trainid;
