@@ -78,9 +78,9 @@
                     <div class="card cabin-card">
                         <img src="images/${cabin.imgUrl}" class="cabin-img" alt="Cabin Image">
                         <div class="card-body">
-                            <h5 class="card-title">${cabin.cabin_name}</h5>
-                            <p class="card-text"><strong>Class:</strong> ${cabin.cabinclass}</p>
-                            <p class="card-text"><strong>Seats:</strong> ${cabin.numseat}</p>
+                            <h5 class="card-title">${cabin.cabinName}</h5>
+                            <p class="card-text"><strong>Class:</strong> ${cabin.type}</p>
+                            <p class="card-text"><strong>Seats:</strong> ${cabin.numSeat}</p>
                         </div>
                     </div>
                 </div>

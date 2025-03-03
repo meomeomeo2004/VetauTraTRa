@@ -148,9 +148,9 @@
     var existingCabins = [];
     <c:forEach var="cabin" items="${cabins}">
         existingCabins.push({
-            name: '${cabin.cabin_name}',
-            cabinClass: '${cabin.cabinclass}', // trường trong CSDL là "class"
-            numseat: ${cabin.numseat},
+            name: '${cabin.cabinName}',
+            cabinClass: '${cabin.type}', // trường trong CSDL là "class"
+            numseat: ${cabin.numSeat},
             imgUrl: '${cabin.imgUrl}'
         });
     </c:forEach>
