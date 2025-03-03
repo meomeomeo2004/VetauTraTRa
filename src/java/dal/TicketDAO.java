@@ -10,8 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import model.Ticket;
 import model.TicketDetail;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author ASUS
@@ -97,27 +99,6 @@ public class TicketDAO extends DBContext {
         return null;
     }
 
-    public static void main(String[] args) {
-        TicketDAO ticketDAO = new TicketDAO();
-
-        // Kiểm tra phương thức getAllTicketDetails
-        System.out.println("Danh sách tất cả vé:");
-        List<TicketDetail> tickets = ticketDAO.getAllTicketDetails();
-        for (TicketDetail ticket : tickets) {
-            System.out.println(ticket.getFullName());
-        }
-
-        // Kiểm tra phương thức getTicketDetailById với ID cụ thể
-        int ticketIdToTest = 1; // Cập nhật ID thực tế có trong database
-        System.out.println("\nChi tiết vé có ID: " + ticketIdToTest);
-        TicketDetail ticketDetail = ticketDAO.getTicketDetailById(ticketIdToTest);
-        if (ticketDetail != null) {
-            System.out.println(ticketDetail);
-        } else {
-            System.out.println("Không tìm thấy vé với ID: " + ticketIdToTest);
-        }
-    }
-
     public boolean changeTicketStatus(int ticketId) {
         String sql = "UPDATE Ticket SET status = CASE WHEN status = 0 THEN 1 ELSE 0 END WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -129,6 +110,9 @@ public class TicketDAO extends DBContext {
         }
         return false;
     }
+    
+    
+    
     public void updateTicketDetail(int ticketId, Integer luggageType, 
                                   String phoneNumber, String fullName, 
                                   String address) {
@@ -175,5 +159,39 @@ System.out.println("Rows updated: " + rowsUpdated);
     } catch (Exception e) {
         e.printStackTrace();
     }
+
     }
+    
+    
+    
+    public List<Ticket> getTicketsByTransactionId(int transactionId) {
+        List<Ticket> tickets = new ArrayList<>();
+        String sql = """
+                     SELECT * FROM Ticket WHERE transaction_id = ?; """;
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, transactionId);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+
+                Ticket ticket = new Ticket(
+                    rs.getInt("id"),
+                    rs.getInt("status"),
+                    rs.getInt("luggage_type"),
+                    rs.getTimestamp("booking_date"),
+                    rs.getInt("route_id"),
+                    rs.getInt("seat_id"),
+                    rs.getInt("staff_id"),
+                    rs.getInt("transaction_id"));
+
+                tickets.add(ticket);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(TicketDAO.class
+                .getName()).log(Level.SEVERE, null, ex);
+        }
+        return tickets;
+    }
+
 }

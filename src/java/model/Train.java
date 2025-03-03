@@ -21,12 +21,12 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class Train {
+
     private int id;
     private String trainid;
-    private int totalSeats;  
+    private int totalSeats;
     private int numCabin;
     private int status;
     private int owner;
 
-     
 }
