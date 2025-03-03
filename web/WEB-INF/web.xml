@@ -9,8 +9,8 @@
         <servlet-class>controller.Search</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ViewRoute</servlet-name>
-        <servlet-class>controller.ViewRoute</servlet-class>
+        <servlet-name>PayTicketServlet</servlet-name>
+        <servlet-class>controller.PayTicketServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RouteServlet</servlet-name>
@@ -21,7 +21,7 @@
         <url-pattern>/Search</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ViewRoute</servlet-name>
-        <url-pattern>/ViewRoute</url-pattern>
+        <servlet-name>PayTicketServlet</servlet-name>
+        <url-pattern>/PayTicketServlet</url-pattern>
     </servlet-mapping>
 </web-app>

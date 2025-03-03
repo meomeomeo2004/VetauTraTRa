@@ -82,5 +82,43 @@
             opacity: 0;
         }
     }
+    .train-container {
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+
+    /* Container bao quanh toa tàu */
+    .coach-container {
+        position: relative !important; /* Đảm bảo vị trí tương đối */
+    }
+    .coach-container img {
+        position: relative !important; /* Đảm bảo ảnh nằm trên ::before */
+        z-index: 1 !important; /* Đặt ảnh lên trên */
+    }
+
+    .coach-container::before {
+        content: "" !important;
+        display: block !important; /* Đảm bảo nó là một khối */
+        position: absolute !important;
+        width: 100% !important;
+        height: 70% !important;
+        background-color: RGB(0,131,193) !important; /* Màu xanh lam */
+        border-radius: 10px 10px 10px 10px !important;
+        top: 15% !important; /* Điều chỉnh nếu cần */
+        left: 0 !important;
+        z-index: 0 !important; /* Đặt 0 để không bị đè bởi ảnh */
+    }
+
+
+    /* Khi toa tàu được chọn, đổi màu thân tàu */
+    .coach-container.selected::before {
+        background-color: #a3c600 !important;
+    }
+
+    /* Đầu tàu không thể click */
+    .head-train {
+        pointer-events: none !important;
+    }
 </style>
 

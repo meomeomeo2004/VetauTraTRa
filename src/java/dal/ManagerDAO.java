@@ -237,9 +237,9 @@ public class ManagerDAO extends DBContext {
             String sqlInsert = "INSERT INTO Cabin (name, class, numseat, img_url, train_id) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement psIns = connection.prepareStatement(sqlInsert);
             for (Cabin cabin : cabins) {
-                psIns.setString(1, cabin.getCabin_name());
-                psIns.setString(2, cabin.getCabinclass());
-                psIns.setInt(3, cabin.getNumseat());
+                psIns.setString(1, cabin.getCabinName());
+                psIns.setString(2, cabin.getType());
+                psIns.setInt(3, cabin.getNumSeat());
                 psIns.setString(4, cabin.getImgUrl());
                 psIns.setInt(5, trainId);
                 psIns.executeUpdate();

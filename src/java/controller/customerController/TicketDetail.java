@@ -46,7 +46,7 @@ public class TicketDetail extends HttpServlet {
                         var route = routeDAO.getRouteById(ticket.getRouteId());
                         var seat = seatDAO.getSeatById(ticket.getSeatId());
                         var cabin = cabinDAO.getCabinById(seat.getCabinid());
-                        var train = trainDAO.getTrainById(cabin.getTrainid());
+                        var train = trainDAO.getTrainById(cabin.getTrainId());
                         var staff = staffDAO.getStaffById(ticket.getStaffId());
                         TicketDTO ticketDTO = new TicketDTO(ticket, route, train, cabin, seat, staff);
                         list.add(ticketDTO);

@@ -89,9 +89,9 @@ public class EditTrain extends HttpServlet {
         List<Cabin> cabinList = new ArrayList<>();
         for (int i = 0; i < cabinNames.length; i++) {
             Cabin cabin = new Cabin();
-            cabin.setCabin_name(cabinNames[i]);
-            cabin.setCabinclass(cabinClasses[i]);
-            cabin.setNumseat(Integer.parseInt(cabinNumseatStr[i]));
+            cabin.setCabinName(cabinNames[i]);
+            cabin.setType(cabinClasses[i]);
+            cabin.setNumSeat(Integer.parseInt(cabinNumseatStr[i]));
             cabin.setImgUrl(cabinImgUrls[i]);
             cabinList.add(cabin);
         }

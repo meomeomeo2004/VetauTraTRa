@@ -10,7 +10,7 @@
 
 <h2>Result:</h2>
 <c:forEach var="route" items="${sessionScope.routes}">
-    <p>name: <a href="ViewRouteInfo?id=${route.id}">${route.name}</a></p>
+    <p>name: <a href="ViewRoute?id=${route.id}">${route.routeCode}</a></p>
     <p>Departure Station: ${route.departureStation}</p>
     <p>Arrival Station:${route.arrivalStation}</p>
     <p>Departure Time: ${route.departureTime}</p>

@@ -49,7 +49,7 @@
                                     <div class="col-md-4">
                                         <div class="book_tabel_item">
                                             <div class="input-group">
-                                                    <input type="text" id="departure_station" class="form-control" placeholder="Departure station">
+                                                <input type="text" id="departure_station" class="form-control" placeholder="Departure station">
                                                     <input type="hidden" name="departureStation" id="departureStationHidden">
                                                 </div>
                                                 <div class="input-group">
@@ -92,7 +92,7 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <button type="submit" class="book_now_btn button_hover mt-3">Book</button>
+                                                <button type="submit" class="book_now_btn button_hover mt-3">Search</button>
                                             </div>
                                         </div>
                                     </div>
@@ -216,7 +216,7 @@
                     <div class="col-md-6 d_flex align-items-center">
                         <div class="about_content ">
                             <h2 class="title title_color">About Us <br>Our History<br>Mission & Vision</h2>
-                            <p>inappropriate behavior is often laughed off as âboys will be boys,â women face higher conduct standards especially in the workplace. Thatâs why itâs crucial that, as women, our behavior on the job is beyond reproach. inappropriate behavior is often laughed.</p>
+                            <p>inappropriate behavior is often laughed off as Ã¢ÂÂboys will be boys,Ã¢ÂÂ women face higher conduct standards especially in the workplace. ThatÃ¢ÂÂs why itÃ¢ÂÂs crucial that, as women, our behavior on the job is beyond reproach. inappropriate behavior is often laughed.</p>
                             <a href="#" class="button_hover theme_btn_two">Request Custom Price</a>
                         </div>
                     </div>
@@ -316,7 +316,7 @@
                                     <a href="#" class="button_hover tag_btn">Life Style</a>
                                 </div>
                                 <a href="#"><h4 class="sec_h4">Low Cost Advertising</h4></a>
-                                <p>Acres of Diamondsâ¦ youâve read the famous story, or at least had it related to you. A farmer.</p>
+                                <p>Acres of DiamondsÃ¢ÂÂ¦ youÃ¢ÂÂve read the famous story, or at least had it related to you. A farmer.</p>
                                 <h6 class="date title_color">31st January,2018</h6>
                             </div>
                         </div>
