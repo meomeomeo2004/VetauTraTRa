@@ -1,5 +1,6 @@
 package controller;
 
+import dal.DAOforAdmin;
 import dal.UserDAO;
 import model.User;
 import java.io.IOException;
@@ -77,7 +78,6 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 if (role.equalsIgnoreCase("customer")) {
-
                     response.sendRedirect("/tratra");
                 }
                 if (role.equalsIgnoreCase("seller")) {
@@ -95,6 +95,10 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/admin_page/AdminDashboard");
                 }
 
+                DAOforAdmin dao = new DAOforAdmin();
+                dao.loginCounted(user.getId());
+                response.sendRedirect("/tratra");
+
             } else {
                 request.setAttribute("errorMessage", "Invalid email, password, or role.");
                 request.getRequestDispatcher("../login.jsp").forward(request, response);
@@ -104,4 +108,5 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("../login.jsp").forward(request, response);
         }
     }
+
 }

@@ -32,10 +32,11 @@
                         <h1 class="mt-4">List of accounts</h1>
                         <div style="margin-bottom: 20px; display: flex; justify-content: space-between">
                             <div>
-                                <a class="btn btn-primary" href="AccountList?role=Manager" role="button">Manager</a>
-                                <a class="btn btn-primary" href="AccountList?role=Seller" role="button">Seller</a>
-                                <a class="btn btn-primary" href="AccountList?role=Staff" role="button">Staff</a>
-                                <a class="btn btn-primary" href="AccountList?role=Customer" role="button">Customer</a>    
+                                <a class="btn btn-primary ${param.role eq null ? 'active' : ''}" href="AccountList" role="button">All Roles</a>
+                                <a class="btn btn-primary ${param.role eq 'Manager' ? 'active' : ''}" href="AccountList?role=Manager" role="button">Manager</a>
+                                <a class="btn btn-primary ${param.role eq 'Seller' ? 'active' : ''}" href="AccountList?role=Seller" role="button">Seller</a>
+                                <a class="btn btn-primary ${param.role eq 'Staff' ? 'active' : ''}" href="AccountList?role=Staff" role="button">Staff</a>
+                                <a class="btn btn-primary ${param.role eq 'Customer' ? 'active' : ''}" href="AccountList?role=Customer" role="button">Customer</a>    
                             </div>
                             <div>
                                 <a class="btn btn-success" href="AddAccount" role="button">Add a new account</a>  
@@ -66,14 +67,15 @@
                                                 <td><c:out value="${list.getFullname()}"/></td>
                                                 <td><c:out value="${list.getEmail()}"/></td>
                                                 <c:choose>
-                                                    <c:when test="${list.getStatus() eq '1'}">
-                                                        <td style="color: green;">Active</td>
+                                                    <c:when test="${list.getStatus() eq 1}">
+                                                        <td><p style="color: green;">Active</p></td>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <td style="color: red;">Inactive</td>
+                                                        <td><p style="color: red;">Inactive</p></td>
                                                     </c:otherwise>
                                                 </c:choose>
                                                 <td>
+                                                    <a class="btn btn-primary" href="AccountDetail?id=${list.getId()}&&role=${list.getRole()}" role="button">View Details</a>
                                                     <a class="btn btn-warning" href="EditAccount?id=${list.getId()}&&role=${list.getRole()}" role="button">Edit</a>
                                                     <c:choose>
                                                         <c:when test="${list.getStatus() eq '1'}">
