@@ -1,5 +1,6 @@
 package controller;
 
+import dal.DAOforAdmin;
 import dal.UserDAO;
 import model.User;
 import java.io.IOException;
@@ -77,7 +78,8 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 if (role.equalsIgnoreCase("customer")) {
-
+                    DAOforAdmin dao = new DAOforAdmin();
+                    dao.loginCounted(user.getId());
                 response.sendRedirect("/tratra");
             }
             if (role.equalsIgnoreCase("seller")) {
