@@ -3,9 +3,24 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/SWP391/TraTra/TraTra/src/java/dal/SellerDAO.java</file>
             <file>file:/C:/SWP391/TraTra/TraTra/src/java/dal/CustomerDAO.java</file>
             <file>file:/C:/SWP391/TraTra/TraTra/src/java/model/Station.java</file>
+=======
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/web/search.jsp</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/web/route.jsp</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/src/java/dal/RouteDAO.java</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/src/java/dal/SellerDAO.java</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/src/java/model/Route.java</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/src/java/controller/Search.java</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/web/components/Header.jsp</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/src/java/controller/RouteServlet.java</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/web/components/Script.jsp</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/src/java/model/Seller.java</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/web/index.jsp</file>
+            <file>file:/C:/Users/hoatu/Desktop/SWP391/VetauTraTRa/web/routeInfo.jsp</file>
+>>>>>>> 942093b6d76810b64e6b840de193f7a6c00a872c
         </group>
     </open-files>
 </project-private>

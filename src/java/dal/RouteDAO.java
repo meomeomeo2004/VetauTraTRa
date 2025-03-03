@@ -173,7 +173,7 @@ public class RouteDAO extends DBContext {
                         rs.getInt(4),
                         rs.getString(5),
                         rs.getInt(6)));
-            }
+}
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }

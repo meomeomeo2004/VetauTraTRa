@@ -24,12 +24,15 @@ public class SellerDAO extends DBContext {
 
     public List<Station> getListStation() {
         List<Station> list = new ArrayList<>();
-        String sql = "SELECT * FROM vetau.Station ";
+        String sql = "SELECT * FROM vetautratra.station";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
-                list.add(new Station());
+                list.add(new Station(rs.getString(1),
+                        rs.getString(2), 
+                        rs.getString(3), 
+                        rs.getString(4)));
             }
         } catch (Exception e) {
         }
@@ -39,7 +42,7 @@ public class SellerDAO extends DBContext {
 
     public List<Train> getListTrain() {
         List<Train> list = new ArrayList<>();
-        String sql = "SELECT * FROM vetau.train";
+        String sql = "SELECT * FROM vetautratra.train";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
@@ -60,7 +63,7 @@ public class SellerDAO extends DBContext {
     public void addRoute(int trainid, String routecode,
         String describe, String departureDateTime, String arrivalDateTime, String departureStation,
         String arrivalStation) {
-    String sql = "INSERT INTO Route (train_id, route_code, `describe`, departure_time, arrival_time, departure_station, arrival_station) "
+    String sql = "INSERT INTO Route (train_id, route_code, description, departure_time, arrival_time, departure_station, arrival_station) "
                + "VALUES (?,?,?,?,?,?,?)";
 
     try {
@@ -207,7 +210,7 @@ public List<Route> getListRouteDeleted() {
         }
     }
     public Route getRoutebyCode(int routeid){
-        String sql ="Select * from vetau.route where id = ?";
+        String sql ="Select * from route where id = ?";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setInt(1, routeid);
@@ -251,12 +254,12 @@ public List<Route> getListRouteDeleted() {
         }
     }
 
-//public static void main(String[] args) {
-//    SellerDAO dao = new SellerDAO();  
-//    List<Route> list = dao.getListRoute();
-//    for (Route route : list) {
-//        System.out.println(route.getRoutecode());
-//    }
-//}
+public static void main(String[] args) {
+    SellerDAO dao = new SellerDAO();  
+    List<Station> list = dao.getListStation();
+   for(Station a : list){
+       System.out.println(a);
+   }
+}
    
 }

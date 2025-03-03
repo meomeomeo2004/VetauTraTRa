@@ -4,16 +4,17 @@ import dal.RouteDAO;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import model.Cabin;
 
+@WebServlet(name="ViewRoute", urlPatterns={"/ViewRoute"})
 public class ViewRoute extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

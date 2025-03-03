@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page import="com.google.gson.Gson" %>
 <%@page import="java.util.Map" %>
 <% Map<String, Object> routeData = (Map<String, Object>) request.getAttribute("routeData"); %>
