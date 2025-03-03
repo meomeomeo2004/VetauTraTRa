@@ -21,9 +21,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Cabin {
     private int id;
-    private String cabin_name;
-    private String cabinclass;
-    private int numseat;
+    private String cabinName;
+    private String type;
+    private int numSeat;
     private String imgUrl;
-    private int trainid;
+    private int trainId;
 }

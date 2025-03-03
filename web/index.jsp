@@ -48,7 +48,7 @@
                                     <div class="col-md-4">
                                         <div class="book_tabel_item">
                                             <div class="input-group">
-                                                    <input type="text" id="departure_station" class="form-control" placeholder="Departure station">
+                                                <input type="text" id="departure_station" class="form-control" placeholder="Departure station">
                                                     <input type="hidden" name="departureStation" id="departureStationHidden">
                                                 </div>
                                                 <div class="input-group">
@@ -91,7 +91,7 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <button type="submit" class="book_now_btn button_hover mt-3">Book</button>
+                                                <button type="submit" class="book_now_btn button_hover mt-3">Search</button>
                                             </div>
                                         </div>
                                     </div>
