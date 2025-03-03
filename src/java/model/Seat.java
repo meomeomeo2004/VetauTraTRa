@@ -14,7 +14,6 @@ import lombok.Setter;
  *
  * @author ASUS
  */
-
 @Getter
 @Setter
 @Builder
@@ -22,10 +21,11 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class Seat {
+
     private int id;
     private String name;
     private long price;
     private int cabinid;
     private int status;
-   
+
 }

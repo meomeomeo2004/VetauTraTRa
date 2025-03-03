@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -21,16 +22,16 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
-
+@ToString
 public class Ticket {
+
     private int id;
     private int status;
     private int luggageType;
-    private Timestamp bookingDate; // DATETIME stored as String in format "yyyy-MM-dd HH:mm:ss"
+    private Timestamp bookingDate;
     private int routeId;
     private int seatId;
-    private int staffId; // Nullable
+    private int staffId;
     private int transactionId;
-    
+
 }

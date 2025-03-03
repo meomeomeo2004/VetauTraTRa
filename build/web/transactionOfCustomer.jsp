@@ -43,6 +43,21 @@
             .btn-back {
                 background: #007bff;
             }
+            .btn-view {
+                display: inline-block;
+                background: #28a745; /* Màu xanh lá */
+                color: white;
+                padding: 8px 12px;
+                border-radius: 5px;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: bold;
+            }
+
+            .btn-view:hover {
+                background: #218838;
+            }
+
 
         </style>
     </head>
@@ -77,39 +92,42 @@
                             <th>Tickets</th>
                             <th>Amount</th>
                             <th>Voucher Code</th>
+                            <th>View Info</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach var="t" items="${transactions}">
-                        <input type="hidden" name="customerId" value="${sessionScope.account.id}">
-                        <tr>
-                            <td>${t.id}</td>
-                            <td>${t.paymentMethod}</td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${t.paymentStatus == 1}">
-                                        <span style="color: green;">Paid</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span style="color: red;">Unpaid</span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td><fmt:formatDate value="${t.paymentDate}" pattern="dd/MM/yyyy HH:mm" /></td>
-                            <td>${t.quantity}</td>
-                            <td><fmt:formatNumber value="${t.amountPaid}" type="number" minFractionDigits="2" maxFractionDigits="2" /> VND</td>
-                            <td>${t.vouchercode != null ? t.vouchercode : "None"}</td>
-                        </tr>
-                    </c:forEach>
+                            <tr>
+                                <td>${t.id}</td>
+                                <td>${t.paymentMethod}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${t.paymentStatus == 1}">
+                                            <span style="color: green;">Paid</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span style="color: red;">Unpaid</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td><fmt:formatDate value="${t.paymentDate}" pattern="dd/MM/yyyy HH:mm" /></td>
+                                <td>${t.quantity}</td>
+                                <td><fmt:formatNumber value="${t.amountPaid}" type="number" minFractionDigits="2" maxFractionDigits="2" /> VND</td>
+                                <td>${t.vouchercode != null ? t.vouchercode : "None"}</td>
+                                <td>
+                                    <a href="ticket-detail?transactionId=${t.id}" class="btn-view">
+                                        View Details
+                                    </a>
+                                </td>
+
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </c:if>
 
             <c:if test="${not empty transactions}">
                 <p>Total transactions: ${fn:length(transactions)}</p>
-                <c:forEach var="t" items="${transactions}">
-                    <p>Transaction ID: ${t.id}, Amount: ${t.amountPaid}, Date: ${t.paymentDate}</p>
-                </c:forEach>
             </c:if>
 
             <c:if test="${empty transactions}">
