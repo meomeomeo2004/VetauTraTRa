@@ -136,6 +136,7 @@
     </form>
 </div>
 <script>
+    
     // Hàm kiểm tra xem thông tin train đã đầy đủ chưa
     function isTrainInfoComplete() {
         var model = document.getElementById("train_model").value.trim();

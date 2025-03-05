@@ -76,7 +76,7 @@
             <c:forEach items="${cabinlist}" var="cabin">
                 <div class="col-md-4 mb-4">
                     <div class="card cabin-card">
-                        <img src="images/${cabin.imgUrl}" class="cabin-img" alt="Cabin Image">
+                        <img src="${cabin.imgUrl}" class="cabin-img" alt="Cabin Image">
                         <div class="card-body">
                             <h5 class="card-title">${cabin.cabinName}</h5>
                             <p class="card-text"><strong>Class:</strong> ${cabin.type}</p>

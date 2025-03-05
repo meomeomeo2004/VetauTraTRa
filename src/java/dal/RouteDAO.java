@@ -111,10 +111,10 @@ public class RouteDAO extends DBContext {
                 + "dep.name AS departure_station_name, arr.name AS arrival_station_name, "
                 + "seller.full_name AS seller_name, "
                 + "COUNT(DISTINCT c.id) AS total_cabins, "
-                + "COUNT(CASE WHEN c.type = 'Business' THEN st.id END) AS Seat_Business_amount, "
-                + "COUNT(CASE WHEN c.type = 'Economy' THEN st.id END) AS Seat_Economy_amount, "
-                + "MIN(CASE WHEN c.type = 'Business' THEN st.price END) AS Business_price, "
-                + "MIN(CASE WHEN c.type = 'Economy' THEN st.price END) AS Economy_price "
+                + "COUNT(CASE WHEN c.class = 'Business' THEN st.id END) AS Seat_Business_amount, "
+                + "COUNT(CASE WHEN c.class = 'Economy' THEN st.id END) AS Seat_Economy_amount, "
+                + "MIN(CASE WHEN c.class = 'Business' THEN st.price END) AS Business_price, "
+                + "MIN(CASE WHEN c.class = 'Economy' THEN st.price END) AS Economy_price "
                 + "FROM Route r "
                 + "JOIN Train t ON r.train_id = t.id "
                 + "JOIN Seller seller ON t.owner = seller.id "
@@ -158,7 +158,7 @@ public class RouteDAO extends DBContext {
     public List<Cabin> getCabinFromRouteId(int routeId) {
         List<Cabin> list = new ArrayList<>();
         try {
-            String sql = "SELECT c.id, c.name, c.type, c.numseat, c.img_url, c.train_id FROM Route r "
+            String sql = "SELECT c.id, c.name, c.class, c.numseat, c.img_url, c.train_id FROM Route r "
                     + " JOIN Train t ON r.train_id = t.id "
                     + " JOIN Cabin c ON t.id = c.train_id "
                     + " WHERE r.id = ?;";
