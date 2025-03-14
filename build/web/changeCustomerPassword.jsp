@@ -32,6 +32,7 @@
                             <li class="list-group-item"><a href="profile">View Profile</a></li>
                             <li class="list-group-item"><a href="update-profile">Update Profile</a></li>
                             <li class="list-group-item"><a href="change-password">Change Password</a></li>
+                            <li class="list-group-item"><a href="transaction">Transaction History</a></li>
                         </ul>
                     </div>
                     <div class="col-md-9">

@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import model.Route;
+import lombok.CustomLog;
 
 /**
  *
@@ -23,14 +24,14 @@ public class SellerDAO extends DBContext {
 
     public List<Station> getListStation() {
         List<Station> list = new ArrayList<>();
-        String sql = "SELECT * FROM vetau.Station ";
+        String sql = "SELECT * FROM vetautratra.station";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
                 list.add(new Station(rs.getString(1),
-                        rs.getString(2),
-                        rs.getString(3),
+                        rs.getString(2), 
+                        rs.getString(3), 
                         rs.getString(4)));
             }
         } catch (Exception e) {
@@ -41,7 +42,7 @@ public class SellerDAO extends DBContext {
 
     public List<Train> getListTrain() {
         List<Train> list = new ArrayList<>();
-        String sql = "SELECT * FROM vetau.train";
+        String sql = "SELECT * FROM vetautratra.train";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
@@ -62,7 +63,7 @@ public class SellerDAO extends DBContext {
     public void addRoute(int trainid, String routecode,
         String describe, String departureDateTime, String arrivalDateTime, String departureStation,
         String arrivalStation) {
-    String sql = "INSERT INTO Route (train_id, route_code, `describe`, departure_time, arrival_time, departure_station, arrival_station) "
+    String sql = "INSERT INTO Route (train_id, route_code, description, departure_time, arrival_time, departure_station, arrival_station) "
                + "VALUES (?,?,?,?,?,?,?)";
 
     try {
@@ -170,7 +171,7 @@ public List<Route> getListRouteDeleted() {
         }
         return list;
     }
-    public void updateRoute(int trainid, String routecode,
+    public void updateRoute(int trainId, String routeCode,
             String describe, String departureDateTime, String arrivalDateTime, String departureStation,
             String arrivalStation, int id) {
         String sql = "UPDATE Route\n"
@@ -186,8 +187,8 @@ public List<Route> getListRouteDeleted() {
 
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
-            pre.setInt(1, trainid);
-            pre.setString(2, routecode);
+            pre.setInt(1, trainId);
+            pre.setString(2, routeCode);
             pre.setString(3, describe);                       
             // Chuyển đổi String sang Timestamp (DATETIME)
             SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -209,7 +210,7 @@ public List<Route> getListRouteDeleted() {
         }
     }
     public Route getRoutebyCode(int routeid){
-        String sql ="Select * from vetau.route where id = ?";
+        String sql ="Select * from route where id = ?";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setInt(1, routeid);
@@ -254,26 +255,11 @@ public List<Route> getListRouteDeleted() {
     }
 
 public static void main(String[] args) {
-    SellerDAO dao = new SellerDAO();
-    
-    // Sử dụng định dạng "yyyy-MM-dd'T'HH:mm" như được sử dụng trong hàm updateRoute
-    dao.updateRoute(
-        1, 
-        "XUZ100", 
-        "Tau di Da Nang",
-        "2026-02-20T11:30",  // Ngày giờ đi theo định dạng yyyy-MM-dd'T'HH:mm
-        "2026-02-20T21:00",  // Ngày giờ về theo định dạng yyyy-MM-dd'T'HH:mm
-        "HP", 
-        "DN",
-        7
-    );
-    
-    List<Route> list = dao.getListRoute();
-    for (Route route : list) {
-        System.out.println(route.getRoutecode());
-    }
+    SellerDAO dao = new SellerDAO();  
+    List<Station> list = dao.getListStation();
+   for(Station a : list){
+       System.out.println(a);
+   }
 }
-
-
-    
+   
 }

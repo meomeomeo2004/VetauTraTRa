@@ -11,12 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- *
- * @author ASUS
- */
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor // ==> tat ca thuoc tinh deu duoc set gia tri
+@NoArgsConstructor // ==> thuoc tinh rong
 @Getter
 @Setter
 @ToString
@@ -29,3 +25,4 @@ public class Admin {
     private String fullname;
 
 }
+

@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 
-package controller;
+package seller;
 
 import dal.SellerDAO;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,17 +10,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.Station;
-import model.Train;
+import model.Route;
 
-/**
- *
- * @author ASUS
- */
-@WebServlet(name="ListStationServlet", urlPatterns={"/liststation"})
-public class ListStationServlet extends HttpServlet {
+
+@WebServlet(name="ViewListRoute", urlPatterns={"/viewlistroute"})
+
+public class ViewListRoute extends HttpServlet {
    
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -34,10 +27,10 @@ public class ListStationServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ListStationServlet</title>");  
+            out.println("<title>Servlet ViewListRoute</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ListStationServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ViewListRoute at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -45,22 +38,22 @@ public class ListStationServlet extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+  
         SellerDAO dao = new SellerDAO();
-        HttpSession session = request.getSession();   
-        List<Station> listS = dao.getListStation();               
-        List<Train> listT = dao.getListTrain();
-        session.setAttribute("liststation", listS);
-        session.setAttribute("listtrain", listT);
-        response.sendRedirect("addroute.jsp");
-    } 
+        List<Route> list = dao.getListRoute();
+        request.setAttribute("listroute", list);
+        request.getRequestDispatcher("manageroute.jsp").forward(request, response);
+}
+
 
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       
+        processRequest(request, response);
     }
+
 
 }

@@ -61,7 +61,7 @@
     
     $('select').niceSelect();
     $('#datetimepicker11,#datetimepicker1').datetimepicker({
-        daysOfWeekDisabled: [0, 6]
+        daysOfWeekDisabled: []
     });
     
      /*---------gallery isotope js-----------*/

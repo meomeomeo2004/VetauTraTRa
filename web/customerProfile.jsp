@@ -48,6 +48,9 @@
                             <li class="list-group-item">
                                 <a href="change-password">Change Password</a>
                             </li>
+                            <li class="list-group-item">
+                                <a href="transaction">Transaction History</a>
+                            </li>
 
                         </ul>
                     </div>

@@ -11,25 +11,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
  * @author ASUS
  */
-
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
+@ToString
 public class Transaction {
+
     private int id;
-    private int customerid;
+    private int customerId;
     private String paymentMethod;
     private int paymentStatus;
     private Date paymentDate;
     private int quantity;
-    private BigDecimal amountPaid;
+    private double amountPaid;
     private String vouchercode;
 }

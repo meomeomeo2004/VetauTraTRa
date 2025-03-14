@@ -172,13 +172,13 @@
             <div class="sidebar">
                 <h5>Menu</h5>
                 <ul>
-                    <li><a href="#">Thống Kê</a></li>
-                    <li><a href="#">Quản Lý Chuyến Tàu</a></li>
-                    <li><a href="#">Lịch Trình</a></li>
-                    <li><a href="#">Tàu</a></li>
-                    <li><a href="#">Tài Khoản</a></li>
-                    <li><a href="#">Thông Tin Account</a></li>
-                </ul>
+                <li><a href="homeSellerPage.jsp">Thống Kê</a></li>
+                <li><a href="viewlistroute">Quản Lý Chuyến Tàu</a></li>
+                <li><a href="#">Lịch Trình</a></li>
+                <li><a href="#">Tàu</a></li>
+                <li><a href="#">Tài Khoản</a></li>
+                <li><a href="#">Thông Tin Account</a></li>
+            </ul>
             </div>
             <div class="content">
                 <h3>Quản Lý Chuyến Tàu</h3>
@@ -202,32 +202,27 @@
                         <tbody>
                             <c:forEach items ="${listroute}" var="r">
                                 <tr>
-                                    <td>${r.routecode}</td>
+                                    <td>${r.routeCode}</td>
                                     <td>${r.departureStation}</td>
                                     <td>${r.arrivalStation}</td>
                                     <td>${r.departureDate}</td>  <!-- Lấy ngày đi -->
                                     <td>${r.departureHour}</td>  <!-- Lấy giờ đi -->
                                     <td>${r.arrivalHour}</td>    <!-- Lấy giờ đến -->
-
                                     <td>
                                         <!-- Form tự động submit khi checkbox thay đổi -->
                                         <form action="updatestatusroute" method="POST" id="form-${r.id}">
                                             <input type="hidden" name="routeid" value="${r.id}">
                                             <input type="hidden" name="status" value="0"> <!-- Nếu unchecked thì gửi giá trị 0 -->
-
                                             <!-- Công tắc trượt -->
                                             <label class="toggle-switch">
-                                                <input type="checkbox" name="status" value="1" ${r.status == 1 ? 'checked' : ''} onchange="document.getElementById('form-${r.routecode}').submit()">
+                                                <input type="checkbox" name="status" value="1" ${r.status == 1 ? 'checked' : ''} onchange="document.getElementById('form-${r.routeCode}').submit()">
                                                 <span class="toggle-slider"></span>
                                             </label>
                                         </form>
-
                                         <!-- Nút cập nhật và xóa -->
                                         <a href="updateroute?routeid=${r.id}" class="btn btn-warning btn-sm">✎</a>
                                         <a href="deleteroute?routeid=${r.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn chắc chắn xóa chứ?');">🗑</a>
-  
                                     </td>
-
                                 </tr>   
                             </c:forEach>
 

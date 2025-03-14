@@ -23,7 +23,8 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
+
         String role = request.getRequestURI().split("/")[2];
         request.setAttribute("role", role);
 
@@ -43,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String role = request.getRequestURI().split("/")[2];
@@ -76,17 +77,18 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 if (role.equalsIgnoreCase("customer")) {
-                    response.sendRedirect("/tratra");
+
+                response.sendRedirect("/tratra");
                 }
-                if (role.equalsIgnoreCase("admin")) {
-                    response.sendRedirect(request.getContextPath() + "/admin_page/AdminDashboard");
+                if (role.equalsIgnoreCase("seller")) {
+                    response.sendRedirect(request.getContextPath() +"/homeSellerPage.jsp");
                 }
+
             } else {
                 request.setAttribute("errorMessage", "Invalid email, password, or role.");
                 request.getRequestDispatcher("../login.jsp").forward(request, response);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ServletException | IOException e) {
             request.setAttribute("errorMessage", "Database error. Please try again.");
             request.getRequestDispatcher("../login.jsp").forward(request, response);
         }

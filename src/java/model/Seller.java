@@ -26,7 +26,7 @@ public class Seller {
     private int id;
     private int user_id;
     private String phoneNumber;
-    private String fullName;
+    private String fullName;   
     private String address;
     private int status;
 

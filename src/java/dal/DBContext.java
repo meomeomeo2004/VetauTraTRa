@@ -11,7 +11,7 @@ public class DBContext {
     public DBContext() {
 
         try {
-            String url = "jdbc:mysql://localhost:3306/vetauTraTra?zeroDateTimeBehavior=CONVERT_TO_NULL";
+            String url = "jdbc:mysql://localhost:3306/vetautratra?zeroDateTimeBehavior=CONVERT_TO_NULL";
             String user = "root";
             String password = "123456";
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -19,10 +19,6 @@ public class DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-    }
-
-    public static void main(String[] args) {
 
     }
 }

@@ -23,7 +23,7 @@ public class Manager {
     private int user_id;
     private String address;
     private String phoneNumber;
-    private String fullName;
+    private String fullName;  
     private int status;
-
 }
+

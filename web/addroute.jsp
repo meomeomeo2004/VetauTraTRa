@@ -116,8 +116,8 @@
         <div class="sidebar">
             <h5>Menu</h5>
             <ul>
-                <li><a href="#">Thống Kê</a></li>
-                <li><a href="#">Quản Lý Chuyến Tàu</a></li>
+                <li><a href="homeSellerPage.jsp">Thống Kê</a></li>
+                <li><a href="viewlistroute">Quản Lý Chuyến Tàu</a></li>
                 <li><a href="#">Lịch Trình</a></li>
                 <li><a href="#">Tàu</a></li>
                 <li><a href="#">Tài Khoản</a></li>
@@ -133,7 +133,7 @@
                             <label for="trainid" class="form-label">Loại Tàu</label>
                             <select class="form-select" id="trainid" name="trainid">
                                 <option selected>Type</option>
-                                <c:forEach items="${sessionScope.listtrain}" var="t">
+                                <c:forEach items="${listtrain}" var="t">
                                     <option value="${t.id}">${t.trainid}</option>
                                 </c:forEach>
                             </select>
@@ -164,7 +164,7 @@
                             <label for="departureStation" class="form-label">Từ Ga</label>
                             <select class="form-select" id="departureStation" name="departureStation">
                                 <option selected>Chọn Ga</option>
-                                <c:forEach items="${sessionScope.liststation}" var="o">
+                                <c:forEach items="${liststation}" var="o">
                                     <option value="${o.id}">${o.name}</option>
                                 </c:forEach>
                             </select>
@@ -173,7 +173,7 @@
                             <label for="arrivalStation" class="form-label">Đến Ga</label>
                             <select class="form-select" id="arrivalStation" name="arrivalStation">
                                 <option selected>Chọn Ga</option>
-                                <c:forEach items="${sessionScope.liststation}" var="o">
+                                <c:forEach items="${liststation}" var="o">
                                     <option value="${o.id}">${o.name}</option>
                                 </c:forEach>
                             </select>
@@ -181,7 +181,7 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-success me-2">Thêm</button>
-                        <button type="button" class="btn btn-danger">Hủy</button>
+                        <button type="button" class="btn btn-danger" onclick="window.location.href='viewlistroute'">Hủy</button>
                     </div>
                 </form>
             </div>

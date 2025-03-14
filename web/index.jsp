@@ -3,6 +3,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!doctype html>
 <html lang="en">
@@ -11,7 +13,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="image/favicon.png" type="image/png">
-        <title>Royal Hotel</title>
+        <title>TraTra</title>
         <!-- Bootstrap CSS -->
         <%@include file="components/Style.jsp" %>
     </head>
@@ -26,73 +28,72 @@
                 <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
                 <div class="container">
                     <div class="banner_content text-center">
-                        <h6>Away from monotonous life</h6>
-                        <h2>Relax Your Mind</h2>
-                        <p>If you are looking at blank cassettes on the web, you may be very confused at the<br> difference in price. You may see some for as low as $.17 each.</p>
+                        <h6>Live to experience</h6>
+                        <h2>Pack up and go</h2>
+                        <p>At least once in your life, you must see the place you want to see and go to the place you want to go<br> 
+                            See through the train window and go by train gears.</p>
                         <a href="#" class="btn theme_btn button_hover">Get Started</a>
                     </div>
                 </div>
             </div>
+            <form action="Search" method="post" onsubmit="updateHiddenInputs()">
             <div class="hotel_booking_area position">
                 <div class="container">
                     <div class="hotel_booking_table">
                         <div class="col-md-3">
-                            <h2>Book<br> Your Room</h2>
+                            <h2>Search<br> Ticket</h2>
                         </div>
                         <div class="col-md-9">
                             <div class="boking_table">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="book_tabel_item">
-                                            <div class="form-group">
-                                                <div class='input-group date' id='datetimepicker11'>
-                                                    <input type='text' class="form-control" placeholder="Arrival Date"/>
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                    </span>
+                                            <div class="input-group">
+                                                    <input type="text" id="departure_station" class="form-control" placeholder="Departure station">
+                                                    <input type="hidden" name="departureStation" id="departureStationHidden">
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class='input-group date' id='datetimepicker1'>
-                                                    <input type='text' class="form-control" placeholder="Departure Date"/>
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                    </span>
+                                                <div class="input-group">
+                                                    <input type="text" id="arrival_station" class="form-control" placeholder="Arrival station">
+                                                    <input type="hidden" name="arrivalStation" id="arrivalStationHidden">
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="book_tabel_item">
-                                            <div class="input-group">
-                                                <select class="wide">
-                                                    <option data-display="Adult">Adult</option>
-                                                    <option value="1">Old</option>
-                                                    <option value="2">Younger</option>
-                                                    <option value="3">Potato</option>
-                                                </select>
-                                            </div>
-                                            <div class="input-group">
-                                                <select class="wide">
-                                                    <option data-display="Child">Child</option>
-                                                    <option value="1">Child</option>
-                                                    <option value="2">Baby</option>
-                                                    <option value="3">Child</option>
-                                                </select>
+                                        <div class="col-md-4">
+                                            <div class="book_tabel_item">
+                                                <div class="form-group">
+                                                    <div class='input-group date' id='datetimepicker11'>
+                                                        <input type='text' class="form-control" id="departure_date" placeholder="Departure Date">
+                                                        <input type="hidden" name="departureDate" id="departureDateHidden">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class='input-group date' id='datetimepicker1'>
+                                                        <input type='text' class="form-control" id="arrival_date" placeholder="Arrival Date">
+                                                        <input type="hidden" name="arrivalDate" id="arrivalDateHidden">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="book_tabel_item">
-                                            <div class="input-group">
-                                                <select class="wide">
-                                                    <option data-display="Child">Number of Rooms</option>
-                                                    <option value="1">Room 01</option>
-                                                    <option value="2">Room 02</option>
-                                                    <option value="3">Room 03</option>
-                                                </select>
+                                        <div class="col-md-4">
+                                            <div class="book_tabel_item">
+                                                <div class="input-group">
+                                                    <select id="trip_type" class="wide">
+                                                        <option data-display="Type">Type</option>
+                                                        <option value="oneWay">One way</option>
+                                                        <option value="roundTrip">Round trip</option>
+                                                    </select>
+                                                    <input type="hidden" name="tripType" id="tripTypeHidden">
+                                                </div>
                                             </div>
-                                            <a class="book_now_btn button_hover" href="#">Book Now</a>
+                                            <div>
+                                                <button type="submit" class="book_now_btn button_hover mt-3">Book</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +101,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </section>
         <!--================Banner Area =================-->
 
