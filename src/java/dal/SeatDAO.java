@@ -4,6 +4,8 @@ import model.Seat;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,4 +38,27 @@ public class SeatDAO extends DBContext {
         }
         return seat;
     }
+
+    public List<Seat> getAllSeats() {
+        List<Seat> seats = new ArrayList<>();
+        String sql = "SELECT * FROM Seat;";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Seat seat = new Seat(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getLong("price"),
+                    rs.getInt("cabin_id"),
+                    rs.getInt("status")
+                );
+                seats.add(seat);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return seats;
+    }
+
 }

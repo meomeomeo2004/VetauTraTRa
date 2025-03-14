@@ -103,8 +103,9 @@
                     </table>
                 </c:forEach>
             </c:if>
-
             <a href="transaction" class="btn-back">Back to Transactions</a>
+
+            <a href="update-ticket" class="btn btn-warning">Edit ticket</a>
         </div>
 
         <%@include file="components/Footer.jsp" %>

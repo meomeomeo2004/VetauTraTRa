@@ -23,7 +23,7 @@
                     <h2 class="page-cover-tittle">Profile</h2>
                     <ol class="breadcrumb">
                         <li><a href="/tratra">Home</a></li>
-                        <li class="active">Change Password</li>
+                        <li class="active">Update Profile</li>
                     </ol>
                 </div>
             </div>
