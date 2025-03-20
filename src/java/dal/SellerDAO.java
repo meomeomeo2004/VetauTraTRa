@@ -171,6 +171,8 @@ public List<Route> getListRouteDeleted() {
         }
         return list;
     }
+
+
     public void updateRoute(int trainId, String routeCode,
             String describe, String departureDateTime, String arrivalDateTime, String departureStation,
             String arrivalStation, int id) {

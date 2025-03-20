@@ -83,12 +83,12 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("/tratra");
                 }
                 if (role.equalsIgnoreCase("seller")) {
-                    response.sendRedirect(request.getContextPath() + "/liststation");
+                    response.sendRedirect(request.getContextPath() + "/homeSellerPage.jsp");
                 }
                 if (role.equalsIgnoreCase("manager")) {
                     response.sendRedirect(request.getContextPath() + "/ManagerHomePage.jsp");
                 }
-
+ 
                 if (role.equalsIgnoreCase("staff")) {
                     response.sendRedirect(request.getContextPath() + "/staff_page/staffDashboard");
                 }

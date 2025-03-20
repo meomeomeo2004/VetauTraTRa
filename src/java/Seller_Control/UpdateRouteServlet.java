@@ -39,10 +39,10 @@ public class UpdateRouteServlet extends HttpServlet {
         String id = request.getParameter("routeid");
         int rouid = Integer.parseInt(id);
         SellerDAO dao = new SellerDAO();
-        Route a = dao.getRoutebyCode(rouid);
-        request.setAttribute("r", a);
+        Route a = dao.getRoutebyCode(rouid);       
         List<Station> liststation = dao.getListStation();               
         List<Train> listtrain = dao.getListTrain();
+        request.setAttribute("r", a);
         request.setAttribute("station", liststation);
         request.setAttribute("train", listtrain);
         request.getRequestDispatcher("updateRoute.jsp").forward(request, response);
