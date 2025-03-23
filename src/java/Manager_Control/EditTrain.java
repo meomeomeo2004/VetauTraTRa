@@ -1,29 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package Manager_Control;
 
 import dal.ManagerDAO;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import model.Cabin;
 import model.Seller;
 import model.Train;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author ASUS
- */
 @WebServlet("/editTrain")
 public class EditTrain extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -39,7 +29,6 @@ public class EditTrain extends HttpServlet {
         int trainId = Integer.parseInt(request.getParameter("id"));
         Train train = dao.getTrainById(trainId);
         List<Cabin> cabins = dao.getCabinByTrainId(trainId);
-        // Giả sử SellerDAO có phương thức getAllSellers() để lấy danh sách seller
         List<Seller> sellers = dao.getAllSeller();
         
         request.setAttribute("train", train);
@@ -66,7 +55,21 @@ public class EditTrain extends HttpServlet {
         // Kiểm tra tổng số ghế của các cabin
         int sum = 0;
         for (int i = 0; i < cabinNumseatStr.length; i++) {
-            sum += Integer.parseInt(cabinNumseatStr[i]);
+            try {
+                sum += Integer.parseInt(cabinNumseatStr[i].trim());
+            } catch (NumberFormatException e) {
+                request.setAttribute("errorMessage", "Số ghế của toa " + (i + 1) + " không hợp lệ.");
+                // Nạp lại dữ liệu để hiển thị form chỉnh sửa
+                Train train = dao.getTrainById(trainId);
+                List<Cabin> cabins = dao.getCabinByTrainId(trainId);
+                List<Seller> sellers = dao.getAllSeller();
+                request.setAttribute("train", train);
+                request.setAttribute("cabins", cabins);
+                request.setAttribute("listseller", sellers);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Manager_EditTrain.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
         }
         if (sum != totalSeats) {
             request.setAttribute("errorMessage", "Tổng số ghế của các toa (" + sum + ") không bằng với Total Seats (" + totalSeats + ").");
@@ -91,7 +94,13 @@ public class EditTrain extends HttpServlet {
             Cabin cabin = new Cabin();
             cabin.setCabinName(cabinNames[i]);
             cabin.setType(cabinClasses[i]);
-            cabin.setNumSeat(Integer.parseInt(cabinNumseatStr[i]));
+            int seat = 0;
+            try {
+                seat = Integer.parseInt(cabinNumseatStr[i].trim());
+            } catch (NumberFormatException e) {
+                // Nếu xảy ra lỗi (đã được kiểm tra ở trên) thì có thể bỏ qua hoặc gán mặc định
+            }
+            cabin.setNumSeat(seat);
             cabin.setImgUrl(cabinImgUrls[i]);
             cabinList.add(cabin);
         }
