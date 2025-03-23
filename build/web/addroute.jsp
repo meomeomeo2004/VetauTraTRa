@@ -13,7 +13,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
         <style>
             :root {
-                --primary: #659dbd;
+                --primary: #22577a;
                 --primary-dark: #3a56d4;
                 --secondary: #2ec4b6;
                 --danger: #bc986a;

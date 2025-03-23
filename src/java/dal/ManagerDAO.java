@@ -192,7 +192,7 @@ public class ManagerDAO extends DBContext {
      public List<Seller> getAllSeller(){
          List<Seller> list = new ArrayList<>();
          String sql ="""
-                     SELECT * FROM vetautratra.seller 
+                     SELECT * FROM seller 
                      """;
          try {
              PreparedStatement pre = connection.prepareStatement(sql);
