@@ -6,7 +6,6 @@ import dal.SeatDAO;
 import dal.StaffDAO;
 import dal.TicketDAO;
 import dal.TrainDAO;
-import dal.TransactionDAO;
 import dto.TicketDTO;
 import model.Ticket;
 import java.io.IOException;
@@ -19,14 +18,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.*;
-import model.Route;
-import model.Seat;
-import model.Staff;
-import model.Train;
 import java.sql.Timestamp;
 
 @WebServlet(name = "TicketDetailServlet", urlPatterns = {"/ticket-detail"})
@@ -57,7 +49,7 @@ public class TicketDetail extends HttpServlet {
                         Route route = routeDAO.getRouteById(ticket.getRouteId());
                         Seat seat = seatDAO.getSeatById(ticket.getSeatId());
                         Cabin cabin = cabinDAO.getCabinById(seat.getCabinid());
-                        Train train = trainDAO.getTrainById(cabin.getTrainId());
+                        Train train = trainDAO.getTrainById(cabin.getTrainid());
                         Staff staff = staffDAO.getStaffById(ticket.getStaffId());
 
                         boolean canCanceled = canCanceled(route.getDepartureTime());

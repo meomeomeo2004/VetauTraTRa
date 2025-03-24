@@ -4,14 +4,12 @@
  */
 package dal;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.*;
 
 /**
  *
