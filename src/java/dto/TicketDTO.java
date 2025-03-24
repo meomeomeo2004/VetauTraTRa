@@ -41,8 +41,9 @@ public class TicketDTO {
     private Seat seat;
     private Staff staff;
     private int transactionId;
+    private boolean canCanceled;
 
-    public TicketDTO(Ticket ticket, Route route, Train train, Cabin cabin, Seat seat, Staff staff) {
+    public TicketDTO(Ticket ticket, Route route, Train train, Cabin cabin, Seat seat, Staff staff, boolean canCanceled) {
         this.id = ticket.getId();
         this.status = ticket.getStatus();
         this.luggageType = ticket.getLuggageType();
@@ -51,5 +52,8 @@ public class TicketDTO {
         this.seat = seat;
         this.staff = staff;
         this.transactionId = ticket.getTransactionId();
+        this.canCanceled = canCanceled;
+        this.train = train;
+        this.cabin = cabin;
     }
 }

@@ -15,8 +15,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.*;
+import model.Route;
+import model.Seat;
+import model.Staff;
+import model.Train;
+import java.sql.Timestamp;
 
 @WebServlet(name = "TicketDetailServlet", urlPatterns = {"/ticket-detail"})
 public class TicketDetail extends HttpServlet {
@@ -43,12 +54,15 @@ public class TicketDetail extends HttpServlet {
 
                     List<TicketDTO> list = new ArrayList<>();
                     for (Ticket ticket : tickets) {
-                        var route = routeDAO.getRouteById(ticket.getRouteId());
-                        var seat = seatDAO.getSeatById(ticket.getSeatId());
-                        var cabin = cabinDAO.getCabinById(seat.getCabinid());
-                        var train = trainDAO.getTrainById(cabin.getTrainid());
-                        var staff = staffDAO.getStaffById(ticket.getStaffId());
-                        TicketDTO ticketDTO = new TicketDTO(ticket, route, train, cabin, seat, staff);
+                        Route route = routeDAO.getRouteById(ticket.getRouteId());
+                        Seat seat = seatDAO.getSeatById(ticket.getSeatId());
+                        Cabin cabin = cabinDAO.getCabinById(seat.getCabinid());
+                        Train train = trainDAO.getTrainById(cabin.getTrainId());
+                        Staff staff = staffDAO.getStaffById(ticket.getStaffId());
+
+                        boolean canCanceled = canCanceled(route.getDepartureTime());
+
+                        TicketDTO ticketDTO = new TicketDTO(ticket, route, train, cabin, seat, staff, canCanceled);
                         list.add(ticketDTO);
                     }
 
@@ -66,5 +80,14 @@ public class TicketDetail extends HttpServlet {
             request.setAttribute("error", "Transaction ID is required!");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
+    }
+
+    private static boolean canCanceled(Timestamp departureTime) {
+        // Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        Timestamp currentTime = Timestamp.valueOf("2024-03-20 12:34:56");
+        Instant instantB = departureTime.toInstant();
+        Instant instantA = currentTime.toInstant();
+        Duration duration = Duration.between(instantA, instantB);
+        return duration.toHours() >= 3;
     }
 }
