@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
 
         String role = request.getRequestURI().split("/")[2];
         request.setAttribute("role", role);
@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String role = request.getRequestURI().split("/")[2];
@@ -78,10 +78,10 @@ public class LoginServlet extends HttpServlet {
 
                 if (role.equalsIgnoreCase("customer")) {
 
-                response.sendRedirect("/tratra");
+                    response.sendRedirect("/tratra");
                 }
                 if (role.equalsIgnoreCase("seller")) {
-                    response.sendRedirect(request.getContextPath() +"/homeSellerPage.jsp");
+                    response.sendRedirect(request.getContextPath() + "/homeSellerPage.jsp");
                 }
 
             } else {

@@ -156,7 +156,7 @@
                                     </div>
                                     <c:if test="${not empty newsList}">
                                         <div class="notification-footer">
-                                            <a class="dropdown-item text-center p-3 fw-medium" href="notifications">
+                                            <a class="dropdown-item text-center p-3 fw-medium" href="list-news">
                                                 View all notifications
                                             </a>
                                         </div>

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import model.Cabin;
+import model.Luggage;
 import model.Route;
 import model.Seat;
 import model.Staff;
@@ -33,7 +34,7 @@ public class TicketDTO {
 
     private int id;
     private int status;
-    private int luggageType;
+    private Luggage weight;
     private Timestamp bookingDate;
     private Route route;
     private Train train;
@@ -46,7 +47,7 @@ public class TicketDTO {
     public TicketDTO(Ticket ticket, Route route, Train train, Cabin cabin, Seat seat, Staff staff, boolean canCanceled) {
         this.id = ticket.getId();
         this.status = ticket.getStatus();
-        this.luggageType = ticket.getLuggageType();
+        this.weight = weight;
         this.bookingDate = ticket.getBookingDate();
         this.route = route;
         this.seat = seat;

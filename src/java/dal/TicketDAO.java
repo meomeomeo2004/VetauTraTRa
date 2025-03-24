@@ -20,7 +20,7 @@ public class TicketDAO extends DBContext {
     public List<TicketDetail> getAllTicketDetails() {
         List<TicketDetail> tickets = new ArrayList<>();
         String sql = "SELECT t.id, t.status, t.route_id, t.seat_id, t.staff_id, t.transaction_id, "
-            + "t.luggage_type, tr.amount_paid, c.phone_number, c.full_name, c.address, "
+            + "t.weight, tr.amount_paid, c.phone_number, c.full_name, c.address, "
             + "r.departure_station, r.arrival_station, r.departure_time, r.arrival_time "
             + "FROM Ticket t "
             + "JOIN Transaction tr ON t.transaction_id = tr.id "

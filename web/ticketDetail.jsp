@@ -110,7 +110,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Luggage Type</td>
-                                                    <td>${ticket.luggageType}</td>
+                                                    <td>${ticket.weight.weight} kg</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Booking Date</td>
@@ -130,15 +130,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Train</td>
-                                                    <td>${ticket.train.trainid} - ${ticket.train.owner}</td>
+                                                    <td>${ticket.train.trainid} </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Cabin</td>
-                                                    <td>${ticket.cabin.cabinName} - ${ticket.cabin.type}</td>
+                                                    <td>${ticket.cabin.cabin_name} - ${ticket.cabin.cabinclass}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Seat</td>
-                                                    <td>${ticket.seat.name} - ${ticket.seat.id}</td>
+                                                    <td>${ticket.seat.name}</td>
                                                 </tr>
                                             </table>
                                         </div>
