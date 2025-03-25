@@ -14,9 +14,9 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
                     Ticket List
                 </a>
-                <a class="nav-link" href="RevenueReport">
+                <a class="nav-link" href="refundList">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-pie"></i></div>
-                    Revenue Report
+                    Refund Request Lists
                 </a>
                 <!-- Extra Section -->
                 <div class="sb-sidenav-menu-heading">Extra</div>
