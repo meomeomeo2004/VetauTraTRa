@@ -12,8 +12,8 @@
         <link rel="icon" href="image/favicon.png" type="image/png">
         <title>Royal Hotel</title>
         <%@include file="components/Style.jsp" %>
+        <%@include file="components/StyleProfile.jsp" %>
     </head>
-
 
     <body>
         <section class="breadcrumb_area">
@@ -23,7 +23,7 @@
                     <h2 class="page-cover-tittle">Profile</h2>
                     <ol class="breadcrumb">
                         <li><a href="/tratra">Home</a></li>
-                        <li class="active">Change Password</li>
+                        <li class="active">Update Profile</li>
                     </ol>
                 </div>
             </div>
@@ -35,74 +35,80 @@
         <section class="contact_area section_gap">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3 mb-4">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a href="profile">View Profile</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="update-profile">Update Profile</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="change-password">Change Password</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="transaction">Transaction History</a>
-                            </li>
-                        </ul>
+                    <div class="col-lg-3 col-md-4">
+                        <div class="profile-nav-card">
+                            <div class="profile-nav-header">
+                                Account Menu
+                            </div>
+                            <ul class="profile-nav-list">
+                                <li class="profile-nav-item">
+                                    <a href="profile" class="profile-nav-link">
+                                        <i class="fas fa-user"></i> View Profile
+                                    </a>
+                                </li>
+                                <li class="profile-nav-item">
+                                    <a href="update-profile" class="profile-nav-link active">
+                                        <i class="fas fa-edit"></i> Update Profile
+                                    </a>
+                                </li>
+                                <li class="profile-nav-item">
+                                    <a href="change-password" class="profile-nav-link">
+                                        <i class="fas fa-lock"></i> Change Password
+                                    </a>
+                                </li>
+                                <li class="profile-nav-item">
+                                    <a href="transaction" class="profile-nav-link">
+                                        <i class="fas fa-history"></i> Transaction History
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
+                    <div class="col-lg-9 col-md-8">
+                        <div class="content-card">
+                            <div class="content-card-header">
+                                <h3 class="content-card-title">Update Profile</h3>
+                            </div>
 
-                    <div class="col-md-9">
-                        <div class="card">
-                            <form action="update-profile" method="post" class="card-body">
+                            <form action="update-profile" method="post">
                                 <input type="hidden" name="id" value="${sessionScope.account.id}">
-                                <div class="mb-3">
-                                    <label>Full Name</label>
-                                    <div class="input-group">
-                                        <div class="input-group-text">
-                                            <i class="bi bi-person"></i>
-                                        </div>
-                                        <input class="form-control" type="text" id="fullName" name="fullName"
-                                               value="${cus.fullName}">
+
+                                <div class="form-group">
+                                    <label class="form-label">Full Name</label>
+                                    <div class="input-wrapper">
+                                        <i class="fas fa-user form-icon"></i>
+                                        <input type="text" name="fullName" class="form-control-custom" value="${cus.fullName}" required>
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label>Email</label>
-                                    <div class="input-group">
-                                        <div class="input-group-text">
-                                            <i class="bi bi-envelope"></i>
-                                        </div>
-                                        <input class="form-control" type="email" id="email" name="email"
-                                               value="${sessionScope.account.email}">
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <div class="input-wrapper">
+                                        <i class="fas fa-envelope form-icon"></i>
+                                        <input type="email" name="email" class="form-control-custom" value="${sessionScope.account.email}" required>
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label>Phone Number</label>
-                                    <div class="input-group">
-                                        <div class="input-group-text">
-                                            <i class="bi bi-telephone"></i>
-                                        </div>
-                                        <input class="form-control" type="tel" id="phoneNumber" name="phoneNumber"
-                                               value="${cus.phoneNumber}" >
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <div class="input-wrapper">
+                                        <i class="fas fa-phone form-icon"></i>
+                                        <input type="tel" name="phoneNumber" class="form-control-custom" value="${cus.phoneNumber}" required>
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label>Address</label>
-                                    <div class="input-group">
-                                        <div class="input-group-text">
-                                            <i class="bi bi-geo-alt"></i>
-                                        </div>
-                                        <input class="form-control" type="text" id="address" name="address"
-                                               value="${cus.address}" >
+                                <div class="form-group">
+                                    <label class="form-label">Address</label>
+                                    <div class="input-wrapper">
+                                        <i class="fas fa-map-marker-alt form-icon"></i>
+                                        <input type="text" name="address" class="form-control-custom" value="${cus.address}" required>
                                     </div>
                                 </div>
-                                <button type="submit" name="submit" value="update" class="btn btn-primary w-100">Update Profile</button>
+                                <button type="submit" name="submit" value="update" class="btn-submit">
+                                    <i class="fas fa-check-circle"></i> Update Profile
+                                </button>
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -110,11 +116,9 @@
         </div>
     </section>
 
-
     <!--================ start footer Area  =================-->
     <%@include file="components/Footer.jsp" %>
     <!--================ End footer Area  =================-->
-
 
     <%@include file="components/Message.jsp" %>
     <%@include file="components/Script.jsp" %>

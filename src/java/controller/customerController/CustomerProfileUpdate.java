@@ -37,7 +37,7 @@ public class CustomerProfileUpdate extends HttpServlet {
             String id = request.getParameter("id");
             String fullName = request.getParameter("fullName");
             String address = request.getParameter("address");
-            String phoneNumber = request.getParameter("phoneNumber");
+            String phoneNumber = request.getParameter("phoneNumber").trim();
 
             if (id.isBlank() || fullName.isBlank() || address.isBlank()) {
                 throw new Exception("All fields must be filled!");
@@ -51,6 +51,15 @@ public class CustomerProfileUpdate extends HttpServlet {
             String addressRegex = "^[a-zA-Z0-9\\s,/#-]{5,100}$";
             if (!address.matches(addressRegex)) {
                 throw new Exception("Address must contain 5-100 characters and only accept alphabetic characters, numbers, spaces, commas, slashes, and hyphens.");
+            }
+
+            if (phoneNumber.isBlank()) {
+                throw new Exception("Phone number must be filled!");
+            }
+
+            String phoneRegex = "^[0-9]{10}$";
+            if (!phoneNumber.matches(phoneRegex)) {
+                throw new Exception("Invalid phone number format. It must contain exactly 10 digits.");
             }
 
             int customerId = Integer.parseInt(id);
