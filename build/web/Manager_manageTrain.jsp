@@ -364,7 +364,7 @@
                 .sidebar {
                     width: 240px;
                 }
-                
+
                 .content {
                     margin-left: 240px;
                     width: calc(100% - 240px);
@@ -375,26 +375,26 @@
                 body {
                     flex-direction: column;
                 }
-                
+
                 .sidebar {
                     width: 100%;
                     height: auto;
                     position: relative;
                     padding: 1rem;
                 }
-                
+
                 .content {
                     margin-left: 0;
                     width: 100%;
                     padding: 1.5rem;
                 }
-                
+
                 .card-header {
                     flex-direction: column;
                     gap: 1rem;
                     align-items: flex-start;
                 }
-                
+
                 .action-buttons {
                     margin-top: 0.5rem;
                 }
@@ -404,16 +404,16 @@
                 .content {
                     padding: 1rem;
                 }
-                
+
                 .filter-section .row > div {
                     margin-bottom: 1rem;
                 }
-                
+
                 .btn-group {
                     flex-direction: column;
                     width: 100%;
                 }
-                
+
                 .btn-group .btn {
                     width: 100%;
                     margin-bottom: 0.5rem;
@@ -472,10 +472,10 @@
                 </li>
             </ul>
         </aside>
-        
+
         <main class="content">
             <h2 class="page-title"><i class="fas fa-subway"></i> Train Management</h2>
-            
+
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Train Fleet</h5>
@@ -513,7 +513,7 @@
                             </div>
                         </form>
                     </div>
-                    
+
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -529,65 +529,119 @@
                             </thead>
                             <tbody>
                                 <c:forEach items="${alltrain}" var="t">
-                                    <c:if test="${t.status == 1}">
-                                        <tr>
-                                            <td>${t.id}</td>
-                                            <td><strong>${t.trainid}</strong></td>
-                                            <td>${t.totalSeats}</td>
-                                            <td>${t.numCabin}</td>
-                                            <td>
-                                                <form action="UpdateStatusTrain" method="get">
-                                                    <input type="hidden" name="trainId" value="${t.id}">
-                                                    <select name="status" class="form-select form-select-sm" style="width: auto;" onchange="
-                                                            var newStatus = this.options[this.selectedIndex].text;
-                                                            if (confirm('Are you sure you want to change the status to ' + newStatus + '?')) {
-                                                                this.form.submit();
-                                                            } else {
-                                                                this.selectedIndex = 0;
-                                                            }">
-                                                        <option value="1" selected>Active</option>
-                                                        <option value="2">Maintenance</option>
-                                                        <option value="0">Inactive</option>
-                                                    </select>
-                                                </form>
-                                            </td>
-                                            <td>${sellerMap[t.owner]}</td>
-                                            <td>
-                                                <div class="action-buttons">
-                                                    <a href="editTrain?id=${t.id}" class="btn btn-warning btn-icon" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="DetailsTrain?id=${t.id}" class="btn btn-info btn-icon" title="Details">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </c:if>
-                                </c:forEach>
-                                
-                                <c:if test="${empty alltrain}">
+                                    <c:if test="${t.status == 1}">                                    
                                     <tr>
-                                        <td colspan="7">
-                                            <div class="empty-state">
-                                                <div class="empty-state-icon">
-                                                    <i class="fas fa-train"></i>
-                                                </div>
-                                                <h4 class="empty-state-title">No trains found</h4>
-                                                <p class="empty-state-description">There are no trains matching your criteria.</p>
-                                                <a href="AddTrain" class="btn btn-primary">
-                                                    <i class="fas fa-plus"></i> Add New Train
+                                        <td>${t.id}</td>
+                                        <td><strong>${t.trainid}</strong></td>
+                                        <td>${t.totalSeats}</td>
+                                        <td>${t.numCabin}</td>
+                                        <td>
+                                            <form action="UpdateStatusTrain" method="get">
+                                                <input type="hidden" name="trainId" value="${t.id}">
+                                                <select name="status" class="form-select form-select-sm" style="width: auto;" onchange="
+                                                        var newStatus = this.options[this.selectedIndex].text;
+                                                        if (confirm('Are you sure you want to change the status to ' + newStatus + '?')) {
+                                                            this.form.submit();
+                                                        } else {
+                                                            this.selectedIndex = 0;
+                                                        }">
+                                                    <option value="1" selected>Active</option>
+                                                    <option value="2">Maintenance</option>
+                                                    <option value="0">Inactive</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>${sellerMap[t.owner]}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="editTrain?id=${t.id}" class="btn btn-warning btn-icon" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="DetailsTrain?id=${t.id}" class="btn btn-info btn-icon" title="Details">
+                                                    <i class="fas fa-eye"></i>
                                                 </a>
                                             </div>
                                         </td>
-                                    </tr>
-                                </c:if>
+                                    </tr>     
+                                    </c:if>
+                                    <c:if test="${t.status == 2}">                                    
+                                    <tr>
+                                        <td>${t.id}</td>
+                                        <td><strong>${t.trainid}</strong></td>
+                                        <td>${t.totalSeats}</td>
+                                        <td>${t.numCabin}</td>
+                                        <td>
+                                            <form action="UpdateStatusTrain" method="get">
+                                                <input type="hidden" name="trainId" value="${t.id}">
+                                                <select name="status" class="form-select form-select-sm" style="width: auto;" onchange="
+                                                        var newStatus = this.options[this.selectedIndex].text;
+                                                        if (confirm('Are you sure you want to change the status to ' + newStatus + '?')) {
+                                                            this.form.submit();
+                                                        } else {
+                                                            this.selectedIndex = 0;
+                                                        }">
+                                                    <option value="1" selected>Active</option>
+                                                    <option value="2">Maintenance</option>
+                                                    <option value="0">Inactive</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>${sellerMap[t.owner]}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="editTrain?id=${t.id}" class="btn btn-warning btn-icon" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="DetailsTrain?id=${t.id}" class="btn btn-info btn-icon" title="Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>     
+                                    </c:if>
+                                    <c:if test="${t.status == 0}">                                    
+                                    <tr>
+                                        <td>${t.id}</td>
+                                        <td><strong>${t.trainid}</strong></td>
+                                        <td>${t.totalSeats}</td>
+                                        <td>${t.numCabin}</td>
+                                        <td>
+                                            <form action="UpdateStatusTrain" method="get">
+                                                <input type="hidden" name="trainId" value="${t.id}">
+                                                <select name="status" class="form-select form-select-sm" style="width: auto;" onchange="
+                                                        var newStatus = this.options[this.selectedIndex].text;
+                                                        if (confirm('Are you sure you want to change the status to ' + newStatus + '?')) {
+                                                            this.form.submit();
+                                                        } else {
+                                                            this.selectedIndex = 0;
+                                                        }">
+                                                    <option value="1" selected>Active</option>
+                                                    <option value="2">Maintenance</option>
+                                                    <option value="0">Inactive</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>${sellerMap[t.owner]}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="editTrain?id=${t.id}" class="btn btn-warning btn-icon" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="DetailsTrain?id=${t.id}" class="btn btn-info btn-icon" title="Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>     
+                                    </c:if>
+                                </c:forEach>
+
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Train Statistics Card -->
             <div class="card">
                 <div class="card-header">
@@ -650,7 +704,7 @@
                 </div>
             </div>
         </main>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

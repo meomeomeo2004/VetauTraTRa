@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="DotEnv">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/DotEnv/java-dotenv-5.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DotEnv/java-dotenv-5.2.2-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DotEnv/java-dotenv-5.2.2-javadoc.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

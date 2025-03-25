@@ -2,17 +2,18 @@ package Manager_Control;
 
 import dal.ManagerDAO;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Cabin;
 import model.Seller;
 import model.Train;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import model.Seat;
 
 @WebServlet("/editTrain")
 public class EditTrain extends HttpServlet {
@@ -25,12 +26,14 @@ public class EditTrain extends HttpServlet {
     }
     
     // Hiển thị form chỉnh sửa với dữ liệu hiện có
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int trainId = Integer.parseInt(request.getParameter("id"));
         Train train = dao.getTrainById(trainId);
+        List<Seat> inforseat = dao.getSeatByTrainId(trainId);
         List<Cabin> cabins = dao.getCabinByTrainId(trainId);
         List<Seller> sellers = dao.getAllSeller();
-        
+        request.setAttribute("seat", inforseat);
         request.setAttribute("train", train);
         request.setAttribute("cabins", cabins);
         request.setAttribute("listseller", sellers);
@@ -38,81 +41,103 @@ public class EditTrain extends HttpServlet {
     }
     
     // Xử lý cập nhật dữ liệu chỉnh sửa
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        int trainId = Integer.parseInt(request.getParameter("trainId")); // hidden field
+        int trainId = Integer.parseInt(request.getParameter("trainId")); // hidden field từ form
         String trainModel = request.getParameter("train_model");
         int totalSeats = Integer.parseInt(request.getParameter("total_seats"));
         int numCabin = Integer.parseInt(request.getParameter("numcabin"));
         int owner = Integer.parseInt(request.getParameter("owner"));
         
-        // Lấy thông tin các cabin từ form
+        // Lấy dữ liệu của các cabin từ form edit
         String[] cabinNames = request.getParameterValues("cabinName");
         String[] cabinClasses = request.getParameterValues("cabinClass");
+        String[] cabinPriceStr = request.getParameterValues("cabinPrice");
         String[] cabinNumseatStr = request.getParameterValues("cabinNumseat");
         String[] cabinImgUrls = request.getParameterValues("cabinImgUrl");
         
-        // Kiểm tra tổng số ghế của các cabin
+        // Kiểm tra tổng số ghế của các cabin có khớp với totalSeats không
         int sum = 0;
         for (int i = 0; i < cabinNumseatStr.length; i++) {
             try {
                 sum += Integer.parseInt(cabinNumseatStr[i].trim());
             } catch (NumberFormatException e) {
                 request.setAttribute("errorMessage", "Số ghế của toa " + (i + 1) + " không hợp lệ.");
-                // Nạp lại dữ liệu để hiển thị form chỉnh sửa
-                Train train = dao.getTrainById(trainId);
-                List<Cabin> cabins = dao.getCabinByTrainId(trainId);
-                List<Seller> sellers = dao.getAllSeller();
-                request.setAttribute("train", train);
-                request.setAttribute("cabins", cabins);
-                request.setAttribute("listseller", sellers);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("Manager_EditTrain.jsp");
-                dispatcher.forward(request, response);
+                reloadEditPage(request, response, trainId);
                 return;
             }
         }
         if (sum != totalSeats) {
             request.setAttribute("errorMessage", "Tổng số ghế của các toa (" + sum + ") không bằng với Total Seats (" + totalSeats + ").");
-            // Nạp lại dữ liệu để hiển thị form chỉnh sửa
-            Train train = dao.getTrainById(trainId);
-            List<Cabin> cabins = dao.getCabinByTrainId(trainId);
-            List<Seller> sellers = dao.getAllSeller();
-            request.setAttribute("train", train);
-            request.setAttribute("cabins", cabins);
-            request.setAttribute("listseller", sellers);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Manager_EditTrain.jsp");
-            dispatcher.forward(request, response);
+            reloadEditPage(request, response, trainId);
             return;
         }
         
         // Cập nhật thông tin train
         boolean trainUpdated = dao.updateTrain(trainId, trainModel, totalSeats, numCabin, owner);
         
-        // Chuẩn bị danh sách Cabin mới từ dữ liệu form
-        List<Cabin> cabinList = new ArrayList<>();
-        for (int i = 0; i < cabinNames.length; i++) {
-            Cabin cabin = new Cabin();
-            cabin.setCabinName(cabinNames[i]);
-            cabin.setType(cabinClasses[i]);
-            int seat = 0;
-            try {
-                seat = Integer.parseInt(cabinNumseatStr[i].trim());
-            } catch (NumberFormatException e) {
-                // Nếu xảy ra lỗi (đã được kiểm tra ở trên) thì có thể bỏ qua hoặc gán mặc định
-            }
-            cabin.setNumSeat(seat);
-            cabin.setImgUrl(cabinImgUrls[i]);
-            cabinList.add(cabin);
+        if (!trainUpdated) {
+            request.setAttribute("errorMessage", "Cập nhật thông tin train thất bại.");
+            reloadEditPage(request, response, trainId);
+            return;
         }
         
-        boolean cabinsUpdated = dao.updateCabins(trainId, cabinList);
+        // Vì update cabin theo kiểu xóa toàn bộ rồi thêm lại đã được áp dụng trong AddTrain,
+        // ta sẽ xóa các cabin cũ của train và tạo lại từ dữ liệu form.
+        // (Do ràng buộc ON DELETE CASCADE, các Seat cũ cũng bị xóa theo)
+        boolean cabinsDeleted = dao.deleteCabinsByTrainId(trainId);
+        if (!cabinsDeleted) {
+            request.setAttribute("errorMessage", "Xóa dữ liệu cabin cũ thất bại.");
+            reloadEditPage(request, response, trainId);
+            return;
+        }
         
-        if (trainUpdated && cabinsUpdated) {
+        // Thêm lại từng cabin và các Seat tương ứng
+        boolean allInserted = true;
+        for (int i = 0; i < cabinNames.length; i++) {
+            int cabinNumseat = 0;
+            double cabinPrice = 0;
+            try {
+                cabinNumseat = Integer.parseInt(cabinNumseatStr[i].trim());
+                cabinPrice = Double.parseDouble(cabinPriceStr[i].trim());
+            } catch (NumberFormatException e) {
+                request.setAttribute("errorMessage", "Dữ liệu nhập của cabin " + (i + 1) + " không hợp lệ.");
+                reloadEditPage(request, response, trainId);
+                return;
+            }
+            
+            // Thêm cabin và lấy cabinId vừa được tạo
+            int cabinId = dao.AddCabin(cabinNames[i], cabinClasses[i], cabinNumseat, cabinImgUrls[i], trainId);
+            if (cabinId > 0) {
+                // Thêm các seat cho cabin với giá được nhập từ form
+                dao.addSeats(cabinId, cabinPrice, cabinNumseat, cabinNames[i]);
+            } else {
+                allInserted = false;
+                break;
+            }
+        }
+        
+        if (allInserted) {
             response.sendRedirect("listtrain");
         } else {
-            request.setAttribute("errorMessage", "Cập nhật thất bại, vui lòng thử lại.");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Manager_EditTrain.jsp");
-            dispatcher.forward(request, response);
+            request.setAttribute("errorMessage", "Cập nhật cabin/seat thất bại, vui lòng thử lại.");
+            reloadEditPage(request, response, trainId);
         }
+    }
+    
+    // Hàm hỗ trợ nạp lại dữ liệu edit nếu có lỗi
+    private void reloadEditPage(HttpServletRequest request, HttpServletResponse response, int trainId)
+            throws ServletException, IOException {
+        Train train = dao.getTrainById(trainId);
+        List<Cabin> cabins = dao.getCabinByTrainId(trainId);
+        List<Seller> sellers = dao.getAllSeller();
+        List<Seat> inforseat = dao.getSeatByTrainId(trainId);
+        request.setAttribute("train", train);
+        request.setAttribute("cabins", cabins);
+        request.setAttribute("listseller", sellers);
+        request.setAttribute("seat", inforseat);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("Manager_EditTrain.jsp");
+        dispatcher.forward(request, response);
     }
 }

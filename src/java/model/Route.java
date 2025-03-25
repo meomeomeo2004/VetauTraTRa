@@ -32,7 +32,10 @@ public class Route {
     public String getDepartureHour() {
         return (departureTime != null) ? new SimpleDateFormat("hh:mm a").format(departureTime) : "N/A";
     }
-
+    
+    public String getArrivalDate() {
+        return (arrivalTime != null) ? new SimpleDateFormat("MM/dd/yyyy").format(arrivalTime) : "N/A";
+    } 
     public String getArrivalHour() {
         return (arrivalTime != null) ? new SimpleDateFormat("hh:mm a").format(arrivalTime) : "N/A";
     }

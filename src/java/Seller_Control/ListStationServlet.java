@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Station;
 import model.Train;
+import model.User;
 
 /**
  *
@@ -47,9 +48,12 @@ public class ListStationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User a = (User) session.getAttribute("account");
+        int b = a.getId();
         SellerDAO dao = new SellerDAO();   
         List<Station> listS = dao.getListStation();               
-        List<Train> listT = dao.getListTrain();
+        List<Train> listT = dao.getListTrainBySellerId(b);
         request.setAttribute("liststation", listS);
         request.setAttribute("listtrain", listT);
         request.getRequestDispatcher("addroute.jsp").forward(request, response);
