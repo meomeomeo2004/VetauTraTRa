@@ -441,7 +441,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="ViewAllTrain" class="nav-link">
                             <i class="fas fa-subway"></i>
                             <span>Trains</span>
                         </a>

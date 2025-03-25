@@ -257,12 +257,6 @@
                 margin-top: 0.25rem;
             }
 
-            .cabin-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 1.5rem;
-            }
-
             .cabin-card {
                 border: 1px solid var(--gray-300);
                 border-radius: var(--border-radius);
@@ -410,62 +404,56 @@
                 .sidebar {
                     width: 240px;
                 }
-                
+
                 .content {
                     margin-left: 240px;
                     width: calc(100% - 240px);
                 }
-                
-                .cabin-grid {
-                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                }
+
             }
 
             @media (max-width: 768px) {
                 body {
                     flex-direction: column;
                 }
-                
+
                 .sidebar {
                     width: 100%;
                     height: auto;
                     position: relative;
                     padding: 1rem;
                 }
-                
+
                 .content {
                     margin-left: 0;
                     width: 100%;
                     padding: 1.5rem;
                 }
-                
-                .cabin-grid {
-                    grid-template-columns: 1fr;
-                }
+
             }
 
             @media (max-width: 576px) {
                 .content {
                     padding: 1rem;
                 }
-                
+
                 .progress-steps {
                     flex-direction: column;
                     align-items: flex-start;
                     gap: 1rem;
                 }
-                
+
                 .progress-steps::before {
                     display: none;
                 }
-                
+
                 .step {
                     display: flex;
                     align-items: center;
                     width: 100%;
                     padding: 0;
                 }
-                
+
                 .step-number {
                     margin: 0 1rem 0 0;
                 }
@@ -523,10 +511,10 @@
                 </li>
             </ul>
         </aside>
-        
+
         <main class="content">
             <h2 class="page-title"><i class="fas fa-edit"></i> Edit Train</h2>
-            
+
             <div class="progress-steps">
                 <div class="step active" id="step1">
                     <div class="step-number">1</div>
@@ -537,14 +525,14 @@
                     <div class="step-label">Cabin Details</div>
                 </div>
             </div>
-            
+
             <c:if test="${not empty errorMessage}">
                 <div class="alert alert-danger">
                     <i class="fas fa-exclamation-circle me-2"></i>
                     ${errorMessage}
                 </div>
             </c:if>
-            
+
             <form action="editTrain" method="post" id="editTrainForm">
                 <!-- Train Information Card -->
                 <div class="card" id="trainInfoCard">
@@ -553,7 +541,7 @@
                     </div>
                     <div class="card-body">
                         <input type="hidden" id="trainId" name="trainId" value="${train.id}" />
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -573,7 +561,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -590,7 +578,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="d-flex justify-content-end mt-3">
                             <button type="button" class="btn btn-primary" id="btnContinue">
                                 <i class="fas fa-arrow-right"></i> Continue to Cabin Details
@@ -598,17 +586,17 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Cabin Details Card -->
                 <div class="card disabled-section" id="cabinDetailsCard">
                     <div class="card-header">
                         <h5 class="card-title"><i class="fas fa-door-open me-2"></i>Cabin Details</h5>
                     </div>
                     <div class="card-body">
-                        <div class="cabin-grid" id="cabinContainer">
+                        <div class="row" id="cabinContainer">
                             <!-- Cabin cards will be generated here -->
                         </div>
-                        
+
                         <div class="seat-summary" id="seatSummary">
                             <div class="seat-summary-title">
                                 <i class="fas fa-chair"></i> Seat Distribution Summary
@@ -632,7 +620,7 @@
                                 <span>Warning: The sum of cabin seats does not match the total seats!</span>
                             </div>
                         </div>
-                        
+
                         <div class="d-flex justify-content-between mt-4">
                             <button type="button" class="btn btn-secondary" id="btnBackToTrain">
                                 <i class="fas fa-arrow-left"></i> Back to Train Info
@@ -645,183 +633,215 @@
                 </div>
             </form>
         </main>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            // Mảng chứa dữ liệu các cabin có sẵn từ server
-            var existingCabins = [];
-            <c:forEach var="cabin" items="${cabins}">
-                existingCabins.push({
-                    name: '${cabin.cabinName}',
-                    cabinClass: '${cabin.type}', // trường trong CSDL là "class"
-                    numseat: ${cabin.numSeat},
-                    imgUrl: '${cabin.imgUrl}'
-                });
+            // Mảng toàn cục lưu dữ liệu cabin (giúp giữ lại thông tin khi numcabin thay đổi)
+            // Mỗi phần tử là 1 object: { name, cabinClass, price, numseat, imgUrl }
+            let cabinDataArray = [
+            <c:forEach var="c" items="${cabins}" varStatus="loopC">
+            {
+            name: '${c.cabinName}',
+                    cabinClass: '${c.type}',
+                    numseat: '${c.numSeat}',
+                    imgUrl: '${c.imgUrl}',
+                    price: '<c:choose><c:when test="${not empty seat}"><c:set var="foundPrice" value="0"/><c:forEach var="s" items="${seat}"><c:if test="${s.cabinid == c.id}"><c:set var="foundPrice" value="${s.price}" /></c:if></c:forEach>${foundPrice}</c:when><c:otherwise>0</c:otherwise></c:choose>'
+                        }<c:if test="${not loopC.last}">,</c:if>
             </c:forEach>
-            
-            // Check if train info is complete
-            function isTrainInfoComplete() {
-                var model = document.getElementById("train_model").value.trim();
-                var totalSeats = document.getElementById("total_seats").value.trim();
-                var numCabin = document.getElementById("numcabin").value.trim();
-                var owner = document.getElementById("owner").value.trim();
-                return model !== "" && totalSeats !== "" && numCabin !== "" && owner !== "";
-            }
-            
-            // Generate cabin cards
-            function generateCabins() {
-                var numCabinValue = parseInt(document.getElementById("numcabin").value);
-                var cabinContainer = document.getElementById("cabinContainer");
-                cabinContainer.innerHTML = "";
-                
-                for (var i = 0; i < numCabinValue; i++) {
-                    // Get existing cabin data if available
-                    var cabinData = (existingCabins.length > i) ? existingCabins[i] : {name: "", cabinClass: "", numseat: "", imgUrl: ""};
-                    
-                    // Create cabin card
-                    var cabinCard = document.createElement("div");
-                    cabinCard.className = "cabin-card";
-                    
-                    // Create cabin header
-                    var cabinHeader = document.createElement("div");
-                    cabinHeader.className = "cabin-header";
-                    cabinHeader.innerHTML = `
-                        <i class="fas fa-door-open cabin-icon"></i>
-                        <h5 class="cabin-title">Cabin ${i + 1}</h5>
-                    `;
-                    
-                    // Create cabin form
-                    var cabinForm = document.createElement("div");
-                    cabinForm.className = "cabin-form";
-                    cabinForm.innerHTML = `
-                        <div class="form-group">
-                            <label class="form-label">Cabin Name</label>
-                            <input type="text" class="form-control" name="cabinName" value="${cabinData.name}" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Cabin Class</label>
-                            <input type="text" class="form-control" name="cabinClass" value="${cabinData.cabinClass}" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Number of Seats</label>
-                            <input type="number" class="form-control cabin-seats" name="cabinNumseat" value="${cabinData.numseat}" required onchange="updateSeatSummary()">
-                        </div>
-                        <div class="form-group mb-0">
-                            <label class="form-label">Image URL</label>
-                            <input type="text" class="form-control" name="cabinImgUrl" value="${cabinData.imgUrl}" required>
-                        </div>
-                    `;
-                    
-                    // Append header and form to card
-                    cabinCard.appendChild(cabinHeader);
-                    cabinCard.appendChild(cabinForm);
-                    
-                    // Append card to container
-                    cabinContainer.appendChild(cabinCard);
-                }
-                
-                // Update seat summary after generating cabins
-                updateSeatSummary();
-            }
-            
-            // Update seat summary
-            function updateSeatSummary() {
-                var totalSeats = parseInt(document.getElementById("total_seats").value) || 0;
-                var cabinSeatInputs = document.getElementsByName("cabinNumseat");
-                var totalCabinSeats = 0;
-                
-                for (var i = 0; i < cabinSeatInputs.length; i++) {
-                    totalCabinSeats += parseInt(cabinSeatInputs[i].value) || 0;
-                }
-                
-                // Update summary display
-                document.getElementById("summaryTotalSeats").textContent = totalSeats;
-                document.getElementById("summaryCabinSeats").textContent = totalCabinSeats;
-                
-                // Show warning if seats don't match
-                var seatMismatchWarning = document.getElementById("seatMismatchWarning");
-                if (totalCabinSeats !== totalSeats) {
-                    seatMismatchWarning.classList.remove("hidden");
-                } else {
-                    seatMismatchWarning.classList.add("hidden");
-                }
-            }
-            
-            // Continue to cabin details
-            document.getElementById("btnContinue").addEventListener("click", function() {
-                if (!isTrainInfoComplete()) {
-                    alert("Please fill in all train information fields before continuing.");
-                    return;
-                }
-                
-                // Update UI
-                document.getElementById("trainInfoCard").classList.add("disabled-section");
-                document.getElementById("cabinDetailsCard").classList.remove("disabled-section");
-                document.getElementById("step1").classList.remove("active");
-                document.getElementById("step1").classList.add("completed");
-                document.getElementById("step2").classList.add("active");
-                
-                // Generate cabin cards
-                generateCabins();
-            });
-            
-            // Back to train info
-            document.getElementById("btnBackToTrain").addEventListener("click", function() {
-                document.getElementById("trainInfoCard").classList.remove("disabled-section");
-                document.getElementById("cabinDetailsCard").classList.add("disabled-section");
-                document.getElementById("step1").classList.add("active");
-                document.getElementById("step1").classList.remove("completed");
-                document.getElementById("step2").classList.remove("active");
-            });
-            
-            // Reset cabin details if train info changes
-            var trainFields = ["train_model", "total_seats", "numcabin", "owner"];
-            trainFields.forEach(function(id) {
-                document.getElementById(id).addEventListener("change", function() {
-                    // If we're not on the train info step, go back to it
-                    if (!document.getElementById("step1").classList.contains("active")) {
-                        document.getElementById("trainInfoCard").classList.remove("disabled-section");
-                        document.getElementById("cabinDetailsCard").classList.add("disabled-section");
-                        document.getElementById("step1").classList.add("active");
-                        document.getElementById("step1").classList.remove("completed");
-                        document.getElementById("step2").classList.remove("active");
-                    }
-                });
-            });
-            
-            // Form submission validation
-            document.getElementById("editTrainForm").addEventListener("submit", function(event) {
-                // Check if all cabin fields are filled
-                var cabinInputs = document.querySelectorAll("#cabinContainer input");
-                var allFilled = true;
-                
-                cabinInputs.forEach(function(input) {
-                    if (input.value.trim() === "") {
-                        allFilled = false;
-                    }
-                });
-                
-                if (!allFilled) {
-                    event.preventDefault();
-                    alert("Please fill in all cabin details before submitting.");
-                    return;
-                }
-                
-                // Validate that cabin seats sum matches total seats
-                var totalSeats = parseInt(document.getElementById("total_seats").value);
-                var cabinSeatInputs = document.getElementsByName("cabinNumseat");
-                var sum = 0;
-                
-                for (var i = 0; i < cabinSeatInputs.length; i++) {
-                    sum += parseInt(cabinSeatInputs[i].value) || 0;
-                }
-                
-                if (sum !== totalSeats) {
-                    event.preventDefault();
-                    alert("The total number of cabin seats (" + sum + ") does not match the total seats (" + totalSeats + "). Please adjust the seat distribution.");
-                }
-            });
+                        ];
+
+                        // Kiểm tra thông tin train có đầy đủ chưa
+                        function isTrainInfoComplete() {
+                            console.log(model, totalSeats, numCabin, owner);
+                            var model = document.getElementById("train_model").value.trim();
+                            var totalSeats = document.getElementById("total_seats").value.trim();
+                            var numCabin = document.getElementById("numcabin").value.trim();
+                            var owner = document.getElementById("owner").value.trim();
+                            return model !== "" && totalSeats !== "" && numCabin !== "" && owner !== "";
+                        }
+
+                        // Hàm cập nhật khi user thay đổi bất kỳ ô input nào của cabin
+                        function onCabinFieldChange(index, field, value) {
+                            cabinDataArray[index][field] = value;
+                        }
+
+                        // Tạo/hiển thị lại cabin
+                        function generateCabins() {
+                            var numCabinValue = parseInt(document.getElementById("numcabin").value);
+                            var cabinContainer = document.getElementById("cabinContainer");
+
+                            // 1. Điều chỉnh mảng cabinDataArray để khớp với numCabinValue
+                            if (cabinDataArray.length < numCabinValue) {
+                                while (cabinDataArray.length < numCabinValue) {
+                                    cabinDataArray.push({
+                                        name: "",
+                                        cabinClass: "",
+                                        price: "",
+                                        numseat: "",
+                                        imgUrl: ""
+                                    });
+                                }
+                            } else if (cabinDataArray.length > numCabinValue) {
+                                cabinDataArray.splice(numCabinValue, cabinDataArray.length - numCabinValue);
+                            }
+
+                            // 2. Xóa UI cũ
+                            cabinContainer.innerHTML = "";
+
+                            // 3. Tạo lại UI cho từng cabin
+                            for (let i = 0; i < numCabinValue; i++) {
+                                let cabinData = cabinDataArray[i];
+
+                                // col-md-4 => 3 cột (Bootstrap)
+                                var cabinCol = document.createElement("div");
+                                cabinCol.className = "col-md-4";
+
+                                var cabinCard = document.createElement("div");
+                                cabinCard.className = "cabin-card card mb-3";
+
+                                // Header hiển thị Cabin 1, Cabin 2, ...
+                                var cabinHeader = document.createElement("div");
+                                cabinHeader.className = "card-header";
+                                cabinHeader.innerHTML = `
+                <i class="fas fa-door-open cabin-icon"></i>
+                <h5 class="cabin-title">Cabin ${i + 1}</h5>
+            `;
+
+                                // Body (nội dung form cabin)
+                                var cabinBody = document.createElement("div");
+                                cabinBody.className = "card-body";
+                                cabinBody.innerHTML = `
+                                        <div class="form-group mb-2">
+                                            <label class="form-label">Cabin Name</label>
+                                            <input type="text" class="form-control" name="cabinName" required
+                                                   value="${cabinData.name}"
+                                                   onchange="onCabinFieldChange(${i}, 'name', this.value)">
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <label class="form-label">Cabin Class</label>
+                                            <input type="text" class="form-control" name="cabinClass" required
+                                                   value="${cabinData.cabinClass}"
+                                                   onchange="onCabinFieldChange(${i}, 'cabinClass', this.value)">
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <label class="form-label">Price</label>
+                                            <input type="number" step="0.01" class="form-control" name="cabinPrice" required
+                                                   value="${cabinData.price}"
+                                                   onchange="onCabinFieldChange(${i}, 'price', this.value)">
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <label class="form-label">Number of Seats</label>
+                                            <input type="number" class="form-control cabin-seats" name="cabinNumseat"
+                                                   required value="${cabinData.numseat}"
+                                                   onchange="onCabinFieldChange(${i}, 'numseat', this.value); updateSeatSummary();">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Image URL</label>
+                                            <input type="text" class="form-control" name="cabinImgUrl" required
+                                                   value="${cabinData.imgUrl}"
+                                                   onchange="onCabinFieldChange(${i}, 'imgUrl', this.value)">
+                                        </div>
+            `;
+
+                                cabinCard.appendChild(cabinHeader);
+                                cabinCard.appendChild(cabinBody);
+                                cabinCol.appendChild(cabinCard);
+                                cabinContainer.appendChild(cabinCol);
+                            }
+
+                            // Sau khi tạo xong cabin, cập nhật seat summary
+                            updateSeatSummary();
+                        }
+
+                        // Cập nhật seat summary
+                        function updateSeatSummary() {
+                            var totalSeats = parseInt(document.getElementById("total_seats").value) || 0;
+                            var cabinSeatInputs = document.getElementsByName("cabinNumseat");
+                            var totalCabinSeats = 0;
+
+                            for (var i = 0; i < cabinSeatInputs.length; i++) {
+                                totalCabinSeats += parseInt(cabinSeatInputs[i].value) || 0;
+                            }
+
+                            document.getElementById("summaryTotalSeats").textContent = totalSeats;
+                            document.getElementById("summaryCabinSeats").textContent = totalCabinSeats;
+
+                            var seatMismatchWarning = document.getElementById("seatMismatchWarning");
+                            if (totalCabinSeats !== totalSeats) {
+                                seatMismatchWarning.classList.remove("hidden");
+                            } else {
+                                seatMismatchWarning.classList.add("hidden");
+                            }
+                        }
+
+                        // Sự kiện nút "Continue to Cabin details"
+                        document.getElementById("btnContinue").addEventListener("click", function () {
+                            if (!isTrainInfoComplete()) {
+                              
+                                alert("Please fill in all train information fields before continuing.");
+                                return;
+                            }
+
+                            // Ẩn phần train info, hiện phần cabin details
+                            document.getElementById("trainInfoCard").classList.add("disabled-section");
+                            document.getElementById("cabinDetailsCard").classList.remove("disabled-section");
+                            document.getElementById("step1").classList.remove("active");
+                            document.getElementById("step1").classList.add("completed");
+                            document.getElementById("step2").classList.add("active");
+
+                            // Tạo/hiển thị cabin, vẫn giữ lại dữ liệu cũ
+                            generateCabins();
+                        });
+
+                        // Sự kiện nút "Back to train info"
+                        document.getElementById("btnBackToTrain").addEventListener("click", function () {
+                            document.getElementById("trainInfoCard").classList.remove("disabled-section");
+                            document.getElementById("cabinDetailsCard").classList.add("disabled-section");
+                            document.getElementById("step1").classList.add("active");
+                            document.getElementById("step1").classList.remove("completed");
+                            document.getElementById("step2").classList.remove("active");
+                        });
+
+                        // Khi các trường train info thay đổi => trở về bước 1
+                        var trainFields = ["train_model", "total_seats", "numcabin", "owner"];
+                        trainFields.forEach(function (id) {
+                            document.getElementById(id).addEventListener("change", function () {
+                                if (!document.getElementById("step1").classList.contains("active")) {
+                                    document.getElementById("trainInfoCard").classList.remove("disabled-section");
+                                    document.getElementById("cabinDetailsCard").classList.add("disabled-section");
+                                    document.getElementById("step1").classList.add("active");
+                                    document.getElementById("step1").classList.remove("completed");
+                                    document.getElementById("step2").classList.remove("active");
+                                }
+                            });
+                        });
+
+                        // Validation khi submit form
+                        document.getElementById("editTrainForm").addEventListener("submit", function (event) {
+                            var cabinInputs = document.querySelectorAll("#cabinContainer input");
+                            var allFilled = true;
+                            cabinInputs.forEach(function (input) {
+                                if (input.value.trim() === "") {
+                                    allFilled = false;
+                                }
+                            });
+                            if (!allFilled) {
+                                event.preventDefault();
+                                alert("Please fill in all cabin details before submitting.");
+                                return;
+                            }
+
+                            var totalSeats = parseInt(document.getElementById("total_seats").value);
+                            var cabinSeatInputs = document.getElementsByName("cabinNumseat");
+                            var sum = 0;
+                            for (var i = 0; i < cabinSeatInputs.length; i++) {
+                                sum += parseInt(cabinSeatInputs[i].value) || 0;
+                            }
+                            if (sum !== totalSeats) {
+                                event.preventDefault();
+                                alert("The total number of cabin seats (" + sum + ") does not match the total seats (" + totalSeats + "). Please adjust the seat distribution.");
+                            }
+                        });
         </script>
     </body>
 </html>
-

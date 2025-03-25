@@ -1,300 +1,616 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
-<!doctype html>
-<html lang="en">
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@page import="com.google.gson.Gson" %>
+<%@page import="java.util.Map" %>
+<% Map<String, Object> routeData = (Map<String, Object>) request.getAttribute("routeData"); %>
+<script>
+    let cabins = <%= new Gson().toJson(request.getAttribute("cabins")) %>;
+    let selectedSeatsByCabin = {}; // Object to store selected seats by cabin ID
+    let currentCabin = null; // Keep track of current cabin
+    let routeId = ${route.id}
+</script>
+<!DOCTYPE html>
+<html>
     <style>
         body{
             background:#f5f5f5;
             margin-top:20px;
             padding-top: 80px;
         }
-
-        /* ===== Career ===== */
-        .career-form {
-            background-color: #4e63d7;
-            border-radius: 5px;
-            padding: 0 16px;
+        .icon-hover:hover {
+            border-color: #3b71ca !important;
+            background-color: white !important;
+            color: #3b71ca !important;
         }
 
-        .career-form .form-control {
-            background-color: rgba(255, 255, 255, 0.2);
-            border: 0;
-            padding: 12px 15px;
-            color: #fff;
+        .icon-hover:hover i {
+            color: #3b71ca !important;
         }
 
-        .career-form .form-control::-webkit-input-placeholder {
-            /* Chrome/Opera/Safari */
-            color: #fff;
-        }
-
-        .career-form .form-control::-moz-placeholder {
-            /* Firefox 19+ */
-            color: #fff;
-        }
-
-        .career-form .form-control:-ms-input-placeholder {
-            /* IE 10+ */
-            color: #fff;
-        }
-
-        .career-form .form-control:-moz-placeholder {
-            /* Firefox 18- */
-            color: #fff;
-        }
-
-        .career-form .custom-select {
-            background-color: rgba(255, 255, 255, 0.2);
-            border: 0;
-            padding: 12px 15px;
-            color: #fff;
-            width: 100%;
-            border-radius: 5px;
-            text-align: left;
-            height: auto;
-            background-image: none;
-        }
-
-        .career-form .custom-select:focus {
-            -webkit-box-shadow: none;
-            box-shadow: none;
-        }
-
-        .career-form .select-container {
-            position: relative;
-        }
-
-        .career-form .select-container:before {
-            position: absolute;
-            right: 15px;
-            top: calc(50% - 14px);
-            font-size: 18px;
-            color: #ffffff;
-            content: '\F2F9';
-            font-family: "Material-Design-Iconic-Font";
-        }
-
-        .filter-result .job-box {
-            background:#fff;
-            -webkit-box-shadow: 0 0 35px 0 rgba(130, 130, 130, 0.2);
-            box-shadow: 0 0 35px 0 rgba(130, 130, 130, 0.2);
-            border-radius: 10px;
-            padding: 10px 35px;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        .list-disk li {
-            list-style: none;
-            margin-bottom: 12px;
-        }
-
-        .list-disk li:last-child {
-            margin-bottom: 0;
-        }
-
-        .job-box .img-holder {
-            height: 65px;
-            width: 65px;
-            background-color: #4e63d7;
-            background-image: -webkit-gradient(linear, left top, right top, from(rgba(78, 99, 215, 0.9)), to(#5a85dd));
-            background-image: linear-gradient(to right, rgba(78, 99, 215, 0.9) 0%, #5a85dd 100%);
-            font-family: "Open Sans", sans-serif;
-            color: #fff;
-            font-size: 22px;
-            font-weight: 700;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
-            justify-content: center;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            border-radius: 65px;
-        }
-
-        .career-title {
-            background-color: #4e63d7;
-            color: #fff;
+        /* Thêm CSS cho phần sơ đồ ghế */
+        .seat-map-container {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             padding: 15px;
-            text-align: center;
-            border-radius: 10px 10px 0 0;
-            background-image: -webkit-gradient(linear, left top, right top, from(rgba(78, 99, 215, 0.9)), to(#5a85dd));
-            background-image: linear-gradient(to right, rgba(78, 99, 215, 0.9) 0%, #5a85dd 100%);
+            background-color: #fff;
         }
 
-        .job-overview {
-            -webkit-box-shadow: 0 0 35px 0 rgba(130, 130, 130, 0.2);
-            box-shadow: 0 0 35px 0 rgba(130, 130, 130, 0.2);
-            border-radius: 10px;
+        .seat-map-title {
+            color: #3080c7;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
 
-        @media (min-width: 992px) {
-            .job-overview {
-                position: -webkit-sticky;
-                position: sticky;
-                top: 70px;
-            }
-        }
-
-        .job-overview .job-detail ul {
-            margin-bottom: 28px;
-        }
-
-        .job-overview .job-detail ul li {
-            opacity: 0.75;
-            font-weight: 600;
+        .coach-row {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 15px;
         }
 
-        .job-overview .job-detail ul li i {
-            font-size: 20px;
+        .seat {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #b89d58;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            font-weight: bold;
+            cursor: pointer;
             position: relative;
-            top: 1px;
+            background-color: white;
         }
 
-        .job-overview .overview-bottom,
-        .job-overview .overview-top {
-            padding: 35px;
+        .seat::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #b89d58;
+            border-radius: 2px 0 0 2px;
         }
 
-        .job-content ul li {
-            font-weight: 600;
-            opacity: 0.75;
-            border-bottom: 1px solid #ccc;
-            padding: 10px 5px;
+        .seat.reserved {
+            background-color: #e74c3c;
+            color: white;
         }
 
-        @media (min-width: 768px) {
-            .job-content ul li {
-                border-bottom: 0;
-                padding: 0;
-            }
+        .seat.selected {
+            background-color: #27ae60;
+            color: white;
         }
 
-        .job-content ul li i {
-            font-size: 20px;
-            position: relative;
-            top: 1px;
+        .aisle {
+            width: 30px;
+            background-color: #ccc;
+            margin: 0 10px;
         }
 
-        .mb-30 {
-            margin-bottom: 30px;
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
         }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 15px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+
+        .free {
+            background-color: white;
+            border: 1px solid #b89d58;
+        }
+
+        .reserved-color {
+            background-color: #e74c3c;
+        }
+
+        .selected-color {
+            background-color: #27ae60;
+        }
+
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .summary-title {
+            color: #3080c7;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .coach-container.selected {
+            border: 2px solid #27ae60;
+            border-radius: 5px;
+        }
+
+        .coach-container {
+            display: inline-block;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
     </style>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="icon" href="image/favicon.png" type="image/png">
-        <title>List route</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>${route.routeCode}</title>
         <%@include file="components/Style.jsp" %>
     </head>
-    <body>
-        <%@include file="components/Header.jsp" %>
+    <%@include file="components/Header.jsp" %>
+
+    <!-- content -->
+    <section class="py-5">
         <div class="container">
-            <form action="Search" method="post" onsubmit="updateHiddenInputs()">
-            <div class="hotel_booking_area position">
-                <div class="container">
-                    <div class="hotel_booking_table">
-                        <div class="col-md-3">
-                            <h2>Search<br> Ticket</h2>
+            <div class="row gx-5">
+                <div class="border rounded-2 px-3 py-2 bg-white shadow">
+                    <main class="col-lg-12">
+                        <div class="ps-lg-3">
+                            <h4 class="title text-dark">${route.routeCode}</h4>
+                            <p>${route.description}</p>
+                            <div class="mb-3">
+                                <span class="h5 text-success">
+                                    Economy: <fmt:formatNumber value="${route.economyPrice}" type="number" groupingUsed="true" /> VND
+                                </span>
+                                <span class="mx-2"> | </span>
+                                <span class="h5 text-primary">
+                                    Business: <fmt:formatNumber value="${route.businessPrice}" type="number" groupingUsed="true" /> VND
+                                </span>
+                            </div>
+                            <div class="row d-flex justify-content-between">
+                                <div class="col-md-6 d-flex">
+                                    <dt class="fw-bold me-2">Departure Station:</dt>
+                                    <dd class="me-4">${route.departureStation}</dd>
+                                </div>
+                                <div class="col-md-6 d-flex">
+                                    <dt class="fw-bold me-2">Arrival Station:</dt>
+                                    <dd>${route.arrivalStation}</dd>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between">
+                                <div class="col-md-6 d-flex">
+                                    <dt class="fw-bold me-2">Departure Time:</dt>
+                                    <dd class="me-4">${formattedDeparture}</dd>
+                                </div>
+                                <div class="col-md-6 d-flex">
+                                    <dt class="fw-bold me-2">Arrival Time:</dt>
+                                    <dd>${formattedArrival}</dd>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between">
+                                <div class="col-md-6 d-flex">
+                                    <dt class="fw-bold me-2">Railway company:</dt>
+                                    <dd class="me-4">${route.owner}</dd>
+                                </div>
+                                <div class="col-md-6 d-flex">
+                                    <dt class="fw-bold me-2">Train:</dt>
+                                    <dd>${route.trainName}</dd>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between">
+                                <div class="col-md-6 d-flex">
+                                    <dt class="fw-bold me-2">Seat economy amount:</dt>
+                                    <dd class="me-4">${route.economyAmount}</dd>
+                                </div>
+                                <div class="col-md-6 d-flex">
+                                    <dt class="fw-bold me-2">Seat business amount:</dt>
+                                    <dd>${route.businessAmount}</dd>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-9">
-                            <div class="boking_table">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="book_tabel_item">
-                                            <div class="input-group">
-                                                    <input type="text" id="departure_station" class="form-control" placeholder="Departure station">
-                                                    <input type="hidden" name="departureStation" id="departureStationHidden">
-                                                </div>
-                                                <div class="input-group">
-                                                    <input type="text" id="arrival_station" class="form-control" placeholder="Arrival station">
-                                                    <input type="hidden" name="arrivalStation" id="arrivalStationHidden">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="book_tabel_item">
-                                                <div class="form-group">
-                                                    <div class='input-group date' id='datetimepicker11'>
-                                                        <input type='text' class="form-control" id="departure_date" placeholder="Departure Date">
-                                                        <input type="hidden" name="departureDate" id="departureDateHidden">
-                                                        <span class="input-group-addon">
-                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                        </span>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- content -->
+    <form id="paymentForm" action="PayTicketServlet" method="POST">
+        <input type="hidden" name="amount" id="amount">
+        <input type="hidden" name="numSeats" id="numSeats">
+        <input type="hidden" name="selectedSeats" id="selectedSeats">
+
+        <div class="container">
+            <div class="row gx-4">
+                <div class="col-lg-8 mb-4">
+                    <div class="border rounded-2 px-3 py-2 bg-white shadow">
+                        <div class="tab-content" id="ex1-content">
+                            <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
+                                <div class="train-container" id="trainContainer"></div>
+                                <hr>
+                                <div id="cabinInfo" class="cabin-info">
+                                    <h4>Select a cabin to view information</h4>
+                                </div>
+                                <script>
+                                    function generateTrain(cabins) {
+                                        const trainContainer = document.getElementById("trainContainer");
+                                        trainContainer.innerHTML = "";
+
+                                        cabins.forEach((cabin, index) => {
+                                            const coachDiv = document.createElement("div");
+                                            coachDiv.classList.add("coach-container");
+                                            coachDiv.innerHTML = `<img src="image/route/train.png" class="coach">`;
+                                            coachDiv.dataset.index = index;
+                                            coachDiv.onclick = function () {
+                                                selectCoach(this, cabins[index]);
+                                            };
+                                            trainContainer.appendChild(coachDiv);
+                                        });
+
+                                        // Thêm đầu tàu vào cuối
+                                        const headTrainDiv = document.createElement("div");
+                                        headTrainDiv.classList.add("head-train");
+                                        headTrainDiv.innerHTML = `<img src="image/route/head_train.png" class="coach">`;
+                                        trainContainer.appendChild(headTrainDiv);
+                                    }
+
+                                    function selectCoach(selectedCoach, cabin) {
+                                        console.log("📌 Cabin được chọn:", cabin.id);
+
+                                        if (!cabin) {
+                                            console.error("❌ Lỗi: Cabin không tồn tại!");
+                                            return;
+                                        }
+
+                                        document.querySelectorAll(".coach-container").forEach(coach => {
+                                            coach.classList.remove("selected");
+                                        });
+                                        selectedCoach.classList.add("selected");
+
+                                        let cabinInfo = document.getElementById("cabinInfo");
+                                        if (!cabinInfo) {
+                                            console.error("❌ Không tìm thấy phần tử 'cabinInfo'");
+                                            return;
+                                        }
+
+                                        // Xóa nội dung cũ
+                                        cabinInfo.innerHTML = "";
+
+                                        // Store current cabin
+                                        currentCabin = cabin;
+
+                                        // Initialize selected seats array for this cabin if it doesn't exist
+                                        if (!selectedSeatsByCabin[cabin.id]) {
+                                            selectedSeatsByCabin[cabin.id] = [];
+                                        }
+
+                                        // Call the async function
+                                        generateSeatMap(cabin)
+                                                .catch(error => {
+                                                    console.error("Error generating seat map:", error);
+                                                    cabinInfo.innerHTML = "<p>Error loading seat map. Please try again.</p>";
+                                                });
+                                    }
+
+                                    async function generateSeatMap(cabin) {
+                                        // Get reserved seats before continuing
+                                        const reservedSeats = await loadReservedSeats(routeId, cabin);
+
+                                        // Rest of the function remains the same, but now reservedSeats is an array
+                                        // Tạo hoặc lấy container cho sơ đồ ghế
+                                        let seatMapContainer = document.getElementById("seatMapContainer");
+                                        if (!seatMapContainer) {
+                                            seatMapContainer = document.createElement("div");
+                                            seatMapContainer.id = "seatMapContainer";
+                                            seatMapContainer.className = "seat-map-container";
+                                            document.getElementById("cabinInfo").after(seatMapContainer);
+                                        }
+
+                                        // Xóa nội dung cũ
+                                        seatMapContainer.innerHTML = "";
+
+                                        // Tạo tiêu đề
+                                        const mapTitle = document.createElement("h4");
+                                        mapTitle.className = "seat-map-title";
+                                        mapTitle.textContent = cabin.cabinName + " - " + cabin.type;
+                                        seatMapContainer.appendChild(mapTitle);
+
+                                        // Tạo khung toa xe
+                                        const coach = document.createElement("div");
+                                        coach.className = "coach";
+                                        seatMapContainer.appendChild(coach);
+
+                                        const numSeats = parseInt(cabin.numSeat);
+                                        let seatsPerRow = 10; // Số ghế mỗi hàng (2 bên hành lang, mỗi bên 2 ghế)
+
+                                        if (cabin.type && cabin.type.toLowerCase().includes("business")) {
+                                            seatsPerRow = 10; // Business class có ít ghế hơn mỗi hàng
+                                        }
+
+                                        // Tính số hàng cần thiết
+                                        let numRows = Math.ceil(numSeats / seatsPerRow);
+                                        let seatNumber = 1;
+
+                                        // Tạo các hàng ghế
+                                        for (let i = 0; i < numRows && seatNumber <= numSeats; i++) {
+                                            const row = document.createElement("div");
+                                            row.className = "coach-row";
+                                            coach.appendChild(row);
+
+                                            // Thêm ghế bên trái hành lang
+                                            const leftSeats = seatsPerRow / 2;
+                                            for (let j = 0; j < leftSeats && seatNumber <= numSeats; j++) {
+                                                const seat = createSeatElement(seatNumber, reservedSeats.includes(seatNumber), cabin.id);
+                                                row.appendChild(seat);
+                                                seatNumber++;
+                                            }
+
+                                            // Thêm hành lang
+                                            const aisle = document.createElement("div");
+                                            aisle.className = "aisle";
+                                            row.appendChild(aisle);
+
+                                            // Thêm ghế bên phải hành lang
+                                            const rightSeats = seatsPerRow / 2;
+                                            for (let j = 0; j < rightSeats && seatNumber <= numSeats; j++) {
+                                                const seat = createSeatElement(seatNumber, reservedSeats.includes(seatNumber), cabin.id);
+                                                row.appendChild(seat);
+                                                seatNumber++;
+                                            }
+                                        }
+
+                                        // Thêm phần chú thích
+                                        const legend = document.createElement("div");
+                                        legend.className = "legend";
+                                        legend.innerHTML = `
+                                                    <div class="legend-item">
+                                                        <div class="legend-color free"></div>
+                                                        <span>Empty Seat</span>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class='input-group date' id='datetimepicker1'>
-                                                        <input type='text' class="form-control" id="arrival_date" placeholder="Arrival Date">
-                                                        <input type="hidden" name="arrivalDate" id="arrivalDateHidden">
-                                                        <span class="input-group-addon">
-                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                        </span>
+                                                    <div class="legend-item">
+                                                        <div class="legend-color reserved-color"></div>
+                                                        <span>Booked Seat</span>
                                                     </div>
+                                                    <div class="legend-item">
+                                                        <div class="legend-color selected-color"></div>
+                                                        <span>Your Selected Seat</span>
+                                                    </div>
+                                                `;
+                                        seatMapContainer.appendChild(legend);
+
+                                        // Add click events to seats - IMPORTANT: Do this after creating seats
+                                        addSeatClickEvents();
+                                    }
+
+                                    // Hàm tạo một phần tử ghế
+                                    function createSeatElement(seatNumber, isReserved, cabinId) {
+                                        const seat = document.createElement("div");
+                                        seat.className = isReserved ? "seat reserved" : "seat";
+                                        seat.setAttribute("data-seat", seatNumber);
+                                        seat.setAttribute("data-cabin", cabinId);
+                                        seat.textContent = seatNumber;
+
+                                        // Check if this seat is in our selectedSeats array for this cabin
+                                        if (selectedSeatsByCabin[cabinId] && selectedSeatsByCabin[cabinId].includes(seatNumber.toString())) {
+                                            seat.classList.add('selected');
+                                        }
+
+                                        return seat;
+                                    }
+
+                                    async function loadReservedSeats(routeId, cabin) {
+                                        try {
+                                            const response = await fetch(`/tratra/SeatServlet?routeId=` + routeId + `&cabinId=` + cabin.id);
+                                            const data = await response.json();
+                                            return data;
+                                        } catch (error) {
+                                            console.error("Error fetching reserved seats:", error);
+                                            return []; // Trả về null nếu có lỗi
+                                        }
+                                    }
+
+                                    // Hàm thêm sự kiện click cho ghế
+                                    function addSeatClickEvents() {
+                                        const seats = document.querySelectorAll('.seat:not(.reserved)');
+
+                                        seats.forEach(seat => {
+                                            seat.addEventListener('click', function () {
+                                                const seatNumber = this.getAttribute('data-seat');
+                                                const cabinId = this.getAttribute('data-cabin');
+
+                                                // Make sure the cabin array exists
+                                                if (!selectedSeatsByCabin[cabinId]) {
+                                                    selectedSeatsByCabin[cabinId] = [];
+                                                }
+
+                                                if (this.classList.contains('selected')) {
+                                                    // Bỏ chọn ghế
+                                                    this.classList.remove('selected');
+                                                    selectedSeatsByCabin[cabinId] = selectedSeatsByCabin[cabinId].filter(s => s !== seatNumber);
+                                                } else {
+                                                    // Chọn ghế
+                                                    this.classList.add('selected');
+                                                    selectedSeatsByCabin[cabinId].push(seatNumber);
+                                                }
+
+                                                // Cập nhật thông tin summary
+                                                updateSummary();
+                                            });
+                                        });
+                                    }
+
+                                    function updateSummary() {
+                                        // Get or create the summary container
+                                        let summaryContainer = document.getElementById('seat-summary-container');
+                                        if (!summaryContainer) {
+                                            console.error("Summary container not found");
+                                            return;
+                                        }
+
+                                        // Clear the container
+                                        summaryContainer.innerHTML = '<h4 class="summary-title">Your Seat Selection</h4>';
+
+                                        // Keep track of total seats and total price
+                                        let totalSeats = 0;
+                                        let totalPrice = 0;
+                                        console.log("Selected Seats Data:", selectedSeatsByCabin);
+
+
+                                        // Iterate through each cabin with selected seats
+                                        for (const cabinId in selectedSeatsByCabin) {
+                                            if (selectedSeatsByCabin[cabinId].length > 0) {
+                                                // Find cabin details
+                                                const cabin = cabins.find(c => c.id == cabinId);
+                                                if (!cabin)
+                                                    continue;
+
+                                                // Calculate price for this cabin's seats
+                                                let unitPrice = 0;
+                                                if (cabin.type && cabin.type.toLowerCase().includes("business")) {
+                                                    unitPrice = parseInt("${route.businessPrice}".replace(/,/g, ''));
+                                                } else {
+                                                    unitPrice = parseInt("${route.economyPrice}".replace(/,/g, ''));
+                                                }
+
+                                                const cabinSeatsCount = selectedSeatsByCabin[cabinId].length;
+                                                const cabinPrice = unitPrice * cabinSeatsCount;
+
+                                                // Create summary element for this cabin
+                                                const cabinSummary = document.createElement('div');
+                                                cabinSummary.className = 'summary mb-3';
+
+                                                const cabinTitle = document.createElement('h5');
+                                                cabinTitle.textContent = "Cabin: " + cabin.cabinName + " - " + cabin.type;
+
+                                                const selectedSeatsText = document.createElement('h5');
+                                                selectedSeatsText.textContent = "Selected seat(s): " + selectedSeatsByCabin[cabinId].join(', ');
+
+                                                const numberOfSeatsText = document.createElement('h5');
+                                                numberOfSeatsText.textContent = "Number of seats: " + cabinSeatsCount;
+
+                                                const priceText = document.createElement('h5');
+                                                priceText.textContent = "Price: " + cabinPrice.toLocaleString() + " VND";
+
+                                                cabinSummary.appendChild(cabinTitle);
+                                                cabinSummary.appendChild(selectedSeatsText);
+                                                cabinSummary.appendChild(numberOfSeatsText);
+                                                cabinSummary.appendChild(priceText);
+
+                                                summaryContainer.appendChild(cabinSummary);
+
+                                                // Update totals
+                                                totalSeats += cabinSeatsCount;
+                                                totalPrice += cabinPrice;
+                                            }
+                                        }
+
+                                        // Add total summary if there are any selected seats
+                                        if (totalSeats > 0) {
+                                            const totalSummary = document.createElement('div');
+                                            totalSummary.className = 'summary';
+                                            const totalSeatsText = document.createElement('h5');
+                                            totalSeatsText.className = "text-primary";
+                                            totalSeatsText.textContent = "Total number of seats: " + totalSeats;
+
+                                            const totalPriceText = document.createElement('h5');
+                                            totalPriceText.className = "text-primary";
+                                            totalPriceText.textContent = "Total price: " + totalPrice.toLocaleString() + " VND";
+
+                                            const checkoutButton = document.createElement('a');
+                                            checkoutButton.className = "btn btn-primary mt-3 w-100";
+                                            checkoutButton.textContent = "Buy ticket";
+                                            checkoutButton.onclick = function () {
+                                                // Tạo form gửi dữ liệu POST đến PayTicketServlet
+                                                const form = document.createElement("form");
+                                                form.method = "POST";
+                                                form.action = "PayTicketServlet"; // Đường dẫn đến Servlet xử lý thanh toán
+
+                                                // Thêm input ẩn để truyền dữ liệu
+                                                const amountInput = document.createElement("input");
+                                                amountInput.type = "hidden";
+                                                amountInput.name = "amount";
+                                                amountInput.value = totalPrice;
+
+                                                const numSeatsInput = document.createElement("input");
+                                                numSeatsInput.type = "hidden";
+                                                numSeatsInput.name = "numSeats";
+                                                numSeatsInput.value = totalSeats;
+
+                                                const selectedSeatsInput = document.createElement("input");
+                                                selectedSeatsInput.type = "hidden";
+                                                selectedSeatsInput.name = "selectedSeats";
+                                                selectedSeatsInput.value = JSON.stringify(selectedSeatsByCabin);
+
+                                                // Thêm vào form
+                                                form.appendChild(amountInput);
+                                                form.appendChild(numSeatsInput);
+                                                form.appendChild(selectedSeatsInput);
+                                                document.body.appendChild(form);
+
+                                                // Gửi form
+                                                form.submit();
+                                            };
+
+
+                                            totalSummary.appendChild(totalSeatsText);
+                                            totalSummary.appendChild(totalPriceText);
+                                            totalSummary.appendChild(checkoutButton);
+
+                                            summaryContainer.appendChild(totalSummary);
+                                        } else {
+                                            // If no seats selected, show default message
+                                            const noSeatsMsg = document.createElement('div');
+                                            noSeatsMsg.className = 'summary';
+                                            noSeatsMsg.innerHTML = `
+                                                <h5>No seats selected</h5>
+                                                <p>Please select seats from the train carriages</p>
+                                            `;
+                                            summaryContainer.appendChild(noSeatsMsg);
+                                        }
+                                    }
+
+                                    // Initialize everything when DOM is loaded
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        generateTrain(cabins);
+
+                                        // Initialize the seat summary in the right column
+                                        const summaryContainer = document.getElementById('seat-summary-container');
+                                        if (summaryContainer) {
+                                            summaryContainer.innerHTML = `
+                                                <h4 class="summary-title">Your Seat Selection</h4>
+                                                <div class="summary">
+                                                    <h5>No seats selected</h5>
+                                                    <p>Please select seats from the train carriages</p>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="book_tabel_item">
-                                                <div class="input-group">
-                                                    <select id="trip_type" class="wide">
-                                                        <option data-display="Type">Type</option>
-                                                        <option value="oneWay">One way</option>
-                                                        <option value="roundTrip">Round trip</option>
-                                                    </select>
-                                                    <input type="hidden" name="tripType" id="tripTypeHidden">
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="book_now_btn button_hover mt-3">Search</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                            `;
+                                        }
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="px-0 border rounded-2 shadow-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Summary section moved here -->
+                                <div id="seat-summary-container" class="mb-4">
+                                    <!-- Summary will be inserted here by JavaScript -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-            <c:forEach var="route" items="${sessionScope.routes}">
-                <div class="filter-result">
-                    <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
-                        <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
-                            <div class="job-content">
-                                <h5 class="text-center text-md-left">${route.routeCode}</h5>
-                                <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
-                                    <li class="mr-md-4">
-                                        <i class="zmdi zmdi-pin mr-2"></i> ${route.departureStation} -> ${route.arrivalStation}
-                                    </li>
-                                    <li class="mr-md-4">
-                                        <i class="zmdi zmdi-time mr-2"></i> ${route.departureTime} -> ${route.arrivalTime}
-                                    </li>
-                                    <li class="mr-md-4">
-                                        <i class="zmdi zmdi-money mr-2"></i> 2500
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="job-right my-4 flex-shrink-0">
-                            <a href="ViewRoute?id=${route.id}" class="btn d-block w-100 d-sm-inline-block btn-light">Detail</a>
-                        </div>
-                    </div>
-                </div>
-            </c:forEach>
+            </div>
         </div>
-    </div>
-</div>
-</div>
-</body>
+    </form>
+    <body>
+    </body>
+    <%@include file="components/Script.jsp" %>
 </html>

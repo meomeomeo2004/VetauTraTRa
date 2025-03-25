@@ -10,8 +10,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Route;
+import model.User;
 
 
 @WebServlet(name="ViewListRoute", urlPatterns={"/viewlistroute"})
@@ -40,9 +42,11 @@ public class ViewListRoute extends HttpServlet {
     @Override
 protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-  
+        HttpSession session = request.getSession();
         SellerDAO dao = new SellerDAO();
-        List<Route> list = dao.getListRoute();
+        User a = (User) session.getAttribute("account");
+        int b = a.getId();
+        List<Route> list = dao.getListRouteBySeller(b);
         request.setAttribute("listroute", list);
         request.getRequestDispatcher("manageroute.jsp").forward(request, response);
 }
