@@ -12,6 +12,7 @@
         <link rel="icon" href="image/favicon.png" type="image/png">
         <title>Royal Hotel</title>
         <%@include file="components/Style.jsp" %>
+        <%@include file="components/StyleProfile.jsp" %>
     </head>
     <body>
         <!--================Header Area =================-->
@@ -37,83 +38,103 @@
         <section class="contact_area section_gap">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3 mb-4">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a href="profile">View Profile</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="update-profile">Update Profile</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="change-password">Change Password</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="transaction">Transaction History</a>
-                            </li>
 
-                        </ul>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label>Full Name</label>
-                                    <div class="input-group">
-                                        <div class="input-group-text">
-                                            <i class="bi bi-person"></i>
-                                        </div>
-                                        <input class="form-control" type="email" id="email" name="email"
-                                               value="${cus.fullName}" disabled >
+                    <div class="row">
+                        <!-- Sidebar Navigation -->
+                        <div class="col-lg-3 col-md-4">
+                            <div class="profile-nav-card">
+                                <div class="profile-nav-header">
+                                    Account Menu
+                                </div>
+                                <ul class="profile-nav-list">
+                                    <li class="profile-nav-item">
+                                        <a href="profile" class="profile-nav-link active">
+                                            <i class="fas fa-user"></i> View Profile
+                                        </a>
+                                    </li>
+                                    <li class="profile-nav-item">
+                                        <a href="update-profile" class="profile-nav-link">
+                                            <i class="fas fa-edit"></i> Update Profile
+                                        </a>
+                                    </li>
+                                    <li class="profile-nav-item">
+                                        <a href="change-password" class="profile-nav-link">
+                                            <i class="fas fa-lock"></i> Change Password
+                                        </a>
+                                    </li>
+                                    <li class="profile-nav-item">
+                                        <a href="transaction" class="profile-nav-link">
+                                            <i class="fas fa-history"></i> Transaction History
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-8">
+                            <div class="content-card border">
+                                <div class="content-card-header">
+                                    <h3 class="content-card-title">Your Profile</h3>
+                                </div>
+
+                                <div class="profile-info">
+                                    <div class="profile-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="profile-details">
+                                        <h4>${cus.fullName}</h4>
+                                        <a href="update-profile" class="btn-edit">
+                                            <i class="fas fa-edit mr-2" style="margin-right: 10px;"></i> Edit Profile
+                                        </a>
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label>Email</label>
+                                <div class="form-group">
+                                    <label class="form-label">Full Name</label>
                                     <div class="input-group">
-                                        <div class="input-group-text">
-                                            <i class="bi bi-envelope"></i>
-                                        </div>
-                                        <input class="form-control" type="email" id="email" name="email"
-                                               value="${sessionScope.account.email}" disabled >
+                                        <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
+                                        <input type="text" class="form-control " value="${cus.fullName}" disabled>
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label>Phone Number</label>
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <i class="bi bi-telephone"></i>
+                                            <i class="bi bi-envelope-fill"></i>
                                         </div>
-                                        <input class="form-control" type="email" id="email" name="email"
-                                               value="${cus.phoneNumber}" disabled >
+                                        <input type="email" class="form-control" value="${sessionScope.account.email}" disabled>
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label>Address</label>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <i class="bi bi-geo-alt"></i>
+                                            <i class="bi bi-phone-fill"></i>
                                         </div>
-                                        <input class="form-control" type="email" id="email" name="email"
-                                               value="${cus.address}" disabled >
+                                        <input type="email" class="form-control" value="${cus.phoneNumber}" disabled>
+                                    </div></div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Address</label><div class="input-group">
+                                        <div class="input-group-text">
+                                            <i class="bi bi-pin-map-fill"></i>
+                                        </div>
+                                        <input type="email" class="form-control" value="${cus.address}" disabled>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <!--================Contact Area =================-->
+        </section>
+        <!--================Contact Area =================-->
 
-    <!--================ start footer Area  =================-->
-    <%@include file="components/Footer.jsp" %>
-    <!--================ End footer Area  =================-->
+        <!--================ start footer Area  =================-->
+        <%@include file="components/Footer.jsp" %>
+        <!--================ End footer Area  =================-->
 
-    <%@include file="components/Script.jsp" %>
-</body>
+        <%@include file="components/Script.jsp" %>
+    </body>
 </html>

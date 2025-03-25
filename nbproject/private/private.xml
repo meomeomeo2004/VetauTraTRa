@@ -3,16 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/src/java/Seller_Control/ViewListRoute.java</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/src/java/Seller_Control/ViewRouteDetails.java</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/web/ViewRouteDetails.jsp</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/web/addroute.jsp</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/src/java/model/Train.java</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/web/Seller_MyTrain.jsp</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/web/Manager_manageTrain.jsp</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/src/java/dal/SellerDAO.java</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/src/java/model/Route.java</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/src/java/Manager_Control/DetailsTrain.java</file>
-        </group>
+        <group/>
+
     </open-files>
 </project-private>

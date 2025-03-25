@@ -52,6 +52,7 @@
         <a href="#"><i class="fa fa-ticket"></i> Account</a>
         <a href="#"><i class="fa fa-chart-bar"></i> Reports</a>
         <a href="#"><i class="fa fa-cog"></i> Settings</a>
+        <li><a class="dropdown-item text-danger" href="./logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </div>
 
 
