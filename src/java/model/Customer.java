@@ -29,5 +29,10 @@ public class Customer {
     private String fullName;
     private String address;
     private int status;
-
+public Customer(String fullName, String phoneNumber, String address, int status) {
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.status = status;
+    }
 }

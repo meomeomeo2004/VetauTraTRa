@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -102,45 +103,14 @@
                 background-color: #4f46e5;
             }
 
-            .social-login {
-                margin-top: 20px;
+            .success-message {
+                background-color: #e6ffed;
+                border-left: 4px solid #34c759;
+                color: #2d7f44;
+                padding: 12px;
+                border-radius: 5px;
+                margin-bottom: 20px;
                 text-align: center;
-            }
-
-            .social-text {
-                color: #666;
-                font-size: 14px;
-                margin-bottom: 15px;
-            }
-
-            .social-icons {
-                display: flex;
-                justify-content: center;
-                gap: 10px;
-            }
-
-            .social-icon {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: #f3f4f6;
-                text-decoration: none;
-                transition: background-color 0.3s ease;
-            }
-
-            .social-icon.facebook {
-                color: #1877f2;
-            }
-
-            .social-icon.twitter {
-                color: #1da1f2;
-            }
-
-            .social-icon:hover {
-                background-color: #e5e7eb;
             }
         </style>
         <!-- Font Awesome for social icons -->
@@ -149,6 +119,12 @@
     <body>
         <div class="login-container">
             <h1 class="login-title">Login ${role}</h1>
+
+            <c:if test="${not empty sessionScope.registerSuccess}">
+                <div class="success-message">${sessionScope.registerSuccess}</div>
+                <c:remove var="registerSuccess" scope="session"/>
+            </c:if>
+
             <form action="../${role}/login" method="POST">
                 <div class="form-group">
                     <label for="email">Email</label>
