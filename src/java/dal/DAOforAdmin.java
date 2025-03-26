@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.LoginCounter;
+import model.News;
 import model.RoC;
 import model.SellerRevenue;
 import model.SellerTicketSale;
@@ -442,5 +443,104 @@ public class DAOforAdmin extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void addNew(String content, String title, int status) {
+        String sql;
+        sql = "INSERT INTO news (title, content, status) values (?, ?, ?)";
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            pre.setString(1, title);
+            pre.setString(2, content);
+            pre.setInt(3, status);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        recordChange("Added a news", 1, "admin");
+    }
+
+    public void editNew(String content, String title, int id) {
+        String sql;
+        sql = "UPDATE news SET title = ?, content = ? WHERE id = ?";
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            pre.setString(1, title);
+            pre.setString(2, content);
+            
+            pre.setInt(3, id);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        recordChange("Edited a news", 1, "admin");
+    }
+
+    public void changeStatusNew(int id) {
+        String sql;
+        sql = "UPDATE news SET status = CASE WHEN status = 0 THEN 1 ELSE 0 END WHERE id = ?";
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            pre.setInt(1, id);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        recordChange("Change status a news", 1, "admin");
+    }
+
+    public List<News> getAllNews() {
+        List<News> newsList = new ArrayList<>();
+        String sql = "SELECT id, title, content, created_at, status FROM news";
+        try (PreparedStatement pre = connection.prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
+
+            while (rs.next()) {
+                Timestamp createdAt = rs.getTimestamp("created_at");
+                News news = News.builder()
+                        .id(rs.getInt("id"))
+                        .title(rs.getString("title"))
+                        .content(rs.getString("content"))
+                        .createdAt(createdAt)
+                        .status(rs.getInt("status"))
+                        .build();
+                newsList.add(news);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return newsList;
+    }
+
+    public News getNewsById(int id) {
+        String sql = "SELECT * FROM news WHERE id = ?";
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setInt(1, id);
+            ResultSet rs = pre.executeQuery();
+            if (rs.next()) {
+                Timestamp createdAt = rs.getTimestamp("created_at");
+                return News.builder()
+                        .id(rs.getInt("id"))
+                        .title(rs.getString("title"))
+                        .content(rs.getString("content"))
+                        .createdAt(createdAt)
+                        .status(rs.getInt("status"))
+                        .build();
+            }
+        } catch (SQLException ex) {
+
+        }
+        return null;
     }
 }
