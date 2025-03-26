@@ -66,7 +66,37 @@ public class ViewRouteDetails extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        try {
+            // Lấy tham số từ form
+            String rid = request.getParameter("routeId");
+            String status = request.getParameter("status");
+
+            // Kiểm tra nếu trainId hoặc status bị null
+            if (rid == null || status == null) {
+                request.setAttribute("errorMessage", "Train ID or Status is missing.");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+                return;
+            }
+
+            int rouid = Integer.parseInt(rid);
+            int newStatus = Integer.parseInt(status);
+
+            // Gọi hàm DAO để cập nhật trạng thái
+            SellerDAO dao = new SellerDAO();
+            dao.updateRouteStatus(rouid, newStatus);
+
+            // Chuyển hướng về trang danh sách tàu
+            response.sendRedirect("viewlistroute");
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Invalid train ID or status.");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Error updating train status.");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
 
     }  
 }

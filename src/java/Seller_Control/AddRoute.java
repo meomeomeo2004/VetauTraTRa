@@ -4,6 +4,7 @@
  */
 package seller;
 
+import dal.ManagerDAO;
 import dal.SellerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Train;
 import java.text.ParseException;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import model.Route;
+import model.User;
 
 /**
  *
@@ -56,7 +59,7 @@ public class AddRoute extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
         // Lấy các tham số từ form
         String trainidParam = request.getParameter("trainid");
         String rcode = request.getParameter("routecode");
@@ -68,11 +71,11 @@ public class AddRoute extends HttpServlet {
 
         // Ép kiểu trainid sang int
         int trainid = Integer.parseInt(trainidParam);
-
+        
         try {
             // Chuẩn bị DAO
             SellerDAO dao = new SellerDAO();
-
+            ManagerDAO mdao = new ManagerDAO();
             // Định dạng phù hợp với input type="datetime-local"
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
@@ -83,7 +86,7 @@ public class AddRoute extends HttpServlet {
             // Lấy thời gian hiện tại
             LocalDateTime now = LocalDateTime.now();
             // Thời gian hiện tại + 2 giờ
-            LocalDateTime nowPlus2h = now.plusHours(2);
+            LocalDateTime nowPlus2h = now.plusHours(7);
 
             // (1) Kiểm tra Departure >= (hiện tại + 2 tiếng)
             if (departureDateTime.isBefore(nowPlus2h)) {
@@ -91,7 +94,7 @@ public class AddRoute extends HttpServlet {
                 request.setAttribute("errorMessage",
                         "Departure time must be at least 2 hours from now!");
                 // forward lại trang JSP (ví dụ addRoute.jsp) để user sửa
-                request.getRequestDispatcher("addRoute.jsp").forward(request, response);
+                response.sendRedirect("liststation");
                 return;
             }
 
@@ -100,10 +103,26 @@ public class AddRoute extends HttpServlet {
             if (arrivalDateTime.isBefore(departurePlus30m)) {
                 request.setAttribute("errorMessage",
                         "Arrival time must be at least 30 minutes after Departure!");
-                request.getRequestDispatcher("addRoute.jsp").forward(request, response);
+                response.sendRedirect("liststation");
                 return;
             }
-
+            Train train = mdao.getTrainById(trainid);
+            if(train.getStatus() != 1) {
+                 response.sendRedirect("liststation");
+            }
+            int g = -1;
+            User a = (User) session.getAttribute("account");
+            int b = a.getId();
+            List<Route> list = dao.getListRouteBySeller(b);
+            for(Route r : list){
+                if(r.getRouteCode().equals(rcode)){
+                    g = 1;
+                }            
+            }
+            if(g == 1){
+                response.sendRedirect("liststation");
+            }
+            
             // Nếu mọi kiểm tra đều OK -> thêm vào DB
             dao.addRoute(trainid, rcode, description,
                     depDateTimeParam, arrDateTimeParam,

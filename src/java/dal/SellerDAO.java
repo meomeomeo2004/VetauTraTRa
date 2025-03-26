@@ -278,7 +278,33 @@ public class SellerDAO extends DBContext {
     }
     
     
+    public List<Train> getWaitingList(int sellerid) {
+        List<Train> list = new ArrayList<>();
+        String sql = """
+                     select t.* 
+                     from train t
+                     JOIN Seller s ON t.owner = s.id
+                     where t.status in (4,5) and s.user_id = ?
+                     """;
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, sellerid);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                list.add(new Train(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6)));
+            }
+        } catch (Exception e) {
+        }
 
+        return list;
+    }
+    
+    
     public static void main(String[] args) {
         SellerDAO dao = new SellerDAO();
         List<Train> list = dao.getListTrainBySellerId(4);
