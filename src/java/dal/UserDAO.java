@@ -29,6 +29,26 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
+     public User getUserById(int id) {
+    String sql = "SELECT * FROM User WHERE id = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role")
+                );
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
     public User Login(String email,String password){
         String sql = "Select * from User where email = ? and password = ?";
         try {
