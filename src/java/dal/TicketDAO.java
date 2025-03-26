@@ -8,8 +8,10 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;  
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import model.Ticket;
 import model.TicketDetail;
 import java.util.logging.Level;
@@ -192,6 +194,53 @@ System.out.println("Rows updated: " + rowsUpdated);
                 .getName()).log(Level.SEVERE, null, ex);
         }
         return tickets;
+    }
+    public boolean createTicketsForTransaction(int transactionId, int routeId, List<Map<String, Object>> seats) {
+        String sqlTicket = "INSERT INTO Ticket (status, luggage_type, route_id, seat_id, transaction_id) "
+                + "VALUES (1, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmtTicket = connection.prepareStatement(sqlTicket)) {
+            for (Map<String, Object> seat : seats) {
+                // Lấy tên ghế
+                String seatName = (String) seat.get("seatName");
+
+                // Tìm ID của ghế
+                SeatDAO dao = new SeatDAO();
+                int seatId = dao.findSeatId(seatName, routeId);
+
+                // In ra để kiểm tra quá trình lấy ID
+                System.out.println("🔎 Kiểm tra seat ID trước khi tạo vé:");
+                System.out.println("  - Seat Name: " + seatName);
+                System.out.println("  - Route ID: " + routeId);
+                System.out.println("  - Seat ID: " + seatId);
+
+                // Kiểm tra nếu không tìm thấy Seat ID
+                if (seatId == -1) {
+                    System.err.println("❌ Lỗi: Không tìm thấy Seat ID cho ghế: " + seatName);
+                    return false;
+                }
+
+                // Lấy loại hành lý (mặc định là 0 nếu không có)
+                int luggageType = seat.get("luggageId") != null
+                        ? Integer.parseInt(seat.get("luggageId").toString())
+                        : 0;
+
+                // Thiết lập tham số cho câu truy vấn
+                pstmtTicket.setInt(1, luggageType);
+                pstmtTicket.setInt(2, routeId);
+                pstmtTicket.setInt(3, seatId);
+                pstmtTicket.setInt(4, transactionId);
+
+                // Thực thi từng lệnh INSERT
+                int rowsAffected = pstmtTicket.executeUpdate();
+                System.out.println("✅ Thực thi lệnh INSERT, số dòng bị ảnh hưởng: " + rowsAffected);
+            }
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

@@ -1,192 +1,126 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@page import="com.google.gson.Gson" %>
-<%@page import="java.util.Map" %>
-<% Map<String, Object> routeData = (Map<String, Object>) request.getAttribute("routeData"); %>
-<script>
-    let cabins = <%= new Gson().toJson(request.getAttribute("cabins")) %>;
-    let selectedSeatsByCabin = {}; // Object to store selected seats by cabin ID
-    let currentCabin = null; // Keep track of current cabin
-</script>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
-    <style>
-        body{
-            background:#f5f5f5;
-            margin-top:20px;
-            padding-top: 80px;
-        }
-        .icon-hover:hover {
-            border-color: #3b71ca !important;
-            background-color: white !important;
-            color: #3b71ca !important;
-        }
-
-        .icon-hover:hover i {
-            color: #3b71ca !important;
-        }
-
-        /* Thêm CSS cho phần sơ đồ ghế */
-        .seat-map-container {
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: #fff;
-        }
-
-        .seat-map-title {
-            color: #3080c7;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .coach-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .seat {
-            width: 40px;
-            height: 40px;
-            border: 1px solid #b89d58;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 5px;
-            font-weight: bold;
-            cursor: pointer;
-            position: relative;
-            background-color: white;
-        }
-
-        .seat::before {
-            content: '';
-            position: absolute;
-            left: -2px;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background-color: #b89d58;
-            border-radius: 2px 0 0 2px;
-        }
-
-        .seat.reserved {
-            background-color: #e74c3c;
-            color: white;
-        }
-
-        .seat.selected {
-            background-color: #27ae60;
-            color: white;
-        }
-
-        .aisle {
-            width: 30px;
-            background-color: #ccc;
-            margin: 0 10px;
-        }
-
-        .legend {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin: 0 15px;
-        }
-
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            border-radius: 3px;
-        }
-
-        .free {
-            background-color: white;
-            border: 1px solid #b89d58;
-        }
-
-        .reserved-color {
-            background-color: #e74c3c;
-        }
-
-        .selected-color {
-            background-color: #27ae60;
-        }
-
-        .summary {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-
-        .summary-title {
-            color: #3080c7;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .coach-container.selected {
-            border: 2px solid #27ae60;
-            border-radius: 5px;
-        }
-
-        .coach-container {
-            display: inline-block;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-
-    </style>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>${route.routeCode}</title>
-        <%@include file="components/Style.jsp" %>
-    </head>
-    <%@include file="components/Header.jsp" %>
+        <title>Payment Summary</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #f4f4f4;
+            }
 
-    <!-- content -->
-    <section class="py-5">
+            h2, h3, p {
+                margin: 10px 0;
+            }
+
+            .container {
+                max-width: 600px;
+                margin: 20px auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .summary-item {
+                margin: 8px 0;
+                padding: 8px;
+                background-color: #e9ecef;
+                border-radius: 5px;
+            }
+
+            .seat-list {
+                margin: 10px 0;
+                padding: 0;
+                list-style-type: none;
+            }
+
+            .seat-list li {
+                margin: 4px 0;
+                padding: 6px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+
+            .btn-confirm {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                margin-top: 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                width: 100%;
+            }
+
+            .btn-confirm:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+    <body>
         <div class="container">
-            <div class="row gx-5">
-                <div class="border rounded-2 px-3 py-2 bg-white shadow">
-                    <main class="col-lg-12">
-                        <div class="ps-lg-3">
-                            <h4 class="title text-dark">Transaction</h4>
-                            <div class="mb-3">
-                                <span class="h5 text-success">
-                                    Total: ${amount} VND
-                                </span>
-                                <span class="mx-2"> | </span>
-                                <span class="h5 text-primary">
-                                    Business: <fmt:formatNumber value="${route.businessPrice}" type="number" groupingUsed="true" /> VND
-                                </span>
-                            </div>
-                            <div class="row d-flex justify-content-between">
-                                <div class="col-md-6 d-flex">
-                                    <dt class="fw-bold me-2">Seats Amount:</dt>
-                                    <dd class="me-4">${numSeats}</dd>
-                                </div>
-                                <div class="col-md-6 d-flex">
-                                    <dt class="fw-bold me-2">Selected Seats:</dt>
-                                    <dd>${selectedSeats}</dd>
-                                </div>
-                            </div>
-                            <c:set var="qrCodeUrl" value="https://img.vietqr.io/image/MB-0394110940-compact2.jpg?amount=${amount}" />
-                            <img src="${qrCodeUrl}" alt="QR Code Payment" style="max-width: 50%; height: auto;">
-                        </div>
+            <h2>Payment Summary</h2>
+            <form id="bookingForm" action="ConfirmBookingServlet" method="POST">
+                <div class="summary-item">
+                    <p>Route ID: ${selectedSeats[0].routeId}</p> <!-- Lấy routeId từ ghế đầu tiên -->
+                    <input type="hidden" name="routeId" value="${selectedSeats[0].routeId}">
+                    <p>Route Name: ${selectedSeats[0].routeName}</p>
+                    <input type="hidden" name="routeName" value="${selectedSeats[0].routeName}">
+                    <p><strong>Total Seats:</strong> ${numSeats}</p>
+                    <input type="hidden" name="numSeats" value="${numSeats}">
+                    <p><strong>Total Amount:</strong> <span id="totalAmount">${amount}</span> VND</p>
+                    <input type="hidden" name="totalAmount" id="hiddenTotalAmount" value="${amount}">
                 </div>
-                </main>
-            </div>
+
+                <h3>Selected Seats:</h3>
+                <ul class="seat-list">
+                    <c:forEach var="seat" items="${selectedSeats}">
+                        <li>
+                            <strong>Seat:</strong> ${seat.seatName} - <strong>Price:</strong> ${seat.price} VND
+                            <input type="hidden" name="seatName" value="${seat.seatName}">
+                            <input type="hidden" name="seatPrice" value="${seat.price}">
+                        </li>
+                        <h3>Select Luggage Option:</h3>
+                        <select id="luggageOption_${seat.seatName}" name="luggageOption" class="form-select" onchange="updateTotalAmount()">
+                            <option value="0" data-price="0">No luggage</option>
+                            <c:forEach var="luggage" items="${lu}">
+                                <option value="${luggage.id}" data-price="${luggage.price}">${luggage.weight} kg - ${luggage.price} VND</option>
+                            </c:forEach>
+                        </select>
+                        <input type="hidden" name="selectedLuggage_${seat.seatName}" id="selectedLuggage_${seat.seatName}" value="0">
+                    </c:forEach>
+                </ul>
+
+                <button type="submit" class="btn-confirm">Confirm Payment</button>
+            </form>
         </div>
-    </div>
-</section>
+
+        <script>
+            let totalAmount = ${amount};
+
+            function updateTotalAmount() {
+                // Lấy tất cả các select của hành lý
+                const luggageSelects = document.querySelectorAll('.form-select');
+                let luggageTotal = 0;
+
+                // Duyệt qua từng select để cộng giá tiền hành lý
+                luggageSelects.forEach(select => {
+                    const selectedOption = select.options[select.selectedIndex];
+                    const luggagePrice = parseInt(selectedOption.getAttribute('data-price')) || 0;
+                    luggageTotal += luggagePrice;
+                });
+
+                // Tính tổng tiền
+                const totalWithLuggage = totalAmount + luggageTotal;
+
+                // Cập nhật vào phần tổng tiền
+                document.getElementById('totalAmount').textContent = totalWithLuggage.toLocaleString();
+                document.getElementById('hiddenTotalAmount').value = totalWithLuggage;
+            }
+        </script>
+    </body>
+</html>
