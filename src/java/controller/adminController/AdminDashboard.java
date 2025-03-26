@@ -70,22 +70,22 @@ public class AdminDashboard extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAOforAdmin dao = new DAOforAdmin();
-        List<View> v = dao.getView();
+        List<View> v = dao.getView("month");
         List<LoginCounter> lc = dao.getLoginCounter();
         List<SellerRevenue> sr = dao.getSellerRevenue();
         List<SellerTicketSale> sts = dao.getSellerTicketSale();
         LocalDateTime today = LocalDateTime.now();
-        LocalDateTime oneYearAgo = today.minusYears(1);
-        LocalDateTime twoYearsAgo = today.minusYears(2);
+        LocalDateTime oneMonthAgo = today.minusMonths(1);
+        LocalDateTime twoMonthAgo = today.minusMonths(2);
 
         List<View> recentViews = new ArrayList<>();
         List<View> olderViews = new ArrayList<>();
         for (View view : v) {
             LocalDateTime viewDate = view.getDate().toLocalDate().atStartOfDay();
 
-            if (viewDate.isAfter(oneYearAgo)) {
+            if (viewDate.isAfter(oneMonthAgo)) {
                 recentViews.add(view); // Within 1 year
-            } else if (viewDate.isAfter(twoYearsAgo)) {
+            } else if (viewDate.isAfter(twoMonthAgo)) {
                 olderViews.add(view); // Between 1-2 years
             }
         }
@@ -106,9 +106,9 @@ public class AdminDashboard extends HttpServlet {
         for (LoginCounter login : lc) {
             LocalDateTime loginDate = login.getDate().toLocalDate().atStartOfDay();
 
-            if (loginDate.isAfter(oneYearAgo)) {
+            if (loginDate.isAfter(oneMonthAgo)) {
                 recentLogins.add(login); // Within 1 year
-            } else if (loginDate.isAfter(twoYearsAgo)) {
+            } else if (loginDate.isAfter(twoMonthAgo)) {
                 olderLogins.add(login); // Between 1-2 years
             }
         }
@@ -128,9 +128,9 @@ public class AdminDashboard extends HttpServlet {
         for (SellerRevenue sere : sr) {
             LocalDateTime sereldt = sere.getDate().toLocalDate().atStartOfDay();
 
-            if (sereldt.isAfter(oneYearAgo)) {
+            if (sereldt.isAfter(oneMonthAgo)) {
                 recentSale+=sere.getAmount_paid(); // Within 1 year
-            } else if (sereldt.isAfter(twoYearsAgo)) {
+            } else if (sereldt.isAfter(twoMonthAgo)) {
                 olderSale+=sere.getAmount_paid(); // Between 1-2 years
             }
         }
@@ -150,9 +150,9 @@ public class AdminDashboard extends HttpServlet {
         for (SellerTicketSale seti : sts) {
             LocalDateTime setildt = seti.getDate().toLocalDate().atStartOfDay();
 
-            if (setildt.isAfter(oneYearAgo)) {
+            if (setildt.isAfter(oneMonthAgo)) {
                 recentTicket.add(seti); // Within 1 year
-            } else if (setildt.isAfter(twoYearsAgo)) {
+            } else if (setildt.isAfter(twoMonthAgo)) {
                 olderTicket.add(seti); // Between 1-2 years
             }
         }

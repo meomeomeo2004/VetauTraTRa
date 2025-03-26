@@ -42,11 +42,11 @@ public class ListTrain extends HttpServlet {
         List<Train> list =  dao.getListTrain();
         Map<Integer, String> sellerMap = new HashMap<>();
 
-for (Train t : list) {
-    // Gọi hàm getSellerNameById(int sellerId) để lấy tên seller theo id
-    String sellerName = dao.getSellerNameById(t.getOwner());
-    sellerMap.put(t.getOwner(), sellerName);
-}
+        for (Train t : list) {
+            // Gọi hàm getSellerNameById(int sellerId) để lấy tên seller theo id
+            String sellerName = dao.getSellerNameById(t.getOwner());
+            sellerMap.put(t.getOwner(), sellerName);
+        }
         request.setAttribute("alltrain", list);
         request.setAttribute("sellerMap", sellerMap);
         request.getRequestDispatcher("Manager_manageTrain.jsp").forward(request, response);

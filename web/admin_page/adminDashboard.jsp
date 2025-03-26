@@ -81,200 +81,187 @@
             }
         </style>
     </head>
-    <body class="sb-nav-fixed">
+    <body>
         <%@ include file="adminNavBar.jsp" %>
-
-        <div id="layoutSidenav">
+        <div class="main-content">
             <%@ include file="adminSideBar.jsp" %>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">Dashboard</h1>
-                        <div class="row g-3">
-                            <!-- Stat Cards -->
-                            <div class="col-md-3">
-                                <a>
-                                    <div class="cardcard selected viewChart" style="background: #007bff" onclick="selectCard(this)">
-                                        <p class="mb-1">Total Page Views</p>
-                                        <div class="stat-box">
-                                            <h3>${requestScope.view}</h3>
-                                            <span class="stat-icon blue">
-                                                <c:choose>
-                                                    <c:when test="${requestScope.viewSign eq '1'}">
-                                                        <div style="color: #28a745">
-                                                            <i class="bi bi-caret-up-fill"></i>
-                                                            ${requestScope.viewPercent}%
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div style="color: #dc3545">
-                                                            <i class="bi bi-caret-down-fill"></i>
-                                                            ${requestScope.viewPercent}%
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </span>
-                                        </div>
-                                        <small>You have <span style="font-weight: bold">${requestScope.viewDiff} ${requestScope.viewSign eq '1' ? 'more' : 'less'}</span> views than last year</small>
+            <main class="content">
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Dashboard</h1>
+                    <div class="row g-3">
+                        <!-- Stat Cards -->
+                        <div class="col-md-3">
+                            <a>
+                                <div class="cardcard selected viewChart" style="background: #007bff" onclick="selectCard(this)">
+                                    <p class="mb-1">Total Page Views</p>
+                                    <div class="stat-box">
+                                        <h3>${requestScope.view}</h3>
+                                        <span class="stat-icon blue">
+                                            <c:choose>
+                                                <c:when test="${requestScope.viewSign eq '1'}">
+                                                    <div style="color: #28a745">
+                                                        <i class="bi bi-caret-up-fill"></i>
+                                                        ${requestScope.viewPercent}%
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <div style="color: #dc3545">
+                                                        <i class="bi bi-caret-down-fill"></i>
+                                                        ${requestScope.viewPercent}%
+                                                    </div>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a>
-                                    <div class="cardcard loginChart" style="background: #28a745" onclick="selectCard(this)">
-                                        <p class="mb-1">Total Login</p>
-                                        <div class="stat-box">
-                                            <h3>${requestScope.login}</h3>
-                                            <span class="stat-icon green">
-                                                <c:choose>
-                                                    <c:when test="${requestScope.loginSign eq '1'}">
-                                                        <div style="color: #28a745">
-                                                            <i class="bi bi-caret-up-fill"></i>
-                                                            ${requestScope.loginPercent}%
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div style="color: #dc3545">
-                                                            <i class="bi bi-caret-down-fill"></i>
-                                                            ${requestScope.loginPercent}%
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </span>
-                                        </div>
-                                        <small>You have <span style="font-weight: bold">${requestScope.loginDiff} ${requestScope.loginSign eq '1' ? 'more' : 'less'}</span> login than last year</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a>
-                                    <div class="cardcard ticketChart" style="background: #ff9f00" onclick="selectCard(this)">
-                                        <p class="mb-1">Total Tickets</p>
-                                        <div class="stat-box">
-                                            <h3>${requestScope.ticket}</h3>
-                                            <span class="stat-icon orange">
-                                                <c:choose>
-                                                    <c:when test="${requestScope.ticketSign eq '1'}">
-                                                        <div style="color: #28a745">
-                                                            <i class="bi bi-caret-up-fill"></i>
-                                                            ${requestScope.ticketPercent}%
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div style="color: #dc3545">
-                                                            <i class="bi bi-caret-down-fill"></i>
-                                                            ${requestScope.ticketPercent}%
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </span>
-                                        </div>
-                                        <small>You sale <span style="font-weight: bold">${requestScope.ticketDiff} ${requestScope.ticketSign eq '1' ? 'more' : 'less'}</span> ticket than last year</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a>
-                                    <div class="cardcard saleChart" style="background: #dc3545" onclick="selectCard(this)">
-                                        <p class="mb-1">Total Sales</p>
-                                        <div class="stat-box">
-                                            <h3>${requestScope.sale}$</h3>
-                                            <span class="stat-icon green">
-                                                <c:choose>
-                                                    <c:when test="${requestScope.saleSign eq '1'}">
-                                                        <div style="color: #28a745">
-                                                            <i class="bi bi-caret-up-fill"></i>
-                                                            ${requestScope.salePercent}%
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div style="color: #dc3545">
-                                                            <i class="bi bi-caret-down-fill"></i>
-                                                            ${requestScope.salePercent}%
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </span>
-                                        </div>
-                                        <small>You made <span style="font-weight: bold">${requestScope.saleDiff}$ ${requestScope.saleSign eq '1' ? 'more' : 'less'}</span> than last year</small>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Charts Section -->
-                        <div class="row mt-4">
-                            <div id="">
-                                <div class="chart-container">
-                                    <h5>Bar Chart</h5>
-                                    <canvas id="visitorChart"></canvas>
+                                    <small>You have <span style="font-weight: bold">${requestScope.viewDiff} ${requestScope.viewSign eq '1' ? 'more' : 'less'}</span> views than last month</small>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                DataTable Example
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr>
-                                            <td>Michael Bruce</td>
-                                            <td>Javascript Developer</td>
-                                            <td>Singapore</td>
-                                            <td>29</td>
-                                            <td>2011/06/27</td>
-                                            <td>$183,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Donna Snider</td>
-                                            <td>Customer Support</td>
-                                            <td>New York</td>
-                                            <td>27</td>
-                                            <td>2011/01/25</td>
-                                            <td>$112,000</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="col-md-3">
+                            <a>
+                                <div class="cardcard loginChart" style="background: #28a745" onclick="selectCard(this)">
+                                    <p class="mb-1">Total Login</p>
+                                    <div class="stat-box">
+                                        <h3>${requestScope.login}</h3>
+                                        <span class="stat-icon green">
+                                            <c:choose>
+                                                <c:when test="${requestScope.loginSign eq '1'}">
+                                                    <div style="color: #28a745">
+                                                        <i class="bi bi-caret-up-fill"></i>
+                                                        ${requestScope.loginPercent}%
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <div style="color: #dc3545">
+                                                        <i class="bi bi-caret-down-fill"></i>
+                                                        ${requestScope.loginPercent}%
+                                                    </div>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                    </div>
+                                    <small>You have <span style="font-weight: bold">${requestScope.loginDiff} ${requestScope.loginSign eq '1' ? 'more' : 'less'}</span> login than last month</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a>
+                                <div class="cardcard ticketChart" style="background: #ff9f00" onclick="selectCard(this)">
+                                    <p class="mb-1">Total Tickets</p>
+                                    <div class="stat-box">
+                                        <h3>${requestScope.ticket}</h3>
+                                        <span class="stat-icon orange">
+                                            <c:choose>
+                                                <c:when test="${requestScope.ticketSign eq '1'}">
+                                                    <div style="color: #28a745">
+                                                        <i class="bi bi-caret-up-fill"></i>
+                                                        ${requestScope.ticketPercent}%
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <div style="color: #dc3545">
+                                                        <i class="bi bi-caret-down-fill"></i>
+                                                        ${requestScope.ticketPercent}%
+                                                    </div>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                    </div>
+                                    <small>You sale <span style="font-weight: bold">${requestScope.ticketDiff} ${requestScope.ticketSign eq '1' ? 'more' : 'less'}</span> ticket than last month</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a>
+                                <div class="cardcard saleChart" style="background: #dc3545" onclick="selectCard(this)">
+                                    <p class="mb-1">Total Sales</p>
+                                    <div class="stat-box">
+                                        <h3>${requestScope.sale}$</h3>
+                                        <span class="stat-icon green">
+                                            <c:choose>
+                                                <c:when test="${requestScope.saleSign eq '1'}">
+                                                    <div style="color: #28a745">
+                                                        <i class="bi bi-caret-up-fill"></i>
+                                                        ${requestScope.salePercent}%
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <div style="color: #dc3545">
+                                                        <i class="bi bi-caret-down-fill"></i>
+                                                        ${requestScope.salePercent}%
+                                                    </div>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                    </div>
+                                    <small>You made <span style="font-weight: bold">${requestScope.saleDiff}$ ${requestScope.saleSign eq '1' ? 'more' : 'less'}</span> than last month</small>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="row mt-4">
+                        <div id="">
+                            <div class="chart-container">
+                                <h5>Bar Chart</h5>
+                                <canvas id="visitorChart"></canvas>
                             </div>
                         </div>
                     </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            DataTable Example
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Position</th>
+                                        <th>Office</th>
+                                        <th>Age</th>
+                                        <th>Start date</th>
+                                        <th>Salary</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Position</th>
+                                        <th>Office</th>
+                                        <th>Age</th>
+                                        <th>Start date</th>
+                                        <th>Salary</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Michael Bruce</td>
+                                        <td>Javascript Developer</td>
+                                        <td>Singapore</td>
+                                        <td>29</td>
+                                        <td>2011/06/27</td>
+                                        <td>$183,000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Donna Snider</td>
+                                        <td>Customer Support</td>
+                                        <td>New York</td>
+                                        <td>27</td>
+                                        <td>2011/01/25</td>
+                                        <td>$112,000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </footer>
-            </div>
+                </div>
+                                
+            </main>
         </div>
+
         <script src="js/dashboard.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
