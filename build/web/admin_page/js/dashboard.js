@@ -34,7 +34,7 @@ function selectCard(card) {
 let visitorChartInstance = null;
 
 function genViewChart() {
-    fetch('genViewChart') // Fetch data from the Servlet
+    fetch("genViewChart?duration=month") // Fetch data from the Servlet
             .then(response => response.json()) // Convert response to JSON
             .then(data => {
                 // Unique Visitor Line Chart
@@ -48,7 +48,7 @@ function genViewChart() {
                         data: {
                             labels: data.labels,
                             datasets: [{
-                                    label: 'Total Views',
+                                    label: 'Total Login',
                                     data: data.data,
                                     borderColor: 'rgba(54, 162, 235, 1)',
                                     borderWidth: 2,
@@ -100,12 +100,12 @@ function genSaleChart() {
                         visitorChartInstance.destroy();
                     }
                     let datasets = data.data.map(seller => ({
-                        label: seller.name,
-                        data: seller.sales,
-                        borderColor: getRandomColor(),
-                        borderWidth: 2,
-                    }));
-                    
+                            label: seller.name,
+                            data: seller.sales,
+                            borderColor: getRandomColor(),
+                            borderWidth: 2,
+                        }));
+
                     visitorChartInstance = new Chart(visitorCtx, {
                         type: 'line',
                         data: {
@@ -129,12 +129,12 @@ function genTicketChart() {
                         visitorChartInstance.destroy();
                     }
                     let datasets = data.data.map(seller => ({
-                        label: seller.name,
-                        data: seller.sales,
-                        borderColor: getRandomColor(),
-                        borderWidth: 2,
-                    }));
-                    
+                            label: seller.name,
+                            data: seller.sales,
+                            borderColor: getRandomColor(),
+                            borderWidth: 2,
+                        }));
+
                     visitorChartInstance = new Chart(visitorCtx, {
                         type: 'line',
                         data: {

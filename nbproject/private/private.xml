@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/web/Manager_AddTrain.jsp</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/web/addroute.jsp</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/web/Manager_EditTrain.jsp</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/web/Manager_DetailsTrain.jsp</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/src/java/dal/SellerDAO.java</file>
-            <file>file:/C:/SWP391/TraTra/VetauTraTRa/web/manageroute.jsp</file>
+            <file>file:/C:/Users/Aus%20TUF%20GAMAING/Desktop/FPT%20STUDY/ki%205/SWP/Tra%20Tra%20Iter3/VetauTraTRa/src/java/dal/DAOforAdmin.java</file>
+            <file>file:/C:/Users/Aus%20TUF%20GAMAING/Desktop/FPT%20STUDY/ki%205/SWP/Tra%20Tra%20Iter3/VetauTraTRa/src/java/model/RoC.java</file>
+            <file>file:/C:/Users/Aus%20TUF%20GAMAING/Desktop/FPT%20STUDY/ki%205/SWP/Tra%20Tra%20Iter3/VetauTraTRa/src/java/controller/adminController/RecordOfChange.java</file>
+            <file>file:/C:/Users/Aus%20TUF%20GAMAING/Desktop/FPT%20STUDY/ki%205/SWP/Tra%20Tra%20Iter3/VetauTraTRa/src/java/model/TransLog.java</file>
+            <file>file:/C:/Users/Aus%20TUF%20GAMAING/Desktop/FPT%20STUDY/ki%205/SWP/Tra%20Tra%20Iter3/VetauTraTRa/web/admin_page/js/translog.js</file>
+            <file>file:/C:/Users/Aus%20TUF%20GAMAING/Desktop/FPT%20STUDY/ki%205/SWP/Tra%20Tra%20Iter3/VetauTraTRa/src/java/dal/DBContext.java</file>
+            <file>file:/C:/Users/Aus%20TUF%20GAMAING/Desktop/FPT%20STUDY/ki%205/SWP/Tra%20Tra%20Iter3/VetauTraTRa/web/admin_page/js/roc.js</file>
         </group>
     </open-files>
 </project-private>
