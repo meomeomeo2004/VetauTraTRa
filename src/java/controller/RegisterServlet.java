@@ -2,17 +2,17 @@ package controller;
 
 import dal.CustomerDAO;
 import dal.UserDAO;
-import model.Customer;
-import model.User;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
+import model.Customer;
+import model.User;
 
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
+
+    private final resetService resetService = new resetService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -23,8 +23,8 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
 
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
@@ -36,6 +36,7 @@ public class RegisterServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         CustomerDAO customerDAO = new CustomerDAO();
 
+        // Validate thông tin
         if (userDAO.checkEmailExist(email)) {
             request.setAttribute("registerError", "Email already exists");
             request.getRequestDispatcher("register.jsp").forward(request, response);
@@ -49,13 +50,13 @@ public class RegisterServlet extends HttpServlet {
         }
 
         if (!password.equals(confirmPassword)) {
-            request.setAttribute("registerError", "Password and confirm password do not match");
+            request.setAttribute("registerError", "Passwords do not match");
             request.getRequestDispatcher("register.jsp").forward(request, response);
             return;
         }
 
         if (!password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
-            request.setAttribute("registerError", "Password must contain both letters and numbers");
+            request.setAttribute("registerError", "Password must contain letters and numbers");
             request.getRequestDispatcher("register.jsp").forward(request, response);
             return;
         }
@@ -66,34 +67,22 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRole("Customer");
+        // Lưu thông tin user vào session (chưa insert vào DB)
+        HttpSession session = request.getSession();
+        session.setAttribute("pendingUser", new User(email, password, "Customer"));
+        session.setAttribute("pendingCustomer", new Customer(fullName, phoneNumber, address, 1));
 
-        int userId = userDAO.insertUser(user);
-        if (userId > 0) {
-            Customer customer = new Customer();
-            customer.setUser_id(userId);
-            customer.setFullName(fullName);
-            customer.setPhoneNumber(phoneNumber);
-            customer.setAddress(address);
-            customer.setStatus(1);
+        // Gửi OTP để xác thực email
+        String otp = resetService.generateOTP();
+        OTPStorage.saveOTP(email, otp);
 
-            if (customerDAO.insertCustomer(customer)) {
-                response.sendRedirect("./customer/login");
-            } else {
-                request.setAttribute("registerError", "Failed to register customer.");
-                request.getRequestDispatcher("register.jsp").forward(request, response);
-            }
+        boolean emailSent = resetService.sendOTPEmail(email, otp, fullName);
+
+        if (emailSent) {
+            response.sendRedirect("verify-email?email=" + email);
         } else {
-            request.setAttribute("registerError", "Failed to register user.");
+            request.setAttribute("registerError", "Failed to send OTP email.");
             request.getRequestDispatcher("register.jsp").forward(request, response);
         }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "RegisterServlet for Customer Registration";
     }
 }

@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,25 +12,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
-@Builder
 /**
  *
- * @author dtam6
+ * @author ASUS
  */
-public class User {
-
-    private int id;
-    private String email;
-    private String password;
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class RoC {
+    private String user;
     private String role;
-public User(String email, String password, String role) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
+    private String change;
+    private Timestamp date;
 }
