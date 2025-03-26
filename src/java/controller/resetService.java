@@ -1,5 +1,6 @@
 package controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Properties;
 import java.util.UUID;
@@ -33,7 +34,7 @@ public class resetService {
         return LocalDateTime.now().isAfter(time);
     }
 
-    // Hàm gửi email ban đầu (giữ nguyên như code bạn)
+
     public boolean sendEmail(String to, String link, String name) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");  
@@ -65,8 +66,38 @@ public class resetService {
             return false;
         }
     }
+    public void sendRefundSuccess(String to,String userName,int ticketId,String bankAccount,String bankName,Long price) {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");  
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
 
-    // Hàm gửi email OTP xác thực riêng biệt
+        Authenticator auth = new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, password);
+            }
+        };
+        Session session = Session.getInstance(props,auth);
+        MimeMessage msg = new MimeMessage(session);
+        try {
+            msg.addHeader("Content-type", "text/html; charset=UTF-8");
+            msg.setFrom(from);
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to,false));
+            msg.setSubject("Refund Money", "UTF-8");
+            String content = "<h1>Hello " + userName + "</h1>" + "<p>Refund successfully for "+ticketId+ " Bank Account: "+bankAccount+" Bank Name: "+bankName+" Price: "+price;
+            msg.setContent(content, "text/html; charset=UTF-8");
+            Transport.send(msg);
+            System.out.println("Send successfully");
+
+        } catch (Exception e) {
+            System.out.println("Send error");
+            e.printStackTrace();
+
+        }
+    }
+
+
     public boolean sendOTPEmail(String to, String otp, String name) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");  
