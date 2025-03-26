@@ -125,13 +125,16 @@
                                                     <!-- Add view details icon -->
                                                     <a href="ViewRouteDetails?routeid=${r.id}" class="btn btn-primary btn-icon" title="View Details">
                                                         <i class="fas fa-eye"></i>
+                                                        
                                                     </a>
+                                                    <c:if test="${r.status != 3 and r.status != 2}">
                                                     <a href="updateroute?routeid=${r.id}" class="btn btn-warning btn-icon" title="Update">
                                                         <i class="fas fa-edit"></i>
-                                                    </a>
+                                                    </a>      
                                                     <a href="deleteroute?routeid=${r.id}" class="btn btn-danger btn-icon" title="Delete" onclick="return confirm('Are you sure you want to delete this route?');">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
+                                                    </c:if>    
                                                 </div>
                                             </td>
                                         </tr>
@@ -140,22 +143,6 @@
                                     <input type="hidden" name="arrivalTime" value="${r.arrivalTime}">
                                     </c:if>
                                 </c:forEach>
-                                <c:if test="${empty listroute}">
-                                    <tr>
-                                        <td colspan="8">
-                                            <div class="empty-state">
-                                                <div class="empty-state-icon">
-                                                    <i class="fas fa-train"></i>
-                                                </div>
-                                                <h4 class="empty-state-title">No train routes found</h4>
-                                                <p class="empty-state-description">You don't have any train routes in the system yet. Add a new route to get started.</p>
-                                                <a href="liststation" class="btn btn-primary">
-                                                    <i class="fas fa-plus"></i> Add New Route
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </c:if>
                                 </tbody>
                             </table>
                         </div>

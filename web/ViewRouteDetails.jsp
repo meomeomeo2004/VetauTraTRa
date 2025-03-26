@@ -176,7 +176,7 @@
                             <c:if test="${a.status == 0}">
                             <td>
                                 
-                                    <form action="UpdateStatusRoute" method="POST">
+                                    <form action="ViewRouteDetails" method="POST">
                                         <label class="switch">
                                             <input type="checkbox" name="status" value="1" onchange="this.form.submit()">
                                             <span class="slider"></span>

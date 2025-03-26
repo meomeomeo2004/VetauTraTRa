@@ -1,6 +1,12 @@
-package Manager_Control;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+
+package Seller_Control;
 
 import dal.ManagerDAO;
+import dal.SellerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -8,14 +14,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.HashMap;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 import model.Train;
+import model.User;
 
 
-@WebServlet(name="ListTrain", urlPatterns={"/listtrain"})
-public class ListTrain extends HttpServlet {
+@WebServlet(name="WaitingTrainList", urlPatterns={"/waiting"})
+public class WaitingTrainList extends HttpServlet {
    
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -26,30 +32,27 @@ public class ListTrain extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ListTrain</title>");  
+            out.println("<title>Servlet WaitingTrainList</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ListTrain at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet WaitingTrainList at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     } 
 
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        ManagerDAO dao = new ManagerDAO();
-        List<Train> list =  dao.getListTrain();
-        Map<Integer, String> sellerMap = new HashMap<>();
-
-        for (Train t : list) {
-            // Gọi hàm getSellerNameById(int sellerId) để lấy tên seller theo id
-            String sellerName = dao.getSellerNameById(t.getOwner());
-            sellerMap.put(t.getOwner(), sellerName);
-        }
-        request.setAttribute("alltrain", list);
-        request.setAttribute("sellerMap", sellerMap);
-        request.getRequestDispatcher("Manager_manageTrain.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        SellerDAO dao = new SellerDAO();
+        User a = (User) session.getAttribute("account");
+        int b = a.getId();
+        List<Train> listT = dao.getWaitingList(b);
+        ManagerDAO mdao = new ManagerDAO();
+        request.setAttribute("trainl", listT);
+        request.getRequestDispatcher("WaitingTrainList.jsp").forward(request, response);
     } 
 
 
@@ -58,6 +61,5 @@ public class ListTrain extends HttpServlet {
     throws ServletException, IOException {
         processRequest(request, response);
     }
-
 
 }

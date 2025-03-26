@@ -137,10 +137,10 @@ public class ManagerDAO extends DBContext {
         return list;
     }
 
-    public int AddTrain(String model, int totalseat, int numcabin, int owner) {
+    public int AddTrain(String model, int totalseat, int numcabin, int owner ) {
         String sql = """
-                 INSERT INTO Train (train_model, total_seats, numcabin, owner)
-                 VALUES (?, ?, ?, ?)
+                 INSERT INTO Train (train_model, total_seats,numcabin,status, owner)
+                 VALUES (?,?,?,4,?)
                  """;
         try {
 
@@ -207,7 +207,7 @@ public class ManagerDAO extends DBContext {
 
     // Cập nhật thông tin Train
     public boolean updateTrain(int trainId, String model, int totalSeats, int numCabin, int owner) {
-        String sql = "UPDATE Train SET train_model = ?, total_seats = ?, numcabin = ?, owner = ? WHERE id = ?";
+        String sql = "UPDATE Train SET train_model = ?, total_seats = ?, numcabin = ?, owner = ?, status = 5 WHERE id = ? ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, model);

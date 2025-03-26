@@ -317,10 +317,10 @@
                                                 <c:when test="${train.status == 1}">
                                                     <span class="badge badge-active">Active</span>
                                                 </c:when>
-                                                <c:when test="${train.status == 0}">
-                                                    <span class="badge badge-maintenance">Under Maintenance</span>
-                                                </c:when>
                                                 <c:when test="${train.status == 2}">
+                                                    <span class="badge badge-maintenance">Maintenance</span>
+                                                </c:when>
+                                                <c:when test="${train.status == 0}">
                                                     <span class="badge badge-inactive">Inactive</span>
                                                 </c:when>
                                             </c:choose>

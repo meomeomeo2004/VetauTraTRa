@@ -17,7 +17,7 @@
         <header class="header">
             <h1 class="header-title"><i class="fas fa-ship"></i> TraTra Ferry</h1>
         </header>
-        
+
 
         <div class="main-content">
             <aside class="sidebar">
@@ -64,10 +64,10 @@
                     </li>
                 </ul>
             </aside>
-            
+
             <main class="content">
                 <h2 class="page-title">Train Management</h2>
-                
+
                 <div class="stats-container">
                     <div class="stat-card">
                         <div class="stat-icon active">
@@ -86,7 +86,7 @@
                             <p class="stat-label">Active Trains</p>
                         </div>
                     </div>
-                    
+
                     <div class="stat-card">
                         <div class="stat-icon maintenance">
                             <i class="fas fa-wrench"></i>
@@ -104,7 +104,7 @@
                             <p class="stat-label">Maintenance Trains</p>
                         </div>
                     </div>
-                    
+
                     <div class="stat-card">
                         <div class="stat-icon inactive">
                             <i class="fas fa-train"></i>
@@ -113,7 +113,7 @@
                             <h3 class="stat-value">
                                 <c:set var="inactiveCount" value="0" />
                                 <c:forEach var="train" items="${trainList}">
-                                    <c:if test="${train.status == 3}">
+                                    <c:if test="${train.status == 0}">
                                         <c:set var="inactiveCount" value="${inactiveCount + 1}" />
                                     </c:if>
                                 </c:forEach>
@@ -123,10 +123,13 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Trains List</h5>
+                        <a href="waiting" class="btn btn-primary btn-sm">
+                            <i class="fas fa-clock me-1"></i> Waiting Trains
+                        </a>
                     </div>
                     <div class="card-body">
                         <div class="filters">
@@ -139,7 +142,7 @@
                                     <option value="3">Inactive</option>
                                 </select>
                             </div>
-                            
+
                             <div class="search-box">
                                 <input type="text" class="search-input" id="searchInput" placeholder="Search by train model...">
                                 <button class="btn btn-primary btn-sm" id="searchBtn">
@@ -147,7 +150,7 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -162,6 +165,7 @@
                                 </thead>
                                 <tbody>
                                     <c:forEach var="a" items="${trainList}">
+                                        <c:if test="${a.status !=4 and a.status !=5}">
                                         <tr>
                                             <td>${a.id}</td>
                                             <td>${a.trainid}</td>                                            
@@ -175,12 +179,10 @@
                                                     <c:when test="${a.status == 2}">
                                                         <span class="status-badge status-maintenance">Maintenance</span>
                                                     </c:when>
-                                                    <c:when test="${a.status == 3}">
+                                                    <c:when test="${a.status == 0}">
                                                         <span class="status-badge status-inactive">Inactive</span>
                                                     </c:when>
-                                                    <c:otherwise>
-                                                        <span class="status-badge status-inactive">Unknown</span>
-                                                    </c:otherwise>
+
                                                 </c:choose>
                                             </td>
                                             <td>
@@ -188,19 +190,13 @@
                                                     <a href="DetailsTrain?id=${a.id}" class="btn btn-primary btn-icon" title="View Details">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a href="edittrain?id=${a.id}" class="btn btn-warning btn-icon" title="Edit Train">
-                                                        <i class="fas fa-edit"></i>
+                                                    <a href="UpdateStatusRoute?id=${a.id}" class="btn btn-info btn-icon" title="Settings">
+                                                        <i class="fas fa-cog"></i>
                                                     </a>
-                                                    <form action="updatetrainstatus" method="POST" style="display: inline;">
-                                                        <input type="hidden" name="trainId" value="${a.id}">
-                                                        <label class="toggle-switch" title="${a.status == 1 ? 'Active' : 'Inactive'}">
-                                                            <input type="checkbox" name="status" value="1" ${a.status == 1 ? 'checked' : ''} onchange="this.form.submit()">
-                                                            <span class="toggle-slider"></span>
-                                                        </label>
-                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
+                                        </c:if>
                                     </c:forEach>
                                 </tbody>
                             </table>
@@ -209,28 +205,29 @@
                 </div>
             </main>
         </div>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 // Status filter functionality
                 const statusFilter = document.getElementById('statusFilter');
                 if (statusFilter) {
-                    statusFilter.addEventListener('change', function() {
+                    statusFilter.addEventListener('change', function () {
                         const status = this.value;
                         const rows = document.querySelectorAll('.table tbody tr');
-                        
+
                         rows.forEach(row => {
                             if (status === 'all') {
                                 row.style.display = '';
                                 return;
                             }
-                            
+
                             const statusBadge = row.querySelector('.status-badge');
-                            if (!statusBadge) return;
-                            
+                            if (!statusBadge)
+                                return;
+
                             const statusText = statusBadge.textContent.trim().toLowerCase();
-                            
+
                             if (status === '1' && statusText === 'active') {
                                 row.style.display = '';
                             } else if (status === '2' && statusText === 'maintenance') {
@@ -243,27 +240,29 @@
                         });
                     });
                 }
-                
+
                 // Search functionality
                 const searchInput = document.getElementById('searchInput');
                 const searchBtn = document.getElementById('searchBtn');
-                
+
                 if (searchInput && searchBtn) {
                     const performSearch = () => {
                         const searchTerm = searchInput.value.toLowerCase();
                         const rows = document.querySelectorAll('.table tbody tr');
-                        
+
                         rows.forEach(row => {
                             const modelCell = row.cells[1]; // Train model is in the 2nd column (index 1)
-                            if (!modelCell) return;
-                            
+                            if (!modelCell)
+                                return;
+
                             const modelName = modelCell.querySelector('.model-name');
-                            if (!modelName) return;
-                            
+                            if (!modelName)
+                                return;
+
                             const modelText = modelName.textContent.toLowerCase();
                             row.style.display = modelText.includes(searchTerm) ? '' : 'none';
                         });
-                    };                   
+                    };
                     searchBtn.addEventListener('click', performSearch);
                     searchInput.addEventListener('keyup', (e) => {
                         if (e.key === 'Enter') {
