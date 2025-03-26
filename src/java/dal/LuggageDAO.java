@@ -23,6 +23,23 @@ import java.util.logging.Logger;
  */
 public class LuggageDAO extends DBContext {
 
+    public List<Luggage> getAllLuggage() {
+        List<Luggage> list = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM Luggage";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new Luggage(rs.getInt("id"),
+                        rs.getInt(2),
+                        rs.getBigDecimal(3)));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return list;
+    }
+    
     public Luggage getLuggageById(int id) {
         Luggage luggage = null;
         String sql = """

@@ -7,6 +7,7 @@
     let cabins = <%= new Gson().toJson(request.getAttribute("cabins")) %>;
     let selectedSeatsByCabin = {}; // Object to store selected seats by cabin ID
     let currentCabin = null; // Keep track of current cabin
+    let routeId = ${route.id};
 </script>
 <!DOCTYPE html>
 <html>
@@ -220,9 +221,12 @@
     </section>
     <!-- content -->
     <form id="paymentForm" action="PayTicketServlet" method="POST">
+        <input type="hidden" name="routeId" id="routeId" value="${route.id}">
+        <input type="hidden" name="routeCode" id="routeCode" value="${route.routeCode}">
         <input type="hidden" name="amount" id="amount">
         <input type="hidden" name="numSeats" id="numSeats">
         <input type="hidden" name="selectedSeats" id="selectedSeats">
+        <input type="hidden" name="seatList" id="seatList">
 
         <div class="container">
             <div class="row gx-4">
@@ -233,7 +237,7 @@
                                 <div class="train-container" id="trainContainer"></div>
                                 <hr>
                                 <div id="cabinInfo" class="cabin-info">
-                                    <h4>Select a train to view information</h4>
+                                    <h4>Select a cabin to view information</h4>
                                 </div>
                                 <script>
                                     function generateTrain(cabins) {
@@ -259,7 +263,7 @@
                                     }
 
                                     function selectCoach(selectedCoach, cabin) {
-                                        console.log("📌 Cabin được chọn:", cabin);
+                                        console.log("📌 Cabin được chọn:", cabin.id);
 
                                         if (!cabin) {
                                             console.error("❌ Lỗi: Cabin không tồn tại!");
@@ -288,12 +292,19 @@
                                             selectedSeatsByCabin[cabin.id] = [];
                                         }
 
-                                        // Hiển thị sơ đồ ghế dựa trên cabin.numSeat
-                                        generateSeatMap(cabin);
+                                        // Call the async function
+                                        generateSeatMap(cabin)
+                                                .catch(error => {
+                                                    console.error("Error generating seat map:", error);
+                                                    cabinInfo.innerHTML = "<p>Error loading seat map. Please try again.</p>";
+                                                });
                                     }
 
-                                    // Hàm tạo sơ đồ ghế
-                                    function generateSeatMap(cabin) {
+                                    async function generateSeatMap(cabin) {
+                                        // Get reserved seats before continuing
+                                        const reservedSeats = await loadReservedSeats(routeId, cabin);
+
+                                        // Rest of the function remains the same, but now reservedSeats is an array
                                         // Tạo hoặc lấy container cho sơ đồ ghế
                                         let seatMapContainer = document.getElementById("seatMapContainer");
                                         if (!seatMapContainer) {
@@ -318,18 +329,15 @@
                                         seatMapContainer.appendChild(coach);
 
                                         const numSeats = parseInt(cabin.numSeat);
-                                        let seatsPerRow = 14; // Số ghế mỗi hàng (2 bên hành lang, mỗi bên 2 ghế)
+                                        let seatsPerRow = 10; // Số ghế mỗi hàng (2 bên hành lang, mỗi bên 2 ghế)
 
                                         if (cabin.type && cabin.type.toLowerCase().includes("business")) {
-                                            seatsPerRow = 14; // Business class có ít ghế hơn mỗi hàng
+                                            seatsPerRow = 10; // Business class có ít ghế hơn mỗi hàng
                                         }
 
                                         // Tính số hàng cần thiết
                                         let numRows = Math.ceil(numSeats / seatsPerRow);
                                         let seatNumber = 1;
-
-                                        // Tạo ngẫu nhiên một số ghế đã đặt để minh họa
-                                        const reservedSeats = generateRandomReservedSeats(numSeats);
 
                                         // Tạo các hàng ghế
                                         for (let i = 0; i < numRows && seatNumber <= numSeats; i++) {
@@ -363,19 +371,19 @@
                                         const legend = document.createElement("div");
                                         legend.className = "legend";
                                         legend.innerHTML = `
-                                            <div class="legend-item">
-                                                <div class="legend-color free"></div>
-                                                <span>Empty Seat</span>
-                                            </div>
-                                            <div class="legend-item">
-                                                <div class="legend-color reserved-color"></div>
-                                                <span>Booked Seat</span>
-                                            </div>
-                                            <div class="legend-item">
-                                                <div class="legend-color selected-color"></div>
-                                                <span>Your Selected Seat</span>
-                                            </div>
-                                        `;
+        <div class="legend-item">
+            <div class="legend-color free"></div>
+            <span>Empty Seat</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color reserved-color"></div>
+            <span>Booked Seat</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color selected-color"></div>
+            <span>Your Selected Seat</span>
+        </div>
+    `;
                                         seatMapContainer.appendChild(legend);
 
                                         // Add click events to seats - IMPORTANT: Do this after creating seats
@@ -398,20 +406,15 @@
                                         return seat;
                                     }
 
-                                    // Hàm tạo ngẫu nhiên các ghế đã đặt
-                                    function generateRandomReservedSeats(totalSeats) {
-                                        const reservedSeats = [];
-                                        const reservedCount = Math.floor(totalSeats * 0.3); // Khoảng 30% ghế đã đặt
-
-                                        while (reservedSeats.length < reservedCount) {
-                                            const randomSeat = Math.floor(Math.random() * totalSeats) + 1;
-                                            if (!reservedSeats.includes(randomSeat)) {
-                                                reservedSeats.push(randomSeat);
-                                            }
+                                    async function loadReservedSeats(routeId, cabin) {
+                                        try {
+                                            const response = await fetch(`/tratra/SeatServlet?routeId=` + routeId + `&cabinId=` + cabin.id);
+                                            const data = await response.json();
+                                            return data;
+                                        } catch (error) {
+                                            console.error("Error fetching reserved seats:", error);
+                                            return []; // Trả về null nếu có lỗi
                                         }
-
-                                        //return reservedSeats;
-                                        return [1, 2, 3, 4, 5];
                                     }
 
                                     // Hàm thêm sự kiện click cho ghế
@@ -456,6 +459,7 @@
                                         summaryContainer.innerHTML = '<h4 class="summary-title">Your Seat Selection</h4>';
 
                                         // Keep track of total seats and total price
+                                        let seatList = [];
                                         let totalSeats = 0;
                                         let totalPrice = 0;
                                         console.log("Selected Seats Data:", selectedSeatsByCabin);
@@ -476,6 +480,16 @@
                                                 } else {
                                                     unitPrice = parseInt("${route.economyPrice}".replace(/,/g, ''));
                                                 }
+
+                                                selectedSeatsByCabin[cabinId].forEach(seatNumber => {
+                                                    const seatData = {
+                                                        routeId: "${route.id}",
+                                                        routeName: "${route.routeCode}",
+                                                        seatName: seatNumber + cabin.cabinName,
+                                                        price: unitPrice
+                                                    };
+                                                    seatList.push(seatData);
+                                                });
 
                                                 const cabinSeatsCount = selectedSeatsByCabin[cabinId].length;
                                                 const cabinPrice = unitPrice * cabinSeatsCount;
@@ -530,7 +544,12 @@
                                                 form.method = "POST";
                                                 form.action = "PayTicketServlet"; // Đường dẫn đến Servlet xử lý thanh toán
 
-                                                // Thêm input ẩn để truyền dữ liệu
+                                                // Thêm input ẩn để truyền dữ liệu                      
+                                                const seatListInput = document.createElement("input");
+                                                seatListInput.type = "hidden";
+                                                seatListInput.name = "seatList";
+                                                seatListInput.value = JSON.stringify(seatList);
+
                                                 const amountInput = document.createElement("input");
                                                 amountInput.type = "hidden";
                                                 amountInput.name = "amount";
@@ -545,11 +564,25 @@
                                                 selectedSeatsInput.type = "hidden";
                                                 selectedSeatsInput.name = "selectedSeats";
                                                 selectedSeatsInput.value = JSON.stringify(selectedSeatsByCabin);
-                                                
+
+                                                const routeIdInput = document.createElement("input");
+                                                routeIdInput.type = "hidden";
+                                                routeIdInput.name = "routeId";
+                                                routeIdInput.value = "${route.id}";
+
+                                                const routeCodeInput = document.createElement("input");
+                                                routeCodeInput.type = "hidden";
+                                                routeCodeInput.name = "routeCode";
+                                                routeCodeInput.value = "${route.routeCode}";
+
+
                                                 // Thêm vào form
+                                                form.appendChild(seatListInput);
                                                 form.appendChild(amountInput);
                                                 form.appendChild(numSeatsInput);
                                                 form.appendChild(selectedSeatsInput);
+                                                form.appendChild(routeIdInput);
+                                                form.appendChild(routeCodeInput);
                                                 document.body.appendChild(form);
 
                                                 // Gửi form
