@@ -90,7 +90,7 @@ public class LoginServlet extends HttpServlet {
                 }
  
                 if (role.equalsIgnoreCase("staff")) {
-                    response.sendRedirect(request.getContextPath() + "/staff_page/staffDashboard");
+                    response.sendRedirect(request.getContextPath() + "/staff_page/ticketList");
                 }
                 if (role.equalsIgnoreCase("admin")) {
                     response.sendRedirect(request.getContextPath() + "/admin_page/AdminDashboard");
