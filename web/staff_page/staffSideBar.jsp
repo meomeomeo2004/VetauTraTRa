@@ -20,9 +20,9 @@
                 </a>
                 <!-- Extra Section -->
                 <div class="sb-sidenav-menu-heading">Extra</div>
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="../staff-profile">
                     <div class="sb-nav-link-icon"><i class="fas fa-icons"></i></div>
-                    Icons
+                    Profile
                 </a>
             </div>
         </div>
