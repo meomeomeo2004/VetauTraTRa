@@ -12,6 +12,7 @@ public class ResendOTPServlet extends HttpServlet {
 
     private final resetService resetService = new resetService();
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -23,18 +24,25 @@ public class ResendOTPServlet extends HttpServlet {
             String email = pendingUser.getEmail();
             String name = pendingCustomer.getFullName();
 
+            // Tạo OTP mới
             String newOtp = resetService.generateOTP();
             OTPStorage.saveOTP(email, newOtp);
 
-            boolean emailSent = resetService.sendOTPEmail(email, newOtp, name);
+            // Gửi OTP không đồng bộ để tránh lag
+            new Thread(() -> {
+                try {
+                    boolean emailSent = resetService.sendOTPEmail(email, newOtp, name);
+                    if (!emailSent) {
+                        System.err.println("Failed to resend OTP to " + email);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
 
-            if (emailSent) {
-                request.setAttribute("email", email);
-                request.setAttribute("errorMessage", "A new OTP has been sent to your email.");
-            } else {
-                request.setAttribute("email", email);
-                request.setAttribute("errorMessage", "Failed to resend OTP. Please try again.");
-            }
+            // Phản hồi nhanh chóng và chuyển hướng về trang xác thực OTP
+            request.setAttribute("email", email);
+            request.setAttribute("errorMessage", "A new OTP has been sent to your email.");
             request.getRequestDispatcher("verify_email.jsp").forward(request, response);
 
         } else {

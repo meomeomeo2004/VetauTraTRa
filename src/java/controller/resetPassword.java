@@ -99,50 +99,57 @@ public class resetPassword extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String confirmPassword = request.getParameter("confirm_password");
-        //validate password...
-        if(!password.equals(confirmPassword)) {
-            request.setAttribute("mess", "confirm password must same password");
-            request.setAttribute("email", email);
-            request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
-            return;
-        }
-        HttpSession session = request.getSession();
-        String tokenStr = (String) session.getAttribute("token");
-        DAOTokenForget DAOToken= new DAOTokenForget();
-        TokenForgetPassword tokenForgetPassword = DAOToken.getTokenPassword(tokenStr);
-        //check token is valid, of time, of used
-        resetService service = new resetService();
-        if (tokenForgetPassword == null) {
-            request.setAttribute("mess", "token invalid");
-            request.getRequestDispatcher("requestPassword.jsp").forward(request, response);
-            return;
-        }
-        if (tokenForgetPassword.isUsed()) {
-            request.setAttribute("mess", "token is used");
-            request.getRequestDispatcher("requestPassword.jsp").forward(request, response);
-            return;
-        }
-        if (service.isExpireTime(tokenForgetPassword.getExpiryTime())) {
-            request.setAttribute("mess", "token is expiry time");
-            request.getRequestDispatcher("requestPassword.jsp").forward(request, response);
-            return;
-        }
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
+    String confirmPassword = request.getParameter("confirm_password");
 
-        //update is used of token
-        tokenForgetPassword.setToken(tokenStr);
-        tokenForgetPassword.setUsed(true);
-        PasswordDAO pDAO=new PasswordDAO();
-        pDAO.updatePassword(email, password);
-        DAOToken.updateStatus(tokenForgetPassword);
-
-        //save user in session and redirect to home
-        response.sendRedirect(request.getContextPath() + "/customer/login");
+    // Validate password...
+    if (!password.equals(confirmPassword)) {
+        request.setAttribute("mess", "Confirm password must match the password");
+        request.setAttribute("email", email);
+        request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
+        return;
     }
+
+    HttpSession session = request.getSession();
+    String tokenStr = (String) session.getAttribute("token");
+    DAOTokenForget DAOToken = new DAOTokenForget();
+    TokenForgetPassword tokenForgetPassword = DAOToken.getTokenPassword(tokenStr);
+    resetService service = new resetService();
+
+    // Kiểm tra token hợp lệ
+    if (tokenForgetPassword == null) {
+        request.setAttribute("mess", "Token invalid");
+        request.getRequestDispatcher("requestPassword.jsp").forward(request, response);
+        return;
+    }
+    if (tokenForgetPassword.isUsed()) {
+        request.setAttribute("mess", "Token is already used");
+        request.getRequestDispatcher("requestPassword.jsp").forward(request, response);
+        return;
+    }
+    if (service.isExpireTime(tokenForgetPassword.getExpiryTime())) {
+        request.setAttribute("mess", "Token is expired");
+        request.getRequestDispatcher("requestPassword.jsp").forward(request, response);
+        return;
+    }
+
+    // Cập nhật trạng thái token và đổi mật khẩu
+    tokenForgetPassword.setToken(tokenStr);
+    tokenForgetPassword.setUsed(true);
+    PasswordDAO pDAO = new PasswordDAO();
+    pDAO.updatePassword(email, password);
+    DAOToken.updateStatus(tokenForgetPassword);
+
+    // Đặt thông báo thành công vào session
+    session.setAttribute("registerSuccess", "Password has been reset successfully! Please log in.");
+
+    // Chuyển hướng đến trang login customer
+    response.sendRedirect(request.getContextPath() + "/customer/login");
+}
+
 
     /** 
      * Returns a short description of the servlet.
