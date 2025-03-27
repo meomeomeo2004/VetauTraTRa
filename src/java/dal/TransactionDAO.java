@@ -50,4 +50,47 @@ public class TransactionDAO extends DBContext {
         List<Transaction> list = dao.getTransactionByCustomerId(1);
         System.out.println(list);
     }
+    
+    public boolean createTransaction(int customerId, String paymentMethod, int quantity, double amountPaid, String voucherCode) {
+        String sql = "INSERT INTO transaction (customer_id, payment_method, quantity, amount_paid, voucher_code) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, customerId);
+            stmt.setString(2, paymentMethod);
+            stmt.setInt(3, quantity);
+            stmt.setDouble(4, amountPaid);
+            stmt.setString(5, voucherCode);
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public Transaction getLatestTransactionByCustomerId(int customerId) {
+        String sql = "SELECT * FROM transaction WHERE customer_id = ? ORDER BY id DESC LIMIT 1";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, customerId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Transaction transaction = new Transaction();
+                    transaction.setId(rs.getInt("id"));
+                    transaction.setCustomerId(rs.getInt("customer_id"));
+                    transaction.setPaymentMethod(rs.getString("payment_method"));
+                    transaction.setPaymentStatus(rs.getInt("payment_status"));
+                    transaction.setQuantity(rs.getInt("quantity"));
+                    transaction.setAmountPaid(rs.getDouble("amount_paid"));
+                    transaction.setVouchercode(rs.getString("voucher_code"));
+                    transaction.setPaymentDate(rs.getTimestamp("payment_date"));
+                    
+                    return transaction;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

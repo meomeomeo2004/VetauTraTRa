@@ -37,4 +37,28 @@ public class StaffDAO extends DBContext {
         }
         return staff;
     }
+        public Staff getStaffByUserId(int userId) {
+        Staff staff = null;
+        String sql = "SELECT id, user_id, phone_number, full_name, address, status FROM Staff WHERE user_id = ?";
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, userId);
+            ResultSet rs = pre.executeQuery();
+
+            if (rs.next()) {
+                staff = new Staff(
+                    rs.getInt("id"),
+                    rs.getInt("user_id"),
+                    rs.getString("phone_number"),
+                    rs.getString("full_name"),
+                    rs.getString("address"),
+                    rs.getInt("status")
+                );
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StaffDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return staff;
+    }
 }

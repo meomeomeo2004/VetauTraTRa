@@ -2,17 +2,19 @@ package controller;
 
 import dal.CustomerDAO;
 import dal.UserDAO;
-import model.Customer;
-import model.User;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
+import model.Customer;
+import model.User;
 
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
+
+    private final resetService resetService = new resetService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -23,8 +25,8 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
 
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
@@ -36,64 +38,73 @@ public class RegisterServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         CustomerDAO customerDAO = new CustomerDAO();
 
+        // Danh sách chứa các thông báo lỗi
+        List<String> errors = new ArrayList<>();
+
+        // Kiểm tra định dạng email
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+            errors.add("Email must have the format xxx@xxx.xxx");
+        }
+
+        // Kiểm tra định dạng số điện thoại
+        if (!phoneNumber.matches("^0[0-9]{9}$")) {
+            errors.add("Phone number must start with '0' and contain exactly 10 digits");
+        }
+
+        // Kiểm tra email đã tồn tại
         if (userDAO.checkEmailExist(email)) {
-            request.setAttribute("registerError", "Email already exists");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-            return;
+            errors.add("Email already exists");
         }
 
+        // Kiểm tra số điện thoại đã tồn tại
         if (customerDAO.checkPhoneNumberExist(phoneNumber)) {
-            request.setAttribute("registerError", "Phone Number already exists");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-            return;
+            errors.add("Phone Number already exists");
         }
 
+        // Kiểm tra mật khẩu trùng khớp
         if (!password.equals(confirmPassword)) {
-            request.setAttribute("registerError", "Password and confirm password do not match");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-            return;
+            errors.add("Passwords do not match");
         }
 
+        // Kiểm tra mật khẩu có chứa chữ và số
         if (!password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
-            request.setAttribute("registerError", "Password must contain both letters and numbers");
+            errors.add("Password must contain letters and numbers");
+        }
+
+        // Kiểm tra định dạng tên
+        if (!fullName.matches("[A-Za-z\\s]{2,}")) {
+            errors.add("Full name must contain only letters and spaces with at least 2 characters");
+        }
+
+        // Nếu có lỗi, chuyển về trang đăng ký
+        if (errors.size() > 0) {
+            request.setAttribute("registerErrors", errors);
             request.getRequestDispatcher("register.jsp").forward(request, response);
             return;
         }
 
-        if (!phoneNumber.matches("[0-9]{10}")) {
-            request.setAttribute("registerError", "Phone number is not valid");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-            return;
-        }
+        // Lưu thông tin user vào session (chưa insert vào DB)
+        HttpSession session = request.getSession();
+        session.setAttribute("pendingUser", new User(email, password, "Customer"));
+        session.setAttribute("pendingCustomer", new Customer(fullName, phoneNumber, address, 1));
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRole("Customer");
+        // Gửi OTP không đồng bộ để giảm độ trễ
+        new Thread(() -> {
+            try {
+                // Gửi OTP để xác thực email
+                String otp = resetService.generateOTP();
+                OTPStorage.saveOTP(email, otp);
+                boolean emailSent = resetService.sendOTPEmail(email, otp, fullName);
 
-        int userId = userDAO.insertUser(user);
-        if (userId > 0) {
-            Customer customer = new Customer();
-            customer.setUser_id(userId);
-            customer.setFullName(fullName);
-            customer.setPhoneNumber(phoneNumber);
-            customer.setAddress(address);
-            customer.setStatus(1);
-
-            if (customerDAO.insertCustomer(customer)) {
-                response.sendRedirect("./customer/login");
-            } else {
-                request.setAttribute("registerError", "Failed to register customer.");
-                request.getRequestDispatcher("register.jsp").forward(request, response);
+                if (!emailSent) {
+                    System.err.println("Failed to send OTP email.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } else {
-            request.setAttribute("registerError", "Failed to register user.");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        }
-    }
+        }).start();
 
-    @Override
-    public String getServletInfo() {
-        return "RegisterServlet for Customer Registration";
+        // Chuyển hướng ngay lập tức để không bị lag
+        response.sendRedirect("verify-email?email=" + email);
     }
 }

@@ -4,6 +4,7 @@
  */
 package dal;
 
+import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,8 +16,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.LoginCounter;
+import model.News;
+import model.RoC;
 import model.SellerRevenue;
 import model.SellerTicketSale;
+import model.TransLog;
 import model.UserDetail;
 import model.View;
 
@@ -108,6 +112,8 @@ public class DAOforAdmin extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        recordChange("Changed status of an account", 1, "admin");
     }
 
     public void editAcc(String fullname, String phonenumber, String address, String role, int id) {
@@ -126,6 +132,8 @@ public class DAOforAdmin extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        recordChange("Edited an account", 1, "admin");
     }
 
     public void addNewAcc(String fullname, String email, String phonenumber, String password, String role) {
@@ -167,6 +175,8 @@ public class DAOforAdmin extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        recordChange("Added a new account", 1, "admin");
     }
 
     public UserDetail getUserDetail(int id, String role) {
@@ -212,9 +222,21 @@ public class DAOforAdmin extends DBContext {
         }
     }
 
-    public List<View> getView() {
+    public List<View> getView(String duration) {
         List<View> views = new ArrayList<>();
         String sql = "select * from View";
+        if (duration.equalsIgnoreCase("week")) {
+            sql = "SELECT * FROM view\n"
+                    + "WHERE date BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW()";
+        }
+        if (duration.equalsIgnoreCase("month")) {
+            sql = "SELECT * FROM view\n"
+                    + "WHERE date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()";
+        }
+        if (duration.equalsIgnoreCase("year")) {
+            sql = "SELECT * FROM view\n"
+                    + "WHERE date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW()";
+        }
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
@@ -316,5 +338,209 @@ public class DAOforAdmin extends DBContext {
         }
 
         return sts_list;
+    }
+
+    public List<TransLog> getTransactionLog() {
+        List<TransLog> trans_list = new ArrayList<>();
+        String sql = "SELECT * from transaction join customer on customer.id = customer_id";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                String fromPerson = rs.getString("full_name");
+                Timestamp date = rs.getTimestamp("payment_date");
+                int amount = rs.getInt("amount_paid");
+
+                TransLog trans = new TransLog(1, fromPerson, "TraTra", date, amount);
+                trans_list.add(trans);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        sql = """
+              SELECT customer.full_name, staff.full_name, handle_time, amount_paid from refund
+              join customer on customer.user_id = userId
+              join staff on staff.user_id = staffId
+              join ticket on ticket.id = ticketId
+              join transaction on transaction.id = transaction_id
+              where refund.status = 1""";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                String toPerson = rs.getString("customer.full_name");
+                String fromPerson = rs.getString("staff.full_name");
+                Timestamp date = rs.getTimestamp("handle_time");
+                int amount = rs.getInt("amount_paid");
+
+                TransLog trans = new TransLog(0, fromPerson, toPerson, date, amount);
+                trans_list.add(trans);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return trans_list;
+    }
+
+    public List<RoC> getRoC() {
+        List<RoC> roc_list = new ArrayList<>();
+        String sql = "SELECT * from recordofchange join user on user.id = user_id";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                String change = rs.getString("content");
+                Timestamp date = rs.getTimestamp("created_at");
+                int id = rs.getInt("user_id");
+                String role = rs.getString("user_role");
+                String name = getChoosedUserName(role, id);
+                RoC roc = new RoC(name, role, change, date);
+                roc_list.add(roc);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return roc_list;
+    }
+
+    public String getChoosedUserName(String role, int id) {
+        String name = null;
+        String sql = "select * from User\n"
+                + " join " + role + " on User.id = " + role + ".user_id"
+                + " where user_id = " + id;
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                name = rs.getString("full_name");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return name;
+    }
+
+    public void recordChange(String content, int id, String role) {
+        String sql;
+        sql = "INSERT INTO recordofchange (user_id, user_role, content) values (?, ?, ?)";
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            pre.setInt(1, id);
+            pre.setString(2, role);
+            pre.setString(3, content);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void addNew(String content, String title, int status) {
+        String sql;
+        sql = "INSERT INTO news (title, content, status) values (?, ?, ?)";
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            pre.setString(1, title);
+            pre.setString(2, content);
+            pre.setInt(3, status);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        recordChange("Added a news", 1, "admin");
+    }
+
+    public void editNew(String content, String title, int id) {
+        String sql;
+        sql = "UPDATE news SET title = ?, content = ? WHERE id = ?";
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            pre.setString(1, title);
+            pre.setString(2, content);
+            
+            pre.setInt(3, id);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        recordChange("Edited a news", 1, "admin");
+    }
+
+    public void changeStatusNew(int id) {
+        String sql;
+        sql = "UPDATE news SET status = CASE WHEN status = 0 THEN 1 ELSE 0 END WHERE id = ?";
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            pre.setInt(1, id);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        recordChange("Change status a news", 1, "admin");
+    }
+
+    public List<News> getAllNews() {
+        List<News> newsList = new ArrayList<>();
+        String sql = "SELECT id, title, content, created_at, status FROM news";
+        try (PreparedStatement pre = connection.prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
+
+            while (rs.next()) {
+                Timestamp createdAt = rs.getTimestamp("created_at");
+                News news = News.builder()
+                        .id(rs.getInt("id"))
+                        .title(rs.getString("title"))
+                        .content(rs.getString("content"))
+                        .createdAt(createdAt)
+                        .status(rs.getInt("status"))
+                        .build();
+                newsList.add(news);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOforAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return newsList;
+    }
+
+    public News getNewsById(int id) {
+        String sql = "SELECT * FROM news WHERE id = ?";
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setInt(1, id);
+            ResultSet rs = pre.executeQuery();
+            if (rs.next()) {
+                Timestamp createdAt = rs.getTimestamp("created_at");
+                return News.builder()
+                        .id(rs.getInt("id"))
+                        .title(rs.getString("title"))
+                        .content(rs.getString("content"))
+                        .createdAt(createdAt)
+                        .status(rs.getInt("status"))
+                        .build();
+            }
+        } catch (SQLException ex) {
+
+        }
+        return null;
     }
 }

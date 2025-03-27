@@ -11,307 +11,13 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-        <style>
-            :root {
-                --primary: #22577a;
-                --primary-dark: #3a56d4;
-                --secondary: #2ec4b6;
-                --danger: #bc986a;
-                --warning: #ff9f1c;
-                --success: #2a9d8f;
-                --light: #f8f9fa;
-                --dark: #212529;
-                --gray-100: #f8f9fa;
-                --gray-200: #e9ecef;
-                --gray-300: #dee2e6;
-                --gray-400: #ced4da;
-                --gray-500: #adb5bd;
-                --gray-600: #6c757d;
-                --gray-700: #495057;
-                --gray-800: #343a40;
-                --gray-900: #212529;
-                --border-radius: 0.5rem;
-                --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
-                --transition: all 0.3s ease;
-            }
-
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            body {
-                display: flex;
-                flex-direction: column;
-                min-height: 100vh;
-                margin: 0;
-                font-family: 'Roboto', sans-serif;
-                background-color: var(--gray-100);
-                color: var(--gray-800);
-            }
-
-            .header {
-                width: 100%;
-                background-color: var(--primary);
-                color: white;
-                padding: 1rem 2rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: var(--box-shadow);
-                position: sticky;
-                top: 0;
-                z-index: 1000;
-            }
-
-            .header-title {
-                font-size: 1.5rem;
-                font-weight: 700;
-                margin: 0;
-                letter-spacing: 0.5px;
-            }
-
-            .header-title i {
-                margin-right: 0.5rem;
-            }
-
-            .main-content {
-                display: flex;
-                flex: 1;
-            }
-
-            .sidebar {
-                width: 280px;
-                background-color: white;
-                padding: 2rem 1.5rem;
-                border-right: 1px solid var(--gray-200);
-                box-shadow: var(--box-shadow);
-                transition: var(--transition);
-                height: calc(100vh - 64px);
-                position: sticky;
-                top: 64px;
-                overflow-y: auto;
-            }
-
-            .sidebar-header {
-                margin-bottom: 2rem;
-                text-align: center;
-            }
-
-            .sidebar-title {
-                font-size: 1.25rem;
-                color: var(--primary);
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-            }
-
-            .sidebar-divider {
-                height: 1px;
-                background-color: var(--gray-200);
-                margin: 1rem 0;
-            }
-
-            .nav-list {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            .nav-item {
-                margin-bottom: 0.5rem;
-            }
-
-            .nav-link {
-                display: flex;
-                align-items: center;
-                text-decoration: none;
-                color: var(--gray-700);
-                font-weight: 500;
-                padding: 0.75rem 1rem;
-                border-radius: var(--border-radius);
-                transition: var(--transition);
-            }
-
-            .nav-link:hover, .nav-link.active {
-                background-color: var(--primary);
-                color: white;
-            }
-
-            .nav-link i {
-                margin-right: 0.75rem;
-                font-size: 1.1rem;
-                width: 1.5rem;
-                text-align: center;
-            }
-
-            .content {
-                flex: 1;
-                padding: 2rem;
-                display: flex;
-                justify-content: center;
-            }
-
-            .page-title {
-                font-size: 1.75rem;
-                font-weight: 700;
-                margin-bottom: 1.5rem;
-                color: var(--gray-800);
-            }
-
-            .card {
-                background-color: white;
-                border-radius: var(--border-radius);
-                box-shadow: var(--box-shadow);
-                border: none;
-                margin-bottom: 2rem;
-                overflow: hidden;
-                width: 100%;
-                max-width: 900px;
-            }
-
-            .card-header {
-                background-color: white;
-                border-bottom: 1px solid var(--gray-200);
-                padding: 1.25rem 1.5rem;
-            }
-
-            .card-title {
-                font-size: 1.25rem;
-                font-weight: 600;
-                margin: 0;
-                color: var(--gray-800);
-            }
-
-            .card-body {
-                padding: 1.5rem;
-            }
-
-            .form-label {
-                font-weight: 500;
-                color: var(--gray-700);
-                margin-bottom: 0.5rem;
-            }
-
-            .form-control, .form-select {
-                border-radius: var(--border-radius);
-                border: 1px solid var(--gray-300);
-                padding: 0.625rem 1rem;
-                font-size: 0.95rem;
-                transition: var(--transition);
-            }
-
-            .form-control:focus, .form-select:focus {
-                border-color: var(--primary);
-                box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
-            }
-
-            .form-control::placeholder {
-                color: var(--gray-500);
-            }
-
-            .btn {
-                font-weight: 500;
-                padding: 0.625rem 1.25rem;
-                border-radius: var(--border-radius);
-                transition: var(--transition);
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 0.5rem;
-                border: none;
-            }
-
-            .btn-primary {
-                background-color: var(--primary);
-                color: white;
-            }
-
-            .btn-primary:hover {
-                background-color: var(--primary-dark);
-            }
-
-            .btn-success {
-                background-color: var(--success);
-                color: white;
-            }
-
-            .btn-success:hover {
-                background-color: #248a7e;
-            }
-
-            .btn-danger {
-                background-color: var(--danger);
-                color: white;
-            }
-
-            .btn-danger:hover {
-                background-color: #d62b39;
-            }
-
-            .form-group {
-                margin-bottom: 1.5rem;
-            }
-
-            .form-text {
-                color: var(--gray-600);
-                font-size: 0.875rem;
-                margin-top: 0.25rem;
-            }
-
-            @media (max-width: 992px) {
-                .sidebar {
-                    width: 240px;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .main-content {
-                    flex-direction: column;
-                }
-                
-                .sidebar {
-                    width: 100%;
-                    height: auto;
-                    position: relative;
-                    top: 0;
-                }
-                
-                .content {
-                    padding: 1.5rem;
-                }
-            }
-
-            @media (max-width: 576px) {
-                .header {
-                    padding: 1rem;
-                }
-                
-                .content {
-                    padding: 1rem;
-                }
-                
-                .card-body {
-                    padding: 1rem;
-                }
-                
-                .btn-group {
-                    flex-direction: column;
-                    width: 100%;
-                }
-                
-                .btn-group .btn {
-                    width: 100%;
-                    margin-bottom: 0.5rem;
-                }
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="scss/addroutecss.css">
     </head>
     <body>
         <header class="header">
             <h1 class="header-title"><i class="fas fa-train"></i> TraTra Train Tickets</h1>
         </header>
-        
+
         <div class="main-content">
             <aside class="sidebar">
                 <div class="sidebar-header">
@@ -338,7 +44,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="ViewAllTrain" class="nav-link">
                             <i class="fas fa-subway"></i>
                             <span>Trains</span>
                         </a>
@@ -357,14 +63,28 @@
                     </li>
                 </ul>
             </aside>
-            
+
             <main class="content">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Add New Train Route</h5>
                     </div>
+                    <c:if test="${not empty exist}">
+                    <div class="alert-notification p-3 d-flex align-items-center" id="errorAlert">
+                        <div class="alert-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">Failed</h5>
+                            <p class="mb-0">${exist}</p>
+                        </div>
+                        <div class="close-btn" onclick="closeErrorAlert()">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    </c:if>
                     <div class="card-body">
-                        <form action="AddRoute" method="POST">
+                        <form action="AddRoute" method="POST" onsubmit="return validateForm()">
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -372,7 +92,9 @@
                                         <select class="form-select" id="trainid" name="trainid" required>
                                             <option value="" selected disabled>Select train type</option>
                                             <c:forEach items="${listtrain}" var="t">
-                                                <option value="${t.id}">${t.trainid}</option>
+                                                <c:if test="${t.status == 1}">
+                                                    <option value="${t.id}">${t.trainid}</option>
+                                                </c:if>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -384,27 +106,26 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group mb-4">
                                 <label for="description" class="form-label">Description</label>
                                 <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter route description"></textarea>
                             </div>
-                            
+
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="departureDateTime" class="form-label">Departure Date & Time</label>
-                                        <input type="datetime-local" class="form-control" id="departureDateTime" name="departureDateTime" required>
-                                    </div>
+                                    <label for="departureDateTime" class="form-label">Departure Date & Time</label>
+                                    <input type="datetime-local" class="form-control" id="departureDateTime"
+                                           name="departureDateTime" required
+                                           onchange="handleDepartureChange()"  />
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="returnDateTime" class="form-label">Arrival Date & Time</label>
-                                        <input type="datetime-local" class="form-control" id="returnDateTime" name="returnDateTime" required>
-                                    </div>
+                                    <label for="returnDateTime" class="form-label">Arrival Date & Time</label>
+                                    <input type="datetime-local" class="form-control" id="returnDateTime"
+                                           name="returnDateTime" required />
                                 </div>
                             </div>
-                            
+
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -429,9 +150,9 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="d-flex justify-content-end gap-2 mt-4">
-                                <button type="button" class="btn btn-danger" onclick="window.location.href='viewlistroute'">
+                                <button type="button" class="btn btn-danger" onclick="window.location.href = 'viewlistroute'">
                                     <i class="fas fa-times"></i> Cancel
                                 </button>
                                 <button type="submit" class="btn btn-success">
@@ -443,8 +164,86 @@
                 </div>
             </main>
         </div>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+                                   window.addEventListener("load", function () {
+                                       // Lấy thời gian hiện tại
+                                       let now = new Date();
+                                       // Cộng thêm 2 giờ
+                                       now.setHours(now.getHours() + 2);
+
+                                       // Chuyển thành định dạng datetime-local
+                                       let minDeparture = now.toISOString().slice(0, 16);
+
+                                       // Gán cho Departure Date & Time
+                                       document.getElementById("departureDateTime").min = minDeparture;
+                                   });
+
+                                   function handleDepartureChange() {
+                                       const departureInput = document.getElementById("departureDateTime");
+                                       const arrivalInput = document.getElementById("returnDateTime");
+
+                                       let departureValue = departureInput.value;
+                                       if (!departureValue)
+                                           return;
+
+                                       let departureDate = new Date(departureValue);
+
+                                       // Cộng thêm 30 phút
+                                       let minArrival = new Date(departureDate.getTime() + 30 * 60000);
+                                       arrivalInput.min = minArrival.toISOString().slice(0, 16);
+
+                                       // Nếu arrival đang nhỏ hơn min, reset lại
+                                       if (arrivalInput.value && arrivalInput.value < arrivalInput.min) {
+                                           arrivalInput.value = "";
+                                       }
+                                   }
+
+                                   function validateForm() {
+                                       const now = new Date();
+                                       // Giờ hiện tại + 2 tiếng
+                                       let nowPlus2h = new Date(now.getTime() + 2 * 3600000);
+
+                                       const departureInput = document.getElementById("departureDateTime");
+                                       const arrivalInput = document.getElementById("returnDateTime");
+
+                                       let departureDate = new Date(departureInput.value);
+                                       let arrivalDate = new Date(arrivalInput.value);
+
+                                       // Kiểm tra Departure >= giờ hiện tại + 2 tiếng
+                                       if (departureDate < nowPlus2h) {
+                                           alert("Departure time must be at least 2 hours from now!");
+                                           return false;
+                                       }
+
+                                       // Kiểm tra Arrival >= Departure + 30 phút
+                                       let departurePlus30m = new Date(departureDate.getTime() + 30 * 60000);
+                                       if (arrivalDate < departurePlus30m) {
+                                           alert("Arrival time must be at least 30 minutes before departure time!");
+                                           return false;
+                                       }
+                                       return true;
+                                   }
+                                   
+                                   if (document.getElementById('errorAlert')) {
+                                        setTimeout(function() {
+                                            closeErrorAlert();
+                                        }, 5000);
+                                    }
+
+                                    // Function to close the error alert
+                                    function closeErrorAlert() {
+                                        const alert = document.getElementById('errorAlert');
+                                        if (alert) {
+                                            alert.style.opacity = '0';
+                                            alert.style.transition = 'opacity 0.5s';
+                                            setTimeout(function() {
+                                                alert.style.display = 'none';
+                                            }, 500);
+                                        }
+                                    }
+        </script>
     </body>
 </html>
 

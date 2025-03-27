@@ -441,7 +441,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="ViewAllTrain" class="nav-link">
                             <i class="fas fa-subway"></i>
                             <span>Trains</span>
                         </a>
@@ -458,6 +458,7 @@
                             <span>Account Info</span>
                         </a>
                     </li>
+                    <li><a class="dropdown-item text-danger" href="./logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </aside>
             
