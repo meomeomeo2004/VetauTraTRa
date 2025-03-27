@@ -53,7 +53,7 @@ public class AddRoute extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
     }
 
     @Override
@@ -86,30 +86,27 @@ public class AddRoute extends HttpServlet {
             // Lấy thời gian hiện tại
             LocalDateTime now = LocalDateTime.now();
             // Thời gian hiện tại + 2 giờ
-            LocalDateTime nowPlus2h = now.plusHours(7);
+            LocalDateTime nowPlus2h = now.plusHours(2);
 
             // (1) Kiểm tra Departure >= (hiện tại + 2 tiếng)
             if (departureDateTime.isBefore(nowPlus2h)) {
                 // Không thoả mãn -> báo lỗi, forward lại trang add
-                request.setAttribute("errorMessage",
+                request.setAttribute("exist",
                         "Departure time must be at least 2 hours from now!");
                 // forward lại trang JSP (ví dụ addRoute.jsp) để user sửa
                 response.sendRedirect("liststation");
                 return;
             }
-
+            
             // (2) Kiểm tra Arrival >= Departure + 30 phút
             LocalDateTime departurePlus30m = departureDateTime.plusMinutes(30);
             if (arrivalDateTime.isBefore(departurePlus30m)) {
-                request.setAttribute("errorMessage",
+                request.setAttribute("exist",
                         "Arrival time must be at least 30 minutes after Departure!");
                 response.sendRedirect("liststation");
                 return;
             }
-            Train train = mdao.getTrainById(trainid);
-            if(train.getStatus() != 1) {
-                 response.sendRedirect("liststation");
-            }
+            
             int g = -1;
             User a = (User) session.getAttribute("account");
             int b = a.getId();
@@ -120,7 +117,16 @@ public class AddRoute extends HttpServlet {
                 }            
             }
             if(g == 1){
-                response.sendRedirect("liststation");
+                String mess = "RouteCode already exists, please enter another routecode";
+                request.setAttribute("exist", mess);
+                request.getRequestDispatcher("addroute.jsp").forward(request, response);
+                return;
+            }
+            if(depStation.equals(arrStation)){
+                String mess = "DepartureStation must difference ArrivalStation";
+                request.setAttribute("exist", mess);
+                request.getRequestDispatcher("addroute.jsp").forward(request, response);
+                return;
             }
             
             // Nếu mọi kiểm tra đều OK -> thêm vào DB

@@ -40,20 +40,31 @@ public class UpdateRouteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("routeid");
-        int rouid = Integer.parseInt(id);
-        SellerDAO dao = new SellerDAO();
-        HttpSession session = request.getSession();
-        User f = (User) session.getAttribute("account");
-        int b = f.getId();
-        Route a = dao.getRoutebyCode(rouid);
-        List<Station> liststation = dao.getListStation();
-        List<Train> listtrain = dao.getListTrainBySellerId(b);
-        request.setAttribute("r", a);
-        request.setAttribute("station", liststation);
-        request.setAttribute("train", listtrain);
-        request.getRequestDispatcher("updateRoute.jsp").forward(request, response);
-
+        
+        try {
+            SellerDAO dao = new SellerDAO();
+            HttpSession session = request.getSession();
+            User f = (User) session.getAttribute("account");
+            int b = f.getId();
+            String id = request.getParameter("routeid");
+            int rouid = Integer.parseInt(id);
+            String mess = "The train is booked and cannot be edited";
+            int ticketid = dao.checkTicketInRoute(rouid);
+            if(ticketid != -1 && ticketid != 0){
+                request.setAttribute("erro", mess);
+                request.getRequestDispatcher("viewlistroute").forward(request, response);
+                return;
+            } 
+            Route a = dao.getRoutebyCode(rouid);
+            List<Station> liststation = dao.getListStation();
+            List<Train> listtrain = dao.getListTrainBySellerId(b);
+            request.setAttribute("r", a);
+            request.setAttribute("station", liststation);
+            request.setAttribute("train", listtrain);
+            request.getRequestDispatcher("updateRoute.jsp").forward(request, response);
+        } catch (Exception e) {
+        }
+        
     }
 
     @Override
@@ -75,8 +86,9 @@ public class UpdateRouteServlet extends HttpServlet {
         // Ép kiểu sang int
         int trainId = Integer.parseInt(trainIdParam);
         int routeId = Integer.parseInt(routeIdParam);
-
+        
         try {
+            
             // Định dạng datetime-local (yyyy-MM-ddTHH:mm) 
             // từ <input type="datetime-local">
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");

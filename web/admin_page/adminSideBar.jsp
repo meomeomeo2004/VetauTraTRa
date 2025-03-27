@@ -1,6 +1,4 @@
 <style>
-
-
     .sidebar {
         width: 280px;
         background-color: white;
@@ -110,14 +108,14 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="../admin-profile">
-                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                Profile
+            <a class="nav-link" href="../admin-profile">                
+                <i class="fas fa-user-circle nli"></i>
+                <span>Profile</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="../logout" class="nav-link">
-                <i class="fas fa-user-circle nli"></i>
+                <i class="fas fa-door-open nli"></i>
                 <span>Logout</span>
             </a>
         </li>

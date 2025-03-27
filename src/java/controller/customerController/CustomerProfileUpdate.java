@@ -35,42 +35,60 @@ public class CustomerProfileUpdate extends HttpServlet {
         String message = "";
         try {
             String id = request.getParameter("id");
-            String fullName = request.getParameter("fullName");
-            String address = request.getParameter("address");
+            String fullName = request.getParameter("fullName").trim();
+            String address = request.getParameter("address").trim();
             String phoneNumber = request.getParameter("phoneNumber").trim();
 
-            if (id.isBlank() || fullName.isBlank() || address.isBlank()) {
+            if (id.isBlank() || fullName.isBlank() || address.isBlank() || phoneNumber.isBlank()) {
                 throw new Exception("All fields must be filled!");
             }
 
+            // Lấy thông tin khách hàng hiện tại để so sánh
+            int customerId = Integer.parseInt(id);
+            Customer currentCustomer = customerDAO.getCustomerById(customerId);
+
+            if (currentCustomer == null) {
+                throw new Exception("Customer not found!");
+            }
+
+            // Kiểm tra nếu không có thay đổi
+            if (currentCustomer.getFullName().equals(fullName)
+                && currentCustomer.getAddress().equals(address)
+                && currentCustomer.getPhoneNumber().equals(phoneNumber)) {
+                throw new Exception("No changes detected in the profile information!");
+            }
+
+            // Xác thực full name
             String fullNameRegex = "^[\\p{L}]+( [\\p{L}]+)*$";
             if (!fullName.matches(fullNameRegex) || fullName.length() < 2 || fullName.length() > 50) {
                 throw new Exception("Full Name must be between 2 and 50 characters and only contain alphabetic characters and spaces.");
             }
 
+            // Xác thực địa chỉ
             String addressRegex = "^[a-zA-Z0-9\\s,/#-]{5,100}$";
             if (!address.matches(addressRegex)) {
                 throw new Exception("Address must contain 5-100 characters and only accept alphabetic characters, numbers, spaces, commas, slashes, and hyphens.");
             }
 
-            if (phoneNumber.isBlank()) {
-                throw new Exception("Phone number must be filled!");
-            }
-
+            // Xác thực số điện thoại
             String phoneRegex = "^[0-9]{10}$";
             if (!phoneNumber.matches(phoneRegex)) {
                 throw new Exception("Invalid phone number format. It must contain exactly 10 digits.");
             }
 
-            int customerId = Integer.parseInt(id);
+            // Kiểm tra dấu cách ở cuối
+            if (fullName.endsWith(" ") || address.endsWith(" ") || phoneNumber.endsWith(" ")) {
+                throw new Exception("Fields must not have trailing spaces.");
+            }
 
             int n = customerDAO.updateCustomerProfile(phoneNumber, fullName, address, customerId);
             if (n <= 0) {
                 throw new Exception("Profile update failed!");
             }
 
-            Customer customer = customerDAO.getCustomerById(customerId);
-            session.setAttribute("customer", customer);
+            // Cập nhật thông tin vào session
+            Customer updatedCustomer = customerDAO.getCustomerById(customerId);
+            session.setAttribute("customer", updatedCustomer);
             message = "Update profile successful!";
         } catch (Exception e) {
             message = "Error: " + e.getMessage();

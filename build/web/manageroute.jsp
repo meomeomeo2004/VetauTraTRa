@@ -66,7 +66,21 @@
 
             <main class="content">
                 <h2 class="page-title">Train Route Management</h2>
-
+                <!-- Error Notification -->
+                <c:if test="${not empty requestScope.editerror}">
+                    <div class="alert-notification p-3 d-flex align-items-center" id="errorAlert">
+                        <div class="alert-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">Operation Failed</h5>
+                            <p class="mb-0">${requestScope.editerror}</p>
+                        </div>
+                        <div class="close-btn" onclick="closeErrorAlert()">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                </c:if>
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Train Routes List</h5>
@@ -153,6 +167,26 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+    // Auto-dismiss the error alert after 5 seconds
+    if (document.getElementById('errorAlert')) {
+        setTimeout(function() {
+            closeErrorAlert();
+        }, 5000);
+    }
+    
+    // Function to close the error alert
+    function closeErrorAlert() {
+        const alert = document.getElementById('errorAlert');
+        if (alert) {
+            alert.style.opacity = '0';
+            alert.style.transition = 'opacity 0.5s';
+            setTimeout(function() {
+                alert.style.display = 'none';
+            }, 500);
+        }
+    }
+</script>
     </body>
 </html>
 
