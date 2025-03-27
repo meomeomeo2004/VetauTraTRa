@@ -1,1 +1,6 @@
-dist/*.war**/.envb u i l d / w e b / W E B - I N F / c l a s s e s / s e l l e r /   
+dist/*.war
+**/.envb u i l d / w e b / W E B - I N F / c l a s s e s / s e l l e r / 
+ 
+ 
+/nbproject/private/
+/build/
