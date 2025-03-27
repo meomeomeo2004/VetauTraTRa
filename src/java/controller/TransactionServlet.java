@@ -52,7 +52,7 @@ public class TransactionServlet extends HttpServlet {
                         routeId,
                         transactions
                 );
-                List<Ticket> createdTickets = ticketDAO.getTicketsByTransactionId(latestTransaction.getId());
+                List<Map<String, Object>> createdTickets = ticketDAO.getTicketsWithDetails(latestTransaction.getId());
                 request.setAttribute("tickets", createdTickets);
                 request.setAttribute("transaction", latestTransaction);
                 request.setAttribute("transactions", transactions);
@@ -60,6 +60,7 @@ public class TransactionServlet extends HttpServlet {
                 request.setAttribute("amount", amount);
                 request.setAttribute("numSeats", numSeats);
                 request.setAttribute("customerId", customerId);
+                request.setAttribute("success", "Payment success!");
                 request.getRequestDispatcher("/transaction.jsp").forward(request, response);
             } else {
                 response.getWriter().println("Lỗi khi lưu giao dịch vào cơ sở dữ liệu!");
