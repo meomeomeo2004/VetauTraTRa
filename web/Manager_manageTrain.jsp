@@ -128,32 +128,10 @@
                                             <td>${t.totalSeats}</td>
                                             <td>${t.numCabin}</td>
                                             <td>
-                                                <c:choose>
-                                                    <c:when test="${t.status == 1}">
                                                         <div class="status-badge status-active">
                                                             <i class="fas fa-check-circle"></i>
                                                             <span>Active</span>
                                                         </div>
-                                                    </c:when>
-                                                    <c:when test="${t.status == 2}">
-                                                        <div class="status-badge status-maintenance">
-                                                            <i class="fas fa-exclamation-triangle"></i>
-                                                            <span>Maintenance</span>
-                                                        </div>
-                                                    </c:when>
-                                                    <c:when test="${t.status == 0}">
-                                                        <div class="status-badge status-inactive">
-                                                            <i class="fas fa-times-circle"></i>
-                                                            <span>Inactive</span>
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div class="status-badge">
-                                                            <i class="fas fa-question-circle"></i>
-                                                            <span>Unknown</span>
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
                                             </td>
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>
@@ -175,32 +153,10 @@
                                             <td>${t.totalSeats}</td>
                                             <td>${t.numCabin}</td>
                                             <td>
-                                                <c:choose>
-                                                    <c:when test="${t.status == 1}">
-                                                        <div class="status-badge status-active">
-                                                            <i class="fas fa-check-circle"></i>
-                                                            <span>Active</span>
-                                                        </div>
-                                                    </c:when>
-                                                    <c:when test="${t.status == 2}">
                                                         <div class="status-badge status-maintenance">
                                                             <i class="fas fa-exclamation-triangle"></i>
                                                             <span>Maintenance</span>
                                                         </div>
-                                                    </c:when>
-                                                    <c:when test="${t.status == 0}">
-                                                        <div class="status-badge status-inactive">
-                                                            <i class="fas fa-times-circle"></i>
-                                                            <span>Inactive</span>
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div class="status-badge">
-                                                            <i class="fas fa-question-circle"></i>
-                                                            <span>Unknown</span>
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
                                             </td>
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>
@@ -222,32 +178,10 @@
                                             <td>${t.totalSeats}</td>
                                             <td>${t.numCabin}</td>
                                             <td>
-                                                <c:choose>
-                                                    <c:when test="${t.status == 1}">
-                                                        <div class="status-badge status-active">
-                                                            <i class="fas fa-check-circle"></i>
-                                                            <span>Active</span>
-                                                        </div>
-                                                    </c:when>
-                                                    <c:when test="${t.status == 2}">
-                                                        <div class="status-badge status-maintenance">
-                                                            <i class="fas fa-exclamation-triangle"></i>
-                                                            <span>Maintenance</span>
-                                                        </div>
-                                                    </c:when>
-                                                    <c:when test="${t.status == 0}">
                                                         <div class="status-badge status-inactive">
                                                             <i class="fas fa-times-circle"></i>
                                                             <span>Inactive</span>
                                                         </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div class="status-badge">
-                                                            <i class="fas fa-question-circle"></i>
-                                                            <span>Unknown</span>
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
                                             </td>
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>

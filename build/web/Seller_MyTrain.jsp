@@ -165,7 +165,7 @@
                                 </thead>
                                 <tbody>
                                     <c:forEach var="a" items="${trainList}">
-                                        <c:if test="${a.status !=4 and a.status !=5}">
+                                        <c:if test="${a.status !=4 and a.status !=5 and a.status != 6}">
                                         <tr>
                                             <td>${a.id}</td>
                                             <td>${a.trainid}</td>                                            

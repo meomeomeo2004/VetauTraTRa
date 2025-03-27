@@ -304,16 +304,36 @@ public class SellerDAO extends DBContext {
         return list;
     }
     
+//    SELECT id
+//FROM Ticket
+//WHERE route_id = <route_id>;
+
     
+    public int checkTicketInRoute(int routeid){
+        int ticketid = -1;
+        String sql = """
+                     SELECT MAX(id) AS max_ticket_id
+                     FROM Ticket
+                     WHERE route_id = ?
+                     """;
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, routeid);
+            ResultSet rs = pre.executeQuery();
+            while(rs.next()){
+                ticketid = rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return ticketid;
+    }
     public static void main(String[] args) {
         SellerDAO dao = new SellerDAO();
-        List<Train> list = dao.getListTrainBySellerId(4);
-        for(Train a : list){
-            System.out.println(a.getTrainid());
+        System.out.println(dao.checkTicketInRoute(20));
                     
         }
         
 
     }
 
-}
+
