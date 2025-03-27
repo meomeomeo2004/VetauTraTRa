@@ -3,6 +3,8 @@ package controller;
 import dal.CustomerDAO;
 import dal.UserDAO;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -36,33 +38,47 @@ public class RegisterServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         CustomerDAO customerDAO = new CustomerDAO();
 
-        // Kiểm tra các thông tin nhập vào
+        // Danh sách chứa các thông báo lỗi
+        List<String> errors = new ArrayList<>();
+
+        // Kiểm tra định dạng email
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+            errors.add("Email must have the format xxx@xxx.xxx");
+        }
+
+        // Kiểm tra định dạng số điện thoại
+        if (!phoneNumber.matches("^0[0-9]{9}$")) {
+            errors.add("Phone number must start with '0' and contain exactly 10 digits");
+        }
+
+        // Kiểm tra email đã tồn tại
         if (userDAO.checkEmailExist(email)) {
-            request.setAttribute("registerError", "Email already exists");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-            return;
+            errors.add("Email already exists");
         }
 
+        // Kiểm tra số điện thoại đã tồn tại
         if (customerDAO.checkPhoneNumberExist(phoneNumber)) {
-            request.setAttribute("registerError", "Phone Number already exists");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-            return;
+            errors.add("Phone Number already exists");
         }
 
+        // Kiểm tra mật khẩu trùng khớp
         if (!password.equals(confirmPassword)) {
-            request.setAttribute("registerError", "Passwords do not match");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-            return;
+            errors.add("Passwords do not match");
         }
 
+        // Kiểm tra mật khẩu có chứa chữ và số
         if (!password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
-            request.setAttribute("registerError", "Password must contain letters and numbers");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-            return;
+            errors.add("Password must contain letters and numbers");
         }
 
-        if (!phoneNumber.matches("[0-9]{10}")) {
-            request.setAttribute("registerError", "Phone number is not valid");
+        // Kiểm tra định dạng tên
+        if (!fullName.matches("[A-Za-z\\s]{2,}")) {
+            errors.add("Full name must contain only letters and spaces with at least 2 characters");
+        }
+
+        // Nếu có lỗi, chuyển về trang đăng ký
+        if (errors.size() > 0) {
+            request.setAttribute("registerErrors", errors);
             request.getRequestDispatcher("register.jsp").forward(request, response);
             return;
         }
