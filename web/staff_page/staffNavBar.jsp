@@ -23,7 +23,7 @@
         <!-- Avatar & Dropdown -->
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="assets/img/user-avatar.jpg" alt="Profile" class="rounded-circle" width="30" height="30">
+                <img src="#" alt="Profile" class="rounded-circle" width="30" height="30">
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="#!"><i class="fas fa-cog"></i> Settings</a></li>
