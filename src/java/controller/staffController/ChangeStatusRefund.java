@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpSession;
 import model.Refund;
 import model.Seat;
 import model.Staff;
-import model.Ticket;
 import model.TicketDetail;
 import model.User;
 
@@ -36,25 +35,44 @@ public class ChangeStatusRefund extends HttpServlet {
         RefundDAO fdao = new RefundDAO();
         SeatDAO sDAO = new SeatDAO();
         StaffDAO staffDAO = new StaffDAO();
-        int id;
         TicketDAO tdao = new TicketDAO();
         UserDAO udao = new UserDAO();
+        resetService service = new resetService();
+        int id;
 
         try {
             id = Integer.parseInt(id_raw);
             HttpSession session = request.getSession();
             User acc = (User) session.getAttribute("account");
             Staff staff = staffDAO.getStaffByUserId(acc.getId());
+
             fdao.changeRefundStatus(id, staff.getId());
             Refund rf = fdao.getRefundById(id);
             TicketDetail tk = tdao.getTicketDetailById(rf.getTicketId());
             Seat seat = sDAO.getSeatById(tk.getSeatId());
-            resetService service = new resetService();
-            service.sendRefundSuccess(udao.getUserById(rf.getUserId()).getEmail(), rf.getUserBankAccountName(), rf.getTicketId(), rf.getUserBankNumber(), rf.getUserBankName(), seat.getPrice());
+
+            request.getRequestDispatcher("/staff_page/refundList").forward(request, response);
+
+ 
+            new Thread(() -> {
+                try {
+                    service.sendRefundSuccess(
+                        udao.getUserById(rf.getUserId()).getEmail(),
+                        rf.getUserBankAccountName(),
+                        rf.getTicketId(),
+                        rf.getUserBankNumber(),
+                        rf.getUserBankName(),
+                        seat.getPrice()
+                    );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            response.sendRedirect("/staff_page/refundList");
         }
-        request.getRequestDispatcher("/staff_page/refundList").forward(request, response);
     }
 
     @Override

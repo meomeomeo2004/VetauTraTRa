@@ -36,7 +36,7 @@ public class RegisterServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         CustomerDAO customerDAO = new CustomerDAO();
 
-        // Validate thông tin
+        // Kiểm tra các thông tin nhập vào
         if (userDAO.checkEmailExist(email)) {
             request.setAttribute("registerError", "Email already exists");
             request.getRequestDispatcher("register.jsp").forward(request, response);
@@ -72,17 +72,23 @@ public class RegisterServlet extends HttpServlet {
         session.setAttribute("pendingUser", new User(email, password, "Customer"));
         session.setAttribute("pendingCustomer", new Customer(fullName, phoneNumber, address, 1));
 
-        // Gửi OTP để xác thực email
-        String otp = resetService.generateOTP();
-        OTPStorage.saveOTP(email, otp);
+        // Gửi OTP không đồng bộ để giảm độ trễ
+        new Thread(() -> {
+            try {
+                // Gửi OTP để xác thực email
+                String otp = resetService.generateOTP();
+                OTPStorage.saveOTP(email, otp);
+                boolean emailSent = resetService.sendOTPEmail(email, otp, fullName);
 
-        boolean emailSent = resetService.sendOTPEmail(email, otp, fullName);
+                if (!emailSent) {
+                    System.err.println("Failed to send OTP email.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
 
-        if (emailSent) {
-            response.sendRedirect("verify-email?email=" + email);
-        } else {
-            request.setAttribute("registerError", "Failed to send OTP email.");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        }
+        // Chuyển hướng ngay lập tức để không bị lag
+        response.sendRedirect("verify-email?email=" + email);
     }
 }

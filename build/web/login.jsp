@@ -112,8 +112,17 @@
                 margin-bottom: 20px;
                 text-align: center;
             }
+
+            .error-message {
+                background-color: #ffe6e6;
+                border-left: 4px solid #e53e3e;
+                color: #e53e3e;
+                padding: 12px;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
         </style>
-        <!-- Font Awesome for social icons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     </head>
     <body>
@@ -123,6 +132,10 @@
             <c:if test="${not empty sessionScope.registerSuccess}">
                 <div class="success-message">${sessionScope.registerSuccess}</div>
                 <c:remove var="registerSuccess" scope="session"/>
+            </c:if>
+
+            <c:if test="${not empty errorMessage}">
+                <div class="error-message">${errorMessage}</div>
             </c:if>
 
             <form action="../${role}/login" method="POST">
@@ -142,7 +155,6 @@
                     <a href="../requestPassword" class="forgot-password">Forgot Password?</a>
                 </div>
                 <button type="submit" class="login-button">LOGIN</button>
-                <span style="display: block;text-align: center; margin-top: 5px; color: red">${errorMessage}</span>
             </form>
         </div>
     </body>
