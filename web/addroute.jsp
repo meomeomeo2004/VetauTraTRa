@@ -69,6 +69,20 @@
                     <div class="card-header">
                         <h5 class="card-title">Add New Train Route</h5>
                     </div>
+                    <c:if test="${not empty exist}">
+                    <div class="alert-notification p-3 d-flex align-items-center" id="errorAlert">
+                        <div class="alert-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">Failed</h5>
+                            <p class="mb-0">${exist}</p>
+                        </div>
+                        <div class="close-btn" onclick="closeErrorAlert()">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    </c:if>
                     <div class="card-body">
                         <form action="AddRoute" method="POST" onsubmit="return validateForm()">
                             <div class="row mb-4">
@@ -78,7 +92,9 @@
                                         <select class="form-select" id="trainid" name="trainid" required>
                                             <option value="" selected disabled>Select train type</option>
                                             <c:forEach items="${listtrain}" var="t">
-                                                <option value="${t.id}">${t.trainid}</option>
+                                                <c:if test="${t.status == 1}">
+                                                    <option value="${t.id}">${t.trainid}</option>
+                                                </c:if>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -209,6 +225,24 @@
                                        }
                                        return true;
                                    }
+                                   
+                                   if (document.getElementById('errorAlert')) {
+                                        setTimeout(function() {
+                                            closeErrorAlert();
+                                        }, 5000);
+                                    }
+
+                                    // Function to close the error alert
+                                    function closeErrorAlert() {
+                                        const alert = document.getElementById('errorAlert');
+                                        if (alert) {
+                                            alert.style.opacity = '0';
+                                            alert.style.transition = 'opacity 0.5s';
+                                            setTimeout(function() {
+                                                alert.style.display = 'none';
+                                            }, 500);
+                                        }
+                                    }
         </script>
     </body>
 </html>

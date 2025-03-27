@@ -292,5 +292,60 @@
                     margin-bottom: 0.5rem;
                 }
             }
+            .alert-notification {
+                border-left: 4px solid #dc3545;
+                background-color: #fff;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+                animation: slideDown 0.3s ease-out forwards;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .alert-notification::before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                height: 3px;
+                width: 100%;
+                background-color: #dc3545;
+                animation: countdown 5s linear forwards;
+            }
+            
+            @keyframes slideDown {
+                from { transform: translateY(-20px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            
+            @keyframes countdown {
+                from { width: 100%; }
+                to { width: 0%; }
+            }
+            
+            .alert-notification .close-btn {
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                cursor: pointer;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+            
+            .alert-notification .close-btn:hover {
+                opacity: 1;
+            }
+            
+            .alert-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: rgba(220, 53, 69, 0.1);
+                color: #dc3545;
+                margin-right: 15px;
+            }
 
 

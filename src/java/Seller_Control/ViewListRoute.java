@@ -48,6 +48,11 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         int b = a.getId();
         List<Route> list = dao.getListRouteBySeller(b);
         request.setAttribute("listroute", list);
+        String editerror = (String) request.getAttribute("erro");
+        if (editerror != null) {
+        request.setAttribute("editerror", editerror);
+        }
+
         request.getRequestDispatcher("manageroute.jsp").forward(request, response);
 }
 
