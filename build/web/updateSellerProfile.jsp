@@ -6,42 +6,45 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="image/favicon.png" type="image/png">
-        <title>Admin Profile Update</title>
+        <title>Seller Profile</title>
         <%@include file="components/Style.jsp" %>
         <%@include file="components/StyleProfile.jsp" %>
         <%@include file="components/StyleButton.jsp" %>
-
     </head>
+
     <body>
 
-
+        <a href="../src/java/model/User.java"></a>
+        <!--================Header Area =================-->
         <section class="contact_area section_gap">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 col-md-4">
                         <div class="profile-nav-card">
                             <div class="profile-nav-header">
-                                Admin Menu
+                                Seller Menu
                             </div>
                             <ul class="profile-nav-list">
                                 <li class="profile-nav-item">
-                                    <a href="admin-profile" class="profile-nav-link">
+                                    <a href="seller-profile" class="profile-nav-link">
                                         <i class="fas fa-user"></i> View Profile
                                     </a>
                                 </li>
                                 <li class="profile-nav-item">
-                                    <a href="update-admin-profile" class="profile-nav-link active">
+                                    <a href="update-seller-profile" class="profile-nav-link active">
                                         <i class="fas fa-edit"></i> Update Profile
                                     </a>
                                 </li>
                                 <li class="profile-nav-item">
-                                    <a href="change-admin-password" class="profile-nav-link">
+                                    <a href="change-seller-password" class="profile-nav-link">
                                         <i class="fas fa-lock"></i> Change Password
                                     </a>
                                 </li>
+
                             </ul>
                         </div>
                     </div>
@@ -52,14 +55,15 @@
                                 <h3 class="content-card-title">Update Profile</h3>
                             </div>
 
-                            <form action="update-admin-profile" method="post">
+                            <form action="update-seller-profile" method="post">
                                 <input type="hidden" name="id" value="${sessionScope.account.id}">
 
                                 <div class="form-group">
+
                                     <label class="form-label">Full Name</label>
                                     <div class="input-wrapper">
                                         <i class="fas fa-user form-icon"></i>
-                                        <input type="text" name="fullName" class="form-control-custom" value="${admin.fullname}" required>
+                                        <input type="text" name="fullName" class="form-control-custom" value="${seller.fullName}" required>
                                     </div>
                                 </div>
 
@@ -67,7 +71,7 @@
                                     <label class="form-label">Email</label>
                                     <div class="input-wrapper">
                                         <i class="fas fa-envelope form-icon"></i>
-                                        <input type="email" name="email" class="form-control-custom" value="${sessionScope.account.email}" disabled>
+                                        <input type="email" name="email" class="form-control-custom" value="${sessionScope.account.email}" disabled="">
                                     </div>
                                 </div>
 
@@ -75,12 +79,17 @@
                                     <label class="form-label">Phone Number</label>
                                     <div class="input-wrapper">
                                         <i class="fas fa-phone form-icon"></i>
-                                        <input type="tel" name="phoneNumber" class="form-control-custom" value="${admin.phoneNumber}" required>
+                                        <input type="tel" name="phoneNumber" class="form-control-custom" value="${seller.phoneNumber}" required>
                                     </div>
                                 </div>
 
-
-
+                                <div class="form-group">
+                                    <label class="form-label">Address</label>
+                                    <div class="input-wrapper">
+                                        <i class="fas fa-map-marker-alt form-icon"></i>
+                                        <input type="text" name="address" class="form-control-custom" value="${seller.address}" required>
+                                    </div>
+                                </div>
                                 <button type="submit" name="submit" value="update" class="btn-submit">
                                     <i class="fas fa-check-circle"></i> Update Profile
                                 </button>
@@ -89,13 +98,15 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mb-4 mt-5">
-                    <a href="admin_page/AdminDashboard" class="btn btn-custom-yellow ms-2"><i class="fas fa-home"></i> Back to Dashboard</a>
+                    <a href="#" class="btn btn-custom-yellow ms-2"><i class="fas fa-home"></i> Back to Dashboard</a>
                 </div>
             </div>
         </section>
 
-        <!-- Footer Area -->
+        <!--================ start footer Area  =================-->
         <%@include file="components/Footer.jsp" %>
+        <!--================ End footer Area  =================-->
+
         <%@include file="components/Message.jsp" %>
     </body>
 </html>
