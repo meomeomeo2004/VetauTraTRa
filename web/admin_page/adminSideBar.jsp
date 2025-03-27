@@ -15,6 +15,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Revenue Report
                 </a>
+                <a class="nav-link" href="../admin-profile">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Profile
+                </a>
             </div>
         </div>
     </nav>
