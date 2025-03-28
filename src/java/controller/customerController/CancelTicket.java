@@ -31,7 +31,8 @@ public class CancelTicket extends HttpServlet {
                 boolean success = ticketDAO.changeTicketStatus(ticketId);
 
                 if (success) {
-                    response.sendRedirect("transaction?msg=Ticket canceled successfully");
+                    request.getSession().setAttribute("ticketId", ticketId);
+                    request.getRequestDispatcher("insertRefund.jsp").forward(request, response);
                 } else {
                     request.setAttribute("error", "Failed to cancel the ticket.");
                     request.getRequestDispatcher("error.jsp").forward(request, response);
