@@ -30,21 +30,38 @@ public class TransactionHistory extends HttpServlet {
         HttpSession session = request.getSession();
         User account = (User) session.getAttribute("account");
 
+        int page = 1;
+        int pageSize = 10;
+
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
+        }
+
         if (account != null) {
             try {
                 Customer customer = customerDAO.getCustomerById(account.getId());
 
-                List<Transaction> transactions = transactionDAO.getTransactionByCustomerId(customer.getId());
+                int totalTransactions = transactionDAO.getTransactionCountByCustomerId(customer.getId());
+                int totalPages = (int) Math.ceil((double) totalTransactions / pageSize);
+
+                List<Transaction> transactions = transactionDAO.getTransactionByCustomerIdPaged(customer.getId(), page, pageSize);
 
                 request.setAttribute("transactions", transactions);
+                request.setAttribute("currentPage", page);
+                request.setAttribute("totalPages", totalPages);
 
                 request.getRequestDispatcher("transactionOfCustomer.jsp").forward(request, response);
             } catch (NumberFormatException e) {
-                request.setAttribute("error", "ID khách hàng không hợp lệ!");
+                request.setAttribute("error", "Invalid customer ID!");
                 request.getRequestDispatcher("transactionOfCustomer.jsp").forward(request, response);
             }
         } else {
-            request.setAttribute("error", "Vui lòng nhập ID khách hàng!");
+            request.setAttribute("error", "Please enter customer ID!");
             request.getRequestDispatcher("transactionOfCustomer.jsp").forward(request, response);
         }
     }
