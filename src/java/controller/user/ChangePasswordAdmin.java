@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "ChangePasswordAdmin", urlPatterns = {"/change-admin-password"})
+@WebServlet(name = "ChangePasswordAdmin", urlPatterns = {"/admin_page/ChangePasswordAdmin"})
 public class ChangePasswordAdmin extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
@@ -21,7 +21,7 @@ public class ChangePasswordAdmin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        request.getRequestDispatcher("changeAdminPassword.jsp").forward(request, response);
+        request.getRequestDispatcher("./changeAdminPassword.jsp").forward(request, response);
     }
 
     @Override
@@ -66,7 +66,8 @@ public class ChangePasswordAdmin extends HttpServlet {
                     return;
                 } else {
                     message = "Failed to change password. Please try again!";
-                    response.sendRedirect("/tratra/change-admin-password");
+                    session.setAttribute("message", message);
+                    response.sendRedirect("ChangePasswordAdmin");
                     return;
                 }
             }
@@ -74,11 +75,11 @@ public class ChangePasswordAdmin extends HttpServlet {
         } catch (Exception e) {
             message = "Error: " + e.getMessage();
             session.setAttribute("message", message);
-            response.sendRedirect("change-admin-password");
+            response.sendRedirect("ChangePasswordAdmin");
             return;
         }
 
         session.setAttribute("message", message);
-        response.sendRedirect("change-admin-password");
+        response.sendRedirect("ChangePasswordAdmin");
     }
 }
