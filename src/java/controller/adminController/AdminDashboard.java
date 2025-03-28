@@ -71,9 +71,9 @@ public class AdminDashboard extends HttpServlet {
             throws ServletException, IOException {
         DAOforAdmin dao = new DAOforAdmin();
         List<View> v = dao.getView("month");
-        List<LoginCounter> lc = dao.getLoginCounter();
-        List<SellerRevenue> sr = dao.getSellerRevenue();
-        List<SellerTicketSale> sts = dao.getSellerTicketSale();
+        List<LoginCounter> lc = dao.getLoginCounter("month");
+        List<SellerRevenue> sr = dao.getSellerRevenue("month");
+        List<SellerTicketSale> sts = dao.getSellerTicketSale("month");
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime oneMonthAgo = today.minusMonths(1);
         LocalDateTime twoMonthAgo = today.minusMonths(2);

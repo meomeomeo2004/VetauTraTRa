@@ -83,19 +83,19 @@ public class genViewChart extends HttpServlet {
         List<Integer> viewCount;
 
         if (duration.equalsIgnoreCase("year")) {
-            oneDurationAgo = today.minusMonths(11);
+            oneDurationAgo = today.minusMonths(11).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
             viewCount = new ArrayList<>();
             for (int i = 0; i < 12; i++) {
                 viewCount.add(0);
             }
         } else if (duration.equalsIgnoreCase("month")) {
-            oneDurationAgo = today.minusDays(29);
+            oneDurationAgo = today.minusDays(29).withHour(0).withMinute(0).withSecond(0).withNano(0);
             viewCount = new ArrayList<>();
             for (int i = 0; i < 30; i++) {
                 viewCount.add(0);
             }
         } else {
-            oneDurationAgo = today.minusDays(6);
+            oneDurationAgo = today.minusDays(6).withHour(0).withMinute(0).withSecond(0).withNano(0);
             viewCount = new ArrayList<>();
             for (int i = 0; i < 7; i++) {
                 viewCount.add(0);
@@ -104,7 +104,7 @@ public class genViewChart extends HttpServlet {
 
         for (View view : v) {
             LocalDateTime viewldt = view.getDate().toLocalDate().atStartOfDay();
-            if (viewldt.isAfter(oneDurationAgo)) {
+            if (viewldt.isAfter(oneDurationAgo.minusNanos(1))) {
                 long m = 0;
                 if (duration.equalsIgnoreCase("year")) {
                     m = viewldt.getMonthValue() - 1;
@@ -168,7 +168,6 @@ public class genViewChart extends HttpServlet {
             }
         }
 
-        // Example Data: Last 12 Months' Visitor Counts
         JSONArray lastDuration = new JSONArray();
         JSONArray visitorCounts = new JSONArray();
         for (int i = 0; i < durationLabels.length; i++) {

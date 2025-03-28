@@ -79,6 +79,86 @@
             a {
                 text-decoration: none; /* Removes underline */
             }
+            .chart-time-filter {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .time-filter-btn {
+                padding: 6px 15px;
+                background-color: white;
+                color: #333;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .time-filter-btn:hover {
+                border-color: #22577a;
+                color: #22577a;
+            }
+
+            .time-filter-btn.active {
+                background-color: #22577a;
+                color: white;
+                border-color: #22577a;
+            }
+            .cardcard {
+                position: relative;
+                padding: 15px;
+                border-radius: 10px;
+                color: white;
+                height: 100%;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                cursor: pointer;
+                transition: transform 0.2s;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .cardcard:hover {
+                transform: translateY(-3px);
+            }
+
+            .stat-box {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 5px;
+            }
+
+            .stat-box h3 {
+                margin: 0;
+                font-weight: bold;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 70%;
+            }
+
+            .auto-resize-text {
+                font-size: 1.75rem; /* Default size */
+            }
+
+            /* Font size adjustments based on text length */
+            .stat-box h3.auto-resize-text:not(:empty) {
+                font-size: clamp(1rem, 2.5rem - (0.2rem * var(--text-length, 0)), 1.75rem);
+            }
+
+            small {
+                display: block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100%;
+            }
+
+            small .auto-resize-text:not(:empty) {
+                font-size: clamp(0.75rem, 1rem - (0.05rem * var(--text-length, 0)), 0.875rem);
+            }
         </style>
     </head>
     <body>
@@ -176,7 +256,7 @@
                                 <div class="cardcard saleChart" style="background: #dc3545" onclick="selectCard(this)">
                                     <p class="mb-1">Total Sales</p>
                                     <div class="stat-box">
-                                        <h3>${requestScope.sale}$</h3>
+                                        <h3 class="auto-resize-text">${requestScope.sale}$</h3>
                                         <span class="stat-icon green">
                                             <c:choose>
                                                 <c:when test="${requestScope.saleSign eq '1'}">
@@ -194,74 +274,87 @@
                                             </c:choose>
                                         </span>
                                     </div>
-                                    <small>You made <span style="font-weight: bold">${requestScope.saleDiff}$ ${requestScope.saleSign eq '1' ? 'more' : 'less'}</span> than last month</small>
+                                    <small class="text-truncate">You made <span style="font-weight: bold" class="auto-resize-text">${requestScope.saleDiff}$ ${requestScope.saleSign eq '1' ? 'more' : 'less'}</span> than last month</small>
                                 </div>
                             </a>
                         </div>
-                    </div>
 
-                    <!-- Charts Section -->
-                    <div class="row mt-4">
-                        <div id="">
-                            <div class="chart-container">
-                                <h5>Bar Chart</h5>
-                                <canvas id="visitorChart"></canvas>
+                        <!-- Charts Section -->
+                        <div class="row mt-4">
+                            <div id="">
+                                <div class="chart-container">
+                                    <h5>Bar Chart</h5>
+                                    <div class="chart-time-filter">
+                                        <button id="weekBtn" class="time-filter-btn" onclick="changeChartDuration('week')">Week</button>
+                                        <button id="monthBtn" class="time-filter-btn active" onclick="changeChartDuration('month')">Month</button>
+                                        <button id="yearBtn" class="time-filter-btn" onclick="changeChartDuration('year')">Year</button>
+                                    </div>
+                                    <canvas id="visitorChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                DataTable Example
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Office</th>
+                                            <th>Age</th>
+                                            <th>Start date</th>
+                                            <th>Salary</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Office</th>
+                                            <th>Age</th>
+                                            <th>Start date</th>
+                                            <th>Salary</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr>
+                                            <td>Michael Bruce</td>
+                                            <td>Javascript Developer</td>
+                                            <td>Singapore</td>
+                                            <td>29</td>
+                                            <td>2011/06/27</td>
+                                            <td>$183,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Donna Snider</td>
+                                            <td>Customer Support</td>
+                                            <td>New York</td>
+                                            <td>27</td>
+                                            <td>2011/01/25</td>
+                                            <td>$112,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            DataTable Example
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    <tr>
-                                        <td>Michael Bruce</td>
-                                        <td>Javascript Developer</td>
-                                        <td>Singapore</td>
-                                        <td>29</td>
-                                        <td>2011/06/27</td>
-                                        <td>$183,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Donna Snider</td>
-                                        <td>Customer Support</td>
-                                        <td>New York</td>
-                                        <td>27</td>
-                                        <td>2011/01/25</td>
-                                        <td>$112,000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                                
+
             </main>
         </div>
-
+        <script>
+            // Add this to your existing JavaScript
+            document.addEventListener("DOMContentLoaded", function () {
+                // Set custom property for text length to enable responsive font sizing
+                document.querySelectorAll('.auto-resize-text').forEach(el => {
+                    const textLength = el.textContent.trim().length;
+                    el.style.setProperty('--text-length', textLength);
+                });
+            });
+        </script>
         <script src="js/dashboard.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>

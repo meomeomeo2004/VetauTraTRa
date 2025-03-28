@@ -17,24 +17,13 @@ function selectCard(card) {
     document.querySelectorAll('.cardcard').forEach(el => el.classList.remove('selected'));
     // Add 'selected' class to the clicked card
     card.classList.add('selected');
-    if (card.classList.contains('viewChart')) {
-        genViewChart();
-    }
-    if (card.classList.contains('loginChart')) {
-        genLoginChart();
-    }
-    if (card.classList.contains('saleChart')) {
-        genSaleChart();
-    }
-    if (card.classList.contains('ticketChart')) {
-        genTicketChart();
-    }
+    changeChartDuration();
 }
 
 let visitorChartInstance = null;
 
-function genViewChart() {
-    fetch("genViewChart?duration=week") // Fetch data from the Servlet
+function genViewChart(duration = 'month') {
+    fetch("genViewChart?duration="+duration) // Fetch data from the Servlet
             .then(response => response.json()) // Convert response to JSON
             .then(data => {
                 // Unique Visitor Line Chart
@@ -61,8 +50,8 @@ function genViewChart() {
             })
 }
 
-function genLoginChart() {
-    fetch('genLoginChart') // Fetch data from the Servlet
+function genLoginChart(duration = 'month') {
+    fetch('genLoginChart?duration='+duration) // Fetch data from the Servlet
             .then(response => response.json()) // Convert response to JSON
             .then(data => {
                 // Unique Visitor Line Chart
@@ -86,11 +75,12 @@ function genLoginChart() {
                         options: {responsive: true}
                     });
                 }
+                console.log(data);
             })
 }
 
-function genSaleChart() {
-    fetch('genSaleChart') // Fetch data from the Servlet
+function genSaleChart(duration = 'month') {
+    fetch('genSaleChart?duration='+duration) // Fetch data from the Servlet
             .then(response => response.json()) // Convert response to JSON
             .then(data => {
                 // Unique Visitor Line Chart
@@ -118,8 +108,8 @@ function genSaleChart() {
             })
 }
 
-function genTicketChart() {
-    fetch('genTicketChart') // Fetch data from the Servlet
+function genTicketChart(duration = 'month') {
+    fetch('genTicketChart?duration='+duration) // Fetch data from the Servlet
             .then(response => response.json()) // Convert response to JSON
             .then(data => {
                 // Unique Visitor Line Chart
@@ -153,3 +143,30 @@ function getRandomColor(alpha = 1) {
     let b = Math.floor(Math.random() * 255);
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
+
+function changeChartDuration(duration = 'month') {
+    // Update active button
+    document.querySelectorAll('.time-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.getElementById(duration + 'Btn').classList.add('active');
+    
+    // Call the appropriate chart generation function based on which card is selected
+    const selectedCard = document.querySelector('.cardcard.selected');
+    
+    if (selectedCard.classList.contains('viewChart')) {
+        genViewChart(duration);
+    } else if (selectedCard.classList.contains('loginChart')) {
+        genLoginChart(duration);
+    } else if (selectedCard.classList.contains('saleChart')) {
+        genSaleChart(duration);
+    } else if (selectedCard.classList.contains('ticketChart')) {
+        genTicketChart(duration);
+    }
+}
+
+// Modify the document.addEventListener to set the month button as active by default
+document.addEventListener("DOMContentLoaded", function () {
+    genViewChart();
+    document.getElementById('monthBtn').classList.add('active');
+});

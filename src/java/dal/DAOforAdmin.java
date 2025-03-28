@@ -271,9 +271,23 @@ public class DAOforAdmin extends DBContext {
         }
     }
 
-    public List<LoginCounter> getLoginCounter() {
+    public List<LoginCounter> getLoginCounter(String duration) {
         List<LoginCounter> lcs = new ArrayList<>();
         String sql = "select * from Logincounter";
+
+        if (duration.equalsIgnoreCase("week")) {
+            sql = "select * from Logincounter\n"
+                    + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND NOW()";
+        }
+        if (duration.equalsIgnoreCase("month")) {
+            sql = "select * from Logincounter\n"
+                    + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 29 DAY) AND NOW()";
+        }
+        if (duration.equalsIgnoreCase("year")) {
+            sql = "select * from Logincounter\n"
+                    + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 364 DAY) AND NOW()";
+        }
+
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
@@ -292,20 +306,33 @@ public class DAOforAdmin extends DBContext {
         return lcs;
     }
 
-    public List<SellerRevenue> getSellerRevenue() {
+    public List<SellerRevenue> getSellerRevenue(String duration) {
         List<SellerRevenue> sr_list = new ArrayList<>();
-        String sql = "SELECT full_name, amount_paid, payment_date FROM ticket\n"
-                + "join transaction on ticket.transaction_id = transaction.id\n"
-                + "join route on ticket.route_id = route.id\n"
-                + "join train on route.train_id = train.id\n"
-                + "join seller on seller.id = train.owner";
+        String sql = """
+                     SELECT full_name, price, booking_date FROM ticket
+                                          join seat on seat.id = ticket.seat_id
+                                          join route on ticket.route_id = route.id
+                                          join train on route.train_id = train.id
+                                          join seller on seller.id = train.owner
+                                          WHERE ticket.status != 0""";
+
+        if (duration.equalsIgnoreCase("week")) {
+            sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND NOW()";
+        }
+        if (duration.equalsIgnoreCase("month")) {
+            sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 29 DAY) AND NOW()";
+        }
+        if (duration.equalsIgnoreCase("year")) {
+            sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 364 DAY) AND NOW()";
+        }
+
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
                 String name = rs.getString("full_name");
-                Date date = rs.getDate("payment_date");
-                double amount = rs.getDouble("amount_paid");
+                Date date = rs.getDate("booking_date");
+                double amount = rs.getDouble("price");
                 SellerRevenue sr = new SellerRevenue(name, date, amount);
                 sr_list.add(sr);
             }
@@ -317,12 +344,25 @@ public class DAOforAdmin extends DBContext {
         return sr_list;
     }
 
-    public List<SellerTicketSale> getSellerTicketSale() {
+    public List<SellerTicketSale> getSellerTicketSale(String duration) {
         List<SellerTicketSale> sts_list = new ArrayList<>();
-        String sql = "SELECT full_name, booking_date FROM ticket\n"
-                + "join route on ticket.route_id = route.id\n"
-                + "join train on route.train_id = train.id\n"
-                + "join seller on seller.id = train.owner";
+        String sql = """
+                     SELECT full_name, booking_date FROM ticket
+                     join route on ticket.route_id = route.id
+                     join train on route.train_id = train.id
+                     join seller on seller.id = train.owner
+                     WHERE ticket.status != 0""";
+
+        if (duration.equalsIgnoreCase("week")) {
+            sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND NOW()";
+        }
+        if (duration.equalsIgnoreCase("month")) {
+            sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 29 DAY) AND NOW()";
+        }
+        if (duration.equalsIgnoreCase("year")) {
+            sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 364 DAY) AND NOW()";
+        }
+
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
