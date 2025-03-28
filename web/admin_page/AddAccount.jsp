@@ -20,62 +20,114 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <style>
+            .content {
+                background-color: #f5f5f5;
+                min-height: calc(100vh - 100px);
+            }
+
+            .form-control:focus, .form-select:focus {
+                border-color: #22577a;
+                box-shadow: 0 0 0 0.25rem rgba(34, 87, 122, 0.25);
+            }
+
+            .btn:hover {
+                background-color: #1a4057 !important;
+            }
+
+            .card-header h3 {
+                font-weight: 200;
+                letter-spacing: 0.2px;
+            }
+
+            .form-label {
+                color: #333;
+                margin-bottom: 0.5rem;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-body {
+                    padding: 1.5rem;
+                }
+            }
+            .form-control-lg {
+                font-size: 1rem;
+            }
+            .form-select-lg {
+                font-size: 1rem;
+            }
+            .mb-4 {
+                margin-bottom: 1.2rem !important;
+            }
+        </style>
     </head>
     <body>
     <body class="sb-nav-fixed">
         <%@ include file="adminNavBar.jsp" %>
-
-        <div id="layoutSidenav">
+        <div class="main-content">
             <%@ include file="adminSideBar.jsp" %>
-            <div id="layoutSidenav_content">
-                <main class="container" style="padding-top: 50px; padding-bottom: 50px">
-                    <div class="row d-flex justify-content-center align-items-center">
-                        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                            <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                                <div class="card-body p-4 text-center">
-                                    <div class="mb-md-1 mt-md-4 pb-5">
-                                        <form method="POST" action="AddAccount">
-                                            <h2 class="fw-bold mb-2 text-uppercase">Add a new Account</h2>
-                                            <div class="form-outline form-white mb-4">
-                                                <input value="${requestScope.email}" type="email" name="email" id="email" class="form-control form-control-lg" required/>
-                                                <label class="form-label" for="email">Email</label>
-                                                <p style="color: red"><c:out value="${requestScope.error}"/></p>
-                                            </div>
-
-                                            <div class="form-outline form-white mb-4">
-                                                <input value="${requestScope.phonenumber}" type="number" name="phonenumber" id="phonenumber" class="form-control form-control-lg" required/>
-                                                <label class="form-label" for="phonenumber">Phone Number</label>
-                                            </div>
-                                            <div class="form-outline form-white mb-4">
-                                                <input value="${requestScope.fullname}" type="text" name="fullname" id="fullname" class="form-control form-control-lg" required/>
-                                                <label class="form-label" for="fullname">Full Name</label>
-                                            </div>
-                                            <div class="form-outline form-white mb-4">
-                                                <input value="${requestScope.password}" type="password" name="password" id="password" class="form-control form-control-lg" required/>
-                                                <label class="form-label" for="password">Password</label>
-                                            </div>
-                                            <div class="form-outline form-white mb-4">
-                                                <select name="role" class="form-select" aria-label="Default select example" required>
-                                                    <option value="" ${requestScope.role eq '' ? 'selected' : ''}>Select role</option>
-                                                    <option value="Manager" ${requestScope.role eq 'Manager' ? 'selected' : ''}>Manager</option>
-                                                    <option value="Seller" ${requestScope.role eq 'Seller' ? 'selected' : ''}>Seller</option>
-                                                    <option value="Staff" ${requestScope.role eq 'Staff' ? 'selected' : ''}>Staff</option>
-                                                    <option value="Customer" ${requestScope.role eq 'Customer' ? 'selected' : ''}>Customer</option>
-                                                </select>
-                                            </div>
-                                            <button class="btn btn-outline-light btn-lg px-5" type="submit">Add</button>
-                                        </form>
-                                    </div>
+            <main class="content" style="padding: 0">
+                <div class="container-fluid p-4">
+                    <div class="card" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                        <div class="card-header" style="background-color: #22577a; color: white; border-radius: 10px 10px 0 0;">
+                            <h3 class="text-center mb-0 py-3">ADD A NEW ACCOUNT</h3>
+                        </div>
+                        <div class="card-body p-4">
+                            <form method="POST" action="AddAccount" class="mx-auto" style="max-width: 500px;">
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold" for="email">Email</label>
+                                    <input value="${requestScope.email}" type="email" name="email" id="email" 
+                                           class="form-control form-control-lg bg-light" required/>
+                                    <p style="color: red"><c:out value="${requestScope.error}"/></p>
                                 </div>
-                            </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold" for="phonenumber">Phone Number</label>
+                                    <input value="${requestScope.phonenumber}" type="number" name="phonenumber" id="phonenumber" 
+                                           class="form-control form-control-lg bg-light" required/>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold" for="fullname">Full Name</label>
+                                    <input value="${requestScope.fullname}" type="text" name="fullname" id="fullname" 
+                                           class="form-control form-control-lg bg-light" required/>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold" for="password">Password</label>
+                                    <input value="${requestScope.password}" type="password" name="password" id="password" 
+                                           class="form-control form-control-lg bg-light" required/>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold" for="role">Role</label>
+                                    <select name="role" id="role" class="form-select form-select-lg bg-light" required>
+                                        <option value="" ${requestScope.role eq '' ? 'selected' : ''}>Select role</option>
+                                        <option value="Manager" ${requestScope.role eq 'Manager' ? 'selected' : ''}>Manager</option>
+                                        <option value="Seller" ${requestScope.role eq 'Seller' ? 'selected' : ''}>Seller</option>
+                                        <option value="Staff" ${requestScope.role eq 'Staff' ? 'selected' : ''}>Staff</option>
+                                        <option value="Customer" ${requestScope.role eq 'Customer' ? 'selected' : ''}>Customer</option>
+                                    </select>
+                                </div>
+
+                                <div class="text-center mt-5">
+                                    <button class="btn btn-lg px-5 py-2" type="submit" 
+                                            style="background-color: #22577a; color: white; min-width: 150px;">
+                                        Add
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </main>
-            </div>
+                </div>
+            </main>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
-    </body>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+</body>
 </html>

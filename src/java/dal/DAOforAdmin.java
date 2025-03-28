@@ -473,7 +473,7 @@ public class DAOforAdmin extends DBContext {
 
             pre.setString(1, title);
             pre.setString(2, content);
-            
+
             pre.setInt(3, id);
 
             pre.executeUpdate();
