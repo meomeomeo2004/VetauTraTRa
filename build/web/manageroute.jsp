@@ -15,7 +15,7 @@
     </head>
     <body>
         <header class="header">
-            <h1 class="header-title"><i class="fas fa-train"></i> TraTra Train Tickets</h1>
+            <h1 class="header-title"><i class="fas fa-train"></i> TraTra Tickets</h1>
         </header>
 
         <div class="main-content">
@@ -38,27 +38,27 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Schedules</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a href="ViewAllTrain" class="nav-link">
                             <i class="fas fa-subway"></i>
                             <span>Trains</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>User Accounts</span>
+                        <a href="ViewListVoucher" class="nav-link">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Voucher</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="seller-profile" class="nav-link">
                             <i class="fas fa-user-circle"></i>
-                            <span>Account Info</span>
+                            <span>Account Information</span>
+                        </a>
+                    </li>                    
+                    <li class="nav-item mt-4">
+                        <a href="./logout" class="nav-link text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
                         </a>
                     </li>
                 </ul>

@@ -77,9 +77,9 @@ public class SellerDAO extends DBContext {
             pre.setInt(1, trainid);
             pre.setString(2, routecode);
             pre.setString(3, describe);
+            
             // Sử dụng định dạng đúng cho input datetime-local: "yyyy-MM-dd'T'HH:mm"
             SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-
             Timestamp departureTimestamp = new Timestamp(dateTimeFormat.parse(departureDateTime).getTime());
             Timestamp arrivalTimestamp = new Timestamp(dateTimeFormat.parse(arrivalDateTime).getTime());
 
