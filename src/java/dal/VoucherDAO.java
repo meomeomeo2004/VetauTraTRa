@@ -35,8 +35,7 @@ public class VoucherDAO extends DBContext {
                     .code(rs.getString("code"))
                     .discountAmount(rs.getBigDecimal("discount_amount"))
                     .validFrom(rs.getTimestamp("valid_from"))
-                    .validTo(rs.getTimestamp("valid_to"))
-                    .quantity(rs.getInt("quantity"))
+                    .validTo(rs.getTimestamp("valid_to") != null ? rs.getTimestamp("valid_to") : null)
                     .status(rs.getInt("status"))
                     .createdBy(rs.getInt("created_by"))
                     .build();
