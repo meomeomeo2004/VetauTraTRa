@@ -45,7 +45,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="manager-profile" class="nav-link">
                         <i class="fas fa-user-circle"></i>
                         <span>Account</span>
                     </a>
@@ -121,17 +121,17 @@
                             </thead>
                             <tbody>
                                 <c:forEach items="${alltrain}" var="t">
-                                    <c:if test="${t.status == 1}">                                    
+                                    <c:if test="${t.status == 1}">
                                         <tr>
                                             <td>${t.id}</td>
                                             <td><strong>${t.trainid}</strong></td>
                                             <td>${t.totalSeats}</td>
                                             <td>${t.numCabin}</td>
                                             <td>
-                                                        <div class="status-badge status-active">
-                                                            <i class="fas fa-check-circle"></i>
-                                                            <span>Active</span>
-                                                        </div>
+                                                <div class="status-badge status-active">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    <span>Active</span>
+                                                </div>
                                             </td>
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>
@@ -144,19 +144,19 @@
                                                     </a>
                                                 </div>
                                             </td>
-                                        </tr>     
+                                        </tr>
                                     </c:if>
-                                    <c:if test="${t.status == 2}">                                    
+                                    <c:if test="${t.status == 2}">
                                         <tr>
                                             <td>${t.id}</td>
                                             <td><strong>${t.trainid}</strong></td>
                                             <td>${t.totalSeats}</td>
                                             <td>${t.numCabin}</td>
                                             <td>
-                                                        <div class="status-badge status-maintenance">
-                                                            <i class="fas fa-exclamation-triangle"></i>
-                                                            <span>Maintenance</span>
-                                                        </div>
+                                                <div class="status-badge status-maintenance">
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                    <span>Maintenance</span>
+                                                </div>
                                             </td>
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>
@@ -169,19 +169,19 @@
                                                     </a>
                                                 </div>
                                             </td>
-                                        </tr>     
+                                        </tr>
                                     </c:if>
-                                    <c:if test="${t.status == 0}">                                    
+                                    <c:if test="${t.status == 0}">
                                         <tr>
                                             <td>${t.id}</td>
                                             <td><strong>${t.trainid}</strong></td>
                                             <td>${t.totalSeats}</td>
                                             <td>${t.numCabin}</td>
                                             <td>
-                                                        <div class="status-badge status-inactive">
-                                                            <i class="fas fa-times-circle"></i>
-                                                            <span>Inactive</span>
-                                                        </div>
+                                                <div class="status-badge status-inactive">
+                                                    <i class="fas fa-times-circle"></i>
+                                                    <span>Inactive</span>
+                                                </div>
                                             </td>
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>
@@ -194,7 +194,7 @@
                                                     </a>
                                                 </div>
                                             </td>
-                                        </tr>     
+                                        </tr>
                                     </c:if>
                                 </c:forEach>
 
