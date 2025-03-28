@@ -92,6 +92,8 @@ public class SellerDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace(); // In lỗi để dễ dàng debug
         }
+        
+        
     }
 
     public List<Route> getListRouteBySeller(int user_id) {

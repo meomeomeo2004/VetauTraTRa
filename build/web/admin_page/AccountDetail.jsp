@@ -30,7 +30,7 @@
                 background: #fff;
                 border-radius: 10px;
                 margin-top: 15px;
-                border: 2px solid RGB(33, 37, 41);
+                border: 2px solid #22577a;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
                 overflow: hidden;
             }
@@ -64,17 +64,16 @@
     </head>
     <body>
         <%@ include file="adminNavBar.jsp" %>
-        <div id="layoutSidenav">
+        <div class="main-content">
             <%@ include file="adminSideBar.jsp" %>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div style="margin-top: 30px;" class="container-fluid px-4">
+            <main class="content">
+                    <div style="margin-top: 30px;" class="container-fluid px-6">
                         <div style="display: flex; justify-content: space-between;">
                             <h5 style="margin-top: auto; margin-bottom: auto" class="back-button"><a onclick="history.back()"><i class="bi bi-arrow-left"></i>Back</a></h5>
                             <a class="btn btn-warning" href="EditAccount?id=${requestScope.ud.getId()}&&role=${requestScope.ud.getRole()}" role="button">Edit this user information</a>
                         </div>
                         <div class="profile-container">
-                            <div style="background:  RGB(33, 37, 41); color: white;">
+                            <div style="background:  #22577a; color: white;">
                                 <h2 class=" mb-4" style="padding: 10px">User Profile</h2>                                
                             </div>
                             <form style="padding: 20px">
