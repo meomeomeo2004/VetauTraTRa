@@ -112,51 +112,41 @@
         </style>
     </head>
     <body>
-        <header class="header">
-            <h1 class="header-title"><i class="fas fa-ship"></i> TraTra Tickets</h1>
-        </header>
-
         <div class="main-content">
             <aside class="sidebar">
                 <div class="sidebar-header">
-                    <h5 class="sidebar-title">System Management</h5>
+                    <h5 class="sidebar-title"><i class="fas fa-train"></i> Manager Panel</h5>
                 </div>
                 <div class="sidebar-divider"></div>
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a href="homeSellerPage.jsp" class="nav-link">
+                        <a href="ManagerHomePage.jsp" class="nav-link">
                             <i class="fas fa-chart-line"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="viewlistroute" class="nav-link">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Manage Seller</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="listtrain" class="nav-link active">
+                            <i class="fas fa-subway"></i>
+                            <span>Manage Trains</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
                             <i class="fas fa-route"></i>
-                            <span>Train Routes</span>
+                            <span>Manage Station</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="ViewAllTrain" class="nav-link">
-                            <i class="fas fa-train"></i>
-                            <span>Trains</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="ViewListVoucher" class="nav-link">
-                            <i class="fas fa-ticket-alt"></i>
-                            <span>Voucher</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="seller-profile" class="nav-link">
+                        <a href="manager-profile" class="nav-link">
                             <i class="fas fa-user-circle"></i>
-                            <span>Account Information</span>
-                        </a>
-                    </li>                    
-                    <li class="nav-item mt-4">
-                        <a href="./logout" class="nav-link text-danger">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Logout</span>
+                            <span>Account</span>
                         </a>
                     </li>
                 </ul>
@@ -164,7 +154,7 @@
 
             <main class="content">
                 <h2 class="page-title">Waiting Train Approval</h2>
-                
+
                 <div class="filters mb-4">
                     <div class="filter-group">
                         <span class="filter-label">Status:</span>
@@ -172,6 +162,7 @@
                             <option value="all">All</option>
                             <option value="4">New</option>
                             <option value="5">Edited</option>
+                            <option value="6">Seller Reject</option>
                         </select>
                     </div>
 
@@ -202,43 +193,38 @@
                                 </thead>
                                 <tbody>
                                     <c:forEach var="train" items="${trainl}">
-                                        <tr>
-                                            <td>${train.trainid}</td>
-                                            <td>${train.totalSeats}</td>
-                                            <td>${train.numCabin}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${train.status == 4}">
-                                                        <span class="status-new">New</span>
-                                                    </c:when>
-                                                    <c:when test="${train.status == 5}">
-                                                        <span class="status-edit">Edited</span>
-                                                    </c:when>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <div class="action-buttons">
-                                                    <a href="DetailsTrain?id=${train.id}" class="btn btn-primary btn-sm action-btn">
-                                                        <i class="fas fa-eye"></i> View
-                                                    </a>
-                                                    <form action="UpdateStatusRoute" method="POST" style="display: inline;">
-                                                        <input type="hidden" name="trainId" value="${train.id}">
-                                                        <input type="hidden" name="status" value="0">
-                                                        <button type="submit" class="btn btn-success btn-sm action-btn" onclick="return confirm('Are you sure you want to accept this train?');">
-                                                            <i class="fas fa-check"></i> Accept
-                                                        </button>
-                                                    </form>
-                                                    <form action="UpdateStatusRoute" method="POST" style="display: inline;">
-                                                        <input type="hidden" name="trainId" value="${train.id}">
-                                                        <input type="hidden" name="status" value="6">
-                                                        <button type="submit" class="btn btn-danger btn-sm action-btn" onclick="return confirm('Are you sure you want to cancel this train?');">
-                                                            <i class="fas fa-times"></i> Cancel
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-
-                                        </tr>
+                                        <c:if test="${train.status == 4 || train.status == 5 || train.status == 6}">
+                                            <tr>
+                                                <td>${train.trainid}</td>
+                                                <td>${train.totalSeats}</td>
+                                                <td>${train.numCabin}</td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${train.status == 4}">
+                                                            <span class="status-new">Wait Seller Accept New</span>
+                                                        </c:when>
+                                                        <c:when test="${train.status == 5}">
+                                                            <span class="status-edit">Wait Seller Accept Edit</span>
+                                                        </c:when>
+                                                        <c:when test="${train.status == 6}">
+                                                            <span class="status-edit">Seller Reject</span>
+                                                        </c:when>
+                                                    </c:choose>
+                                                </td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <a href="DetailsTrain?id=${train.id}" class="btn btn-primary btn-sm action-btn">
+                                                            <i class="fas fa-eye"></i> View
+                                                        </a>
+                                                        <c:if test="${train.status == 6}">    
+                                                            <a href="editTrain?id=${train.id}" class="btn btn-warning btn-sm action-btn">
+                                                                <i class="fas fa-edit"></i> Edit
+                                                            </a>
+                                                        </c:if>    
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </c:if>
                                     </c:forEach>
                                 </tbody>
                             </table>
@@ -264,14 +250,15 @@
                                 return;
                             }
 
-                            const statusSpan = row.querySelector('td:nth-child(4) span');
-                            if (!statusSpan) return;
+                            const statusCell = row.querySelector('td:nth-child(4) span');
+                            if (!statusCell)
+                                return;
 
-                            const statusText = statusSpan.textContent.trim().toLowerCase();
+                            const statusText = statusCell.textContent.trim().toLowerCase();
 
-                            if (status === '4' && statusText === 'new') {
-                                row.style.display = '';
-                            } else if (status === '5' && statusText === 'edited') {
+                            if ((status === '4' && statusText.includes('wait seller accept new')) ||
+                                    (status === '5' && statusText.includes('wait seller accept edit')) ||
+                                    (status === '6' && statusText.includes('seller reject'))) {
                                 row.style.display = '';
                             } else {
                                 row.style.display = 'none';
@@ -291,13 +278,14 @@
 
                         rows.forEach(row => {
                             const modelCell = row.cells[0]; // Train model is in the 1st column (index 0)
-                            if (!modelCell) return;
+                            if (!modelCell)
+                                return;
 
                             const modelText = modelCell.textContent.toLowerCase();
                             row.style.display = modelText.includes(searchTerm) ? '' : 'none';
                         });
                     };
-                    
+
                     searchBtn.addEventListener('click', performSearch);
                     searchInput.addEventListener('keyup', (e) => {
                         if (e.key === 'Enter') {
@@ -306,6 +294,7 @@
                     });
                 }
             });
+
         </script>
     </body>
 </html>

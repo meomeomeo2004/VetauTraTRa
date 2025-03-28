@@ -29,7 +29,7 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-users"></i>
-                        <span>Manage Users</span>
+                        <span>Manage Seller</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -41,7 +41,7 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-route"></i>
-                        <span>Manage Routes</span>
+                        <span>Manage Station</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -50,30 +50,23 @@
                         <span>Account</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Reports</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </a>
-                </li>
             </ul>
         </aside>
 
         <main class="content">
             <h2 class="page-title"><i class="fas fa-subway"></i> Train Management</h2>
-
+            <h3><c:if test="${message != null}">${message}</c:if></h3>
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Train Fleet</h5>
-                    <a href="AddTrain" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Add New Train
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="AddTrain" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add New Train
+                        </a>
+                        <a href="waiting" class="btn btn-secondary">
+                            <i class="fas fa-clock"></i> Waiting
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="filter-section">
@@ -136,9 +129,6 @@
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>
                                                 <div class="action-buttons">
-                                                    <a href="editTrain?id=${t.id}" class="btn btn-warning btn-icon" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
                                                     <a href="DetailsTrain?id=${t.id}" class="btn btn-info btn-icon" title="Details">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
@@ -203,7 +193,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Train Statistics Card -->
             <div class="card">
                 <div class="card-header">

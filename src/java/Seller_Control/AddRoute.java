@@ -133,7 +133,7 @@ public class AddRoute extends HttpServlet {
             dao.addRoute(trainid, rcode, description,
                     depDateTimeParam, arrDateTimeParam,
                     depStation, arrStation);
-
+            
             // Chuyển hướng về danh sách routes
             response.sendRedirect("viewlistroute");
 

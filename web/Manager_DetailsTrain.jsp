@@ -323,6 +323,15 @@
                                                 <c:when test="${train.status == 0}">
                                                     <span class="badge badge-inactive">Inactive</span>
                                                 </c:when>
+                                                    <c:when test="${train.status == 4}">
+                                                    <span class="badge badge-maintenance">New Train Waiting</span>
+                                                </c:when>
+                                                <c:when test="${train.status == 5}">
+                                                    <span class="badge badge-maintenance">Train Edited Waiting</span>
+                                                </c:when>
+                                                <c:when test="${train.status == 6}">
+                                                    <span class="badge badge-inactive">Seller Reject</span>
+                                                </c:when>
                                             </c:choose>
                                         </div>
                                     </div>

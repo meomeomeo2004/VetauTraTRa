@@ -15,7 +15,7 @@
     </head>
     <body>
         <header class="header">
-            <h1 class="header-title"><i class="fas fa-ship"></i> TraTra Ferry</h1>
+            <h1 class="header-title"><i class="fas fa-ship"></i> TraTra Tickets</h1>
         </header>
 
 
@@ -35,13 +35,7 @@
                     <li class="nav-item">
                         <a href="viewlistroute" class="nav-link">
                             <i class="fas fa-route"></i>
-                            <span>Trip Management</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Schedule</span>
+                            <span>Train Routes</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -51,15 +45,21 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-user"></i>
-                            <span>Account</span>
+                        <a href="ViewListVoucher" class="nav-link">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Voucher</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-circle-info"></i>
+                        <a href="seller-profile" class="nav-link">
+                            <i class="fas fa-user-circle"></i>
                             <span>Account Information</span>
+                        </a>
+                    </li>                    
+                    <li class="nav-item mt-4">
+                        <a href="./logout" class="nav-link text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
                         </a>
                     </li>
                 </ul>
