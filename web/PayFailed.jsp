@@ -13,6 +13,7 @@
                 --primary-color: #4361ee;
                 --secondary-color: #f8f9fa;
                 --success-color: #38b000;
+                --error-color: #dc3545; /* Added error color */
                 --text-color: #333;
                 --light-gray: #e9ecef;
                 --medium-gray: #dee2e6;
@@ -96,8 +97,9 @@
                 padding: 25px;
             }
 
+            /* Modified notification to use error color */
             .notification {
-                background-color: var(--success-color);
+                background-color: var(--error-color);
                 color: white;
                 padding: 18px;
                 margin: 0 0 30px;
@@ -105,13 +107,14 @@
                 text-align: center;
                 font-weight: 500;
                 font-size: 1.1rem;
-                box-shadow: 0 4px 15px rgba(56, 176, 0, 0.3);
+                box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
                 animation: fadeIn 0.5s ease;
                 position: relative;
             }
 
+            /* Changed icon from checkmark to X */
             .notification::before {
-                content: '✓';
+                content: '✕';
                 display: inline-block;
                 margin-right: 10px;
                 font-weight: bold;
@@ -311,106 +314,11 @@
         </div>
 
         <div class="container">
-            <c:if test="${not empty success}">
+            <c:if test="${not empty fail}">
                 <div class="notification">
-                    ${success}
+                    ${fail}
                 </div>
             </c:if>
-
-            <c:choose>
-                <c:when test="${not empty transaction}">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>Transaction information</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="transaction-details">
-                                <div class="detail-item">
-                                    <div class="detail-label">Transaction id</div>
-                                    <div class="detail-value highlight">${transaction.id}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Payment method</div>
-                                    <div class="detail-value">${transaction.paymentMethod}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Quantity</div>
-                                    <div class="detail-value">${transaction.quantity}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Total amount</div>
-                                    <div class="detail-value highlight">
-                                        <fmt:formatNumber value="${transaction.amountPaid}" type="currency" currencyCode="VND"/>
-                                    </div>
-                                </div>
-                                <c:if test="${not empty transaction.vouchercode}">
-                                    <div class="detail-item">
-                                        <div class="detail-label">Voucher</div>
-                                        <div class="detail-value">${transaction.vouchercode}</div>
-                                    </div>
-                                </c:if>
-                                <div class="detail-item">
-                                    <div class="detail-label">Payment date</div>
-                                    <div class="detail-value">
-                                        <fmt:formatDate value="${transaction.paymentDate}" 
-                                                        pattern="dd/MM/yyyy HH:mm:ss"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>Ticket information</h2>
-                        </div>
-                        <div class="card-body">
-                            <c:if test="${not empty tickets}">
-                                <div class="table-responsive">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Ticket id</th>
-                                                <th>Seat</th>
-                                                <th>Route</th>
-                                                <th>Luggage</th>
-                                                <th>Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="ticket" items="${tickets}">
-                                                <tr>
-                                                    <td>${ticket.ticketId}</td>
-                                                    <td>${ticket.seatName}</td>
-                                                    <td>${ticket.routeName}</td>
-                                                    <td>${ticket.luggageWeight} kg</td>
-                                                    <td>
-                                                        <fmt:formatDate value="${ticket.bookingDate}" 
-                                                                        pattern="dd/MM/yyyy HH:mm:ss"/>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </c:if>
-                            <c:if test="${empty tickets}">
-                                <div class="empty-state">
-                                    <p>Can't find ticket.</p>
-                                </div>
-                            </c:if>
-                        </div>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="card">
-                        <div class="card-body empty-state">
-                            <p>Can't find transaction.</p>
-                        </div>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-
             <a href="/tratra" class="btn btn-primary btn-home">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
