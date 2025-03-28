@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import model.Admin;
 import model.User;
 
-@WebServlet(name = "AdminViewProfile", urlPatterns = {"/admin-profile"})
+@WebServlet(name = "AdminViewProfile", urlPatterns = {"/admin_page/AdminViewProfile"})
 public class AdminViewProfile extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
@@ -30,7 +30,7 @@ public class AdminViewProfile extends HttpServlet {
             Admin admin = userDAO.getAdminById(a);
             request.setAttribute("admin", admin);
         }
-        request.getRequestDispatcher("adminProfile.jsp").forward(request, response);
+        request.getRequestDispatcher("./adminProfile.jsp").forward(request, response);
     }
 
 }

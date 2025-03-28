@@ -227,15 +227,15 @@ public class DAOforAdmin extends DBContext {
         String sql = "select * from View";
         if (duration.equalsIgnoreCase("week")) {
             sql = "SELECT * FROM view\n"
-                    + "WHERE date BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW()";
+                    + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND NOW()";
         }
         if (duration.equalsIgnoreCase("month")) {
             sql = "SELECT * FROM view\n"
-                    + "WHERE date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()";
+                    + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 29 DAY) AND NOW()";
         }
         if (duration.equalsIgnoreCase("year")) {
             sql = "SELECT * FROM view\n"
-                    + "WHERE date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW()";
+                    + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 364 DAY) AND NOW()";
         }
         try {
             PreparedStatement pre = connection.prepareStatement(sql);

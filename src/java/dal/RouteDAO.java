@@ -45,18 +45,17 @@ public class RouteDAO extends DBContext {
                     + " JOIN Station dep ON r.departure_station = dep.station_code "
                     + " JOIN Station arr ON r.arrival_station = arr.station_code WHERE 1=1"); // 1=1 để dễ dàng thêm các điều kiện sau
 
-            // Dùng PreparedStatement để tránh SQL Injection
             if (departureStation != null && !departureStation.trim().isEmpty()) {
-                sql.append(" AND departure_station LIKE ?");
+                sql.append(" AND dep.name LIKE ?");
             }
             if (arrivalStation != null && !arrivalStation.trim().isEmpty()) {
-                sql.append(" AND arrival_station LIKE ?");
+                sql.append(" AND arr.name LIKE ?");
             }
             if (departureDate != null && !departureDate.trim().isEmpty()) {
-                sql.append(" AND departure_time LIKE ?");
+                sql.append(" AND r.departure_time LIKE ?");
             }
             if (arrivalDate != null && !arrivalDate.trim().isEmpty()) {
-                sql.append(" AND arrival_time LIKE ?");
+                sql.append(" AND r.arrival_time LIKE ?");
             }
 
             // Sử dụng PreparedStatement với câu SQL động
