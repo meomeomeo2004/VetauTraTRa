@@ -108,7 +108,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="../admin-profile">                
+            <a class="nav-link" href="AdminViewProfile">                
                 <i class="fas fa-user-circle nli"></i>
                 <span>Profile</span>
             </a>
@@ -139,3 +139,4 @@
         }
     });
 </script>
+

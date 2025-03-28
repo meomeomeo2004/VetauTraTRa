@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import model.Admin;
 import model.User;
 
-@WebServlet(name = "UpdateProfileAdmin", urlPatterns = {"/update-admin-profile"})
+@WebServlet(name = "UpdateProfileAdmin", urlPatterns = {"/admin_page/UpdateProfileAdmin"})
 public class UpdateProfileAdmin extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
@@ -29,7 +29,7 @@ public class UpdateProfileAdmin extends HttpServlet {
             Admin admin = userDAO.getAdminById(acc.getId());
             request.setAttribute("admin", admin);
         }
-        request.getRequestDispatcher("updateAdminProfile.jsp").forward(request, response);
+        request.getRequestDispatcher("./updateAdminProfile.jsp").forward(request, response);
     }
 
     @Override
@@ -90,6 +90,6 @@ public class UpdateProfileAdmin extends HttpServlet {
         }
 
         session.setAttribute("message", message);
-        response.sendRedirect("update-admin-profile");
+        response.sendRedirect("UpdateProfileAdmin");
     }
 }

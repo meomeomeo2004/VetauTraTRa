@@ -34,7 +34,7 @@ function selectCard(card) {
 let visitorChartInstance = null;
 
 function genViewChart() {
-    fetch("genViewChart?duration=month") // Fetch data from the Servlet
+    fetch("genViewChart?duration=week") // Fetch data from the Servlet
             .then(response => response.json()) // Convert response to JSON
             .then(data => {
                 // Unique Visitor Line Chart
