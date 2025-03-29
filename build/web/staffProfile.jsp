@@ -125,7 +125,6 @@
                     </div>
                     <div class="d-flex justify-content-end mb-4 mt-5">
                         <a href="staff_page/ticketList" class="btn btn-custom-navy"><i class="fas fa-arrow-left"></i> Back to Ticket List</a>
-                        <a href="staff_page/staffDashboard" class="btn btn-custom-yellow ms-2"><i class="fas fa-home"></i> Back to Dashboard</a>
                     </div>
                 </div>
             </div>
