@@ -137,4 +137,92 @@ public class TransactionDAO extends DBContext {
         }
         return transactions;
     }
+
+    public List<Transaction> filterTransactionsPaged(int customerId, String paymentDate, Double minAmount, Double maxAmount, int page, int pageSize) {
+        List<Transaction> transactions = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM Transaction WHERE customer_id = ?");
+        if (paymentDate != null && !paymentDate.isEmpty()) {
+            sql.append(" AND DATE(payment_date) = ?");
+        }
+        if (minAmount != null) {
+            sql.append(" AND amount_paid >= ?");
+        }
+        if (maxAmount != null) {
+            sql.append(" AND amount_paid <= ?");
+        }
+        sql.append(" ORDER BY payment_date DESC LIMIT ?, ?");
+
+        try (PreparedStatement pre = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+            pre.setInt(paramIndex++, customerId);
+            if (paymentDate != null && !paymentDate.isEmpty()) {
+                pre.setString(paramIndex++, paymentDate);
+            }
+            if (minAmount != null) {
+                pre.setDouble(paramIndex++, minAmount);
+            }
+            if (maxAmount != null) {
+                pre.setDouble(paramIndex++, maxAmount);
+            }
+            int offset = (page - 1) * pageSize;
+            pre.setInt(paramIndex++, offset);
+            pre.setInt(paramIndex, pageSize);
+
+            try (ResultSet rs = pre.executeQuery()) {
+                while (rs.next()) {
+                    Transaction transaction = new Transaction(
+                        rs.getInt("id"),
+                        rs.getInt("customer_id"),
+                        rs.getString("payment_method"),
+                        rs.getInt("payment_status"),
+                        rs.getTimestamp("payment_date"),
+                        rs.getInt("quantity"),
+                        rs.getDouble("amount_paid"),
+                        rs.getString("voucher_code")
+                    );
+                    transactions.add(transaction);
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error filtering transactions: " + ex.getMessage());
+        }
+        return transactions;
+    }
+
+    public int countFilteredTransactions(int customerId, String paymentDate, Double minAmount, Double maxAmount) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS total FROM Transaction WHERE customer_id = ?");
+        if (paymentDate != null && !paymentDate.isEmpty()) {
+            sql.append(" AND DATE(payment_date) = ?");
+        }
+        if (minAmount != null) {
+            sql.append(" AND amount_paid >= ?");
+        }
+        if (maxAmount != null) {
+            sql.append(" AND amount_paid <= ?");
+        }
+
+        try (PreparedStatement pre = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+            pre.setInt(paramIndex++, customerId);
+            if (paymentDate != null && !paymentDate.isEmpty()) {
+                pre.setString(paramIndex++, paymentDate);
+            }
+            if (minAmount != null) {
+                pre.setDouble(paramIndex++, minAmount);
+            }
+            if (maxAmount != null) {
+                pre.setDouble(paramIndex++, maxAmount);
+            }
+
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error counting filtered transactions: " + ex.getMessage());
+        }
+        return 0;
+    }
+
 }
