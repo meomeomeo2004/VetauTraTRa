@@ -362,7 +362,7 @@
             <input type="text" name="title" placeholder="Search by title" value="${title}">
             <input type="date" name="createdAt" value="${createdAt}">
             <button type="submit">Filter</button>
-
+            </form>
             <c:if test="${not empty allNewsList}">
                 <c:forEach var="news" items="${allNewsList}">
                     <div class="news-item">
@@ -407,7 +407,7 @@
                     </ul>
                 </c:if>
             </div>
-        </form>
+        
     </div>
 
     <%@ include file="components/Footer.jsp" %>
