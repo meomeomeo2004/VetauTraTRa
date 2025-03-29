@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import model.User;
 
-@WebFilter(urlPatterns = {"/staff_page/*"})
+@WebFilter(urlPatterns = {"/staff_page/*","/staff-profile"})
 public class filterStaff implements Filter {
 
     @Override

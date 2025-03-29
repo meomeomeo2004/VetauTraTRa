@@ -139,6 +139,123 @@
                     border-bottom: 2px solid #ffbe0b;
                 }
             }
+            /* Filter Form Styling */
+            .filter-form {
+                margin-bottom: 25px;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                border-left: 4px solid var(--navy);
+            }
+
+            .filter-form > div {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .filter-form input {
+                padding: 10px 15px;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                font-size: 14px;
+                flex: 1;
+                min-width: 150px;
+                transition: all 0.3s ease;
+            }
+
+            .filter-form input:focus {
+                border-color: var(--navy);
+                box-shadow: 0 0 0 3px rgba(34, 87, 122, 0.1);
+                outline: none;
+            }
+
+            /* Updated filter button to yellow */
+            .btn-filter {
+                background-color: var(--yellow);
+                color: var(--navy-dark); /* Dark navy text for better contrast on yellow */
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .btn-filter:hover {
+                background-color: var(--yellow-dark);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(255, 190, 11, 0.3);
+            }
+
+            .btn-filter:active {
+                transform: translateY(0);
+            }
+            /* Pagination Styling */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                margin: 25px 0;
+            }
+
+            .pagination-list {
+                display: flex;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .pagination-list li {
+                margin: 0;
+                border-right: 1px solid rgba(0, 0, 0, 0.05);
+            }
+
+            .pagination-list li:last-child {
+                border-right: none;
+            }
+
+            .pagination-list li button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 40px;
+                height: 40px;
+                padding: 0 15px;
+                background-color: white;
+                color: var(--navy);
+                border: none;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .pagination-list li:not(.active) button:hover {
+                background-color: rgba(255, 190, 11, 0.15);
+            }
+
+            .pagination-list li.active button {
+                background-color: var(--navy);
+                color: white;
+                position: relative;
+            }
+
+            .pagination-list li.active button::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background-color: var(--yellow);
+            }
+
         </style>
     </head>
     <body>
@@ -190,79 +307,97 @@
                             <div class="content-card-header">
                                 <h3 class="content-card-title">Transaction History</h3>
                             </div>
+                            <form class="filter-form" action="transaction" method="get">
+                                <div>
+                                    <input type="date" name="paymentDate" value="${paymentDate}" placeholder="Payment Date">
+                                    <input type="number" name="minAmount" value="${minAmount}" step="0" placeholder="Min Amount (VND)">
+                                    <input type="number" name="maxAmount" value="${maxAmount}" step="5" placeholder="Max Amount (VND)">
+                                    <button type="submit" class="btn-filter">Filter</button>
+                                </div>
 
-                            <c:if test="${not empty transactions}">
+                                <c:if test="${not empty transactions}">
 
-                                <div class="responsive-table">
-                                    <table class="transaction-table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Payment Method</th>
-                                                <th>Status</th>
-                                                <th>Payment Date</th>
-                                                <th>Tickets</th>
-                                                <th>Amount</th>
-                                                <th>Voucher</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="t" items="${transactions}">
+                                    <div class="responsive-table">
+                                        <table class="transaction-table">
+                                            <thead>
                                                 <tr>
-                                                    <td>#${t.id}</td>
-                                                    <td>${t.paymentMethod}</td>
-                                                    <td>
-                                                        <c:choose>
-                                                            <c:when test="${t.paymentStatus == 1}">
-                                                                <span class="status-paid">Paid</span>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span class="status-unpaid">Unpaid</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
-                                                    <td>
-                                                        <fmt:formatDate value="${t.paymentDate}" pattern="dd/MM/yyyy HH:mm" />
-                                                    </td>
-                                                    <td>${t.quantity}</td>
-                                                    <td>
-                                                        <fmt:formatNumber value="${t.amountPaid}"
-                                                                          type="number"
-                                                                          minFractionDigits="2"
-                                                                          maxFractionDigits="2" />
-                                                        VND
-                                                    </td>
-                                                    <td>
-                                                        ${t.vouchercode != null ? t.vouchercode : "None"}
-                                                    </td>
-                                                    <td>
-                                                        <a href="ticket-detail?transactionId=${t.id}" class="btn-view">
-                                                            <i class="fas fa-eye"></i> Details
-                                                        </a>
-                                                    </td>
+                                                    <th>ID</th>
+                                                    <th>Payment Method</th>
+                                                    <th>Status</th>
+                                                    <th>Payment Date</th>
+                                                    <th>Tickets</th>
+                                                    <th>Amount</th>
+                                                    <th>Voucher</th>
+                                                    <th>Action</th>
                                                 </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="transaction-summary">
-                                    <p>Total transactions: <span class="count">${fn:length(transactions)}</span></p>
-                                </div>
-                                <div class="pagination">
-                                    <c:if test="${totalPages > 1}">
-                                        <ul class="pagination-list">
-                                            <c:forEach var="i" begin="1" end="${totalPages}">
-                                                <li class="${i == currentPage ? 'active' : ''}">
-                                                    <a href="transaction?page=${i}">${i}</a>
-                                                </li>
-                                            </c:forEach>
-                                        </ul>
-                                    </c:if>
-                                </div>
-
-                            </c:if>
-
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="t" items="${transactions}">
+                                                    <tr>
+                                                        <td>#${t.id}</td>
+                                                        <td>${t.paymentMethod}</td>
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="${t.paymentStatus == 1}">
+                                                                    <span class="status-paid">Paid</span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span class="status-unpaid">Unpaid</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </td>
+                                                        <td>
+                                                            <fmt:formatDate value="${t.paymentDate}" pattern="dd/MM/yyyy HH:mm" />
+                                                        </td>
+                                                        <td>${t.quantity}</td>
+                                                        <td>
+                                                            <fmt:formatNumber value="${t.amountPaid}"
+                                                                              type="number"
+                                                                              minFractionDigits="2"
+                                                                              maxFractionDigits="2" />
+                                                            VND
+                                                        </td>
+                                                        <td>
+                                                            ${t.vouchercode != null ? t.vouchercode : "None"}
+                                                        </td>
+                                                        <td>
+                                                            <a href="ticket-detail?transactionId=${t.id}" class="btn-view">
+                                                                <i class="fas fa-eye"></i> Details
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="transaction-summary">
+                                        <p>Total transactions: <span class="count">${fn:length(transactions)}</span></p>
+                                    </div>
+                                    <div class="pagination">
+                                        <div class="pagination">
+                                            <c:if test="${totalPages > 1}">
+                                                <ul class="pagination-list">
+                                                    <li class="${currentPage == 1 ? 'disabled' : ''}">
+                                                        <button type="submit" name="page" value="${currentPage - 1}" ${currentPage == 1 ? 'disabled' : ''}>
+                                                            Previous
+                                                        </button>
+                                                    </li>
+                                                    <li class="active">
+                                                        <button type="submit" disabled>
+                                                            Page ${currentPage} of ${totalPages}
+                                                        </button>
+                                                    </li>
+                                                    <li class="${currentPage == totalPages ? 'disabled' : ''}">
+                                                        <button type="submit" name="page" value="${currentPage + 1}" ${currentPage == totalPages ? 'disabled' : ''}>
+                                                            Next
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </c:if>
+                                        </div>
+                                    </div>
+                                </c:if>
+                            </form>
                             <c:if test="${empty transactions}">
                                 <div class="empty-state">
                                     <i class="fas fa-receipt"></i>

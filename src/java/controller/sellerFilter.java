@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import model.User;
 
-@WebFilter(urlPatterns = {"/*"})
+@WebFilter(urlPatterns = {"/seller-profile","/viewlistroute","/ViewAllTrain","/ViewListVoucher","/homeSellerPage.jsp"})
 public class sellerFilter implements Filter {
 
     @Override
@@ -32,14 +32,13 @@ public class sellerFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("account") : null;
 
-        // Kiểm tra URL của trang Seller
-        if (httpRequest.getRequestURI().endsWith("/homeSellerPage.jsp")) {
+        
             // Kiểm tra đăng nhập và quyền Seller
             if (user == null || !user.getRole().equalsIgnoreCase("seller")) {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/seller/login");
                 return;
             }
-        }
+        
 
         // Cho phép tiếp tục
         chain.doFilter(request, response);
