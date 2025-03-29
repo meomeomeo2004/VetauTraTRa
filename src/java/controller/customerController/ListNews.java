@@ -22,18 +22,27 @@ public class ListNews extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        List<News> allNewsList = newsDAO.getAllNews();
+        int page = 1;
+        int pageSize = 5;
 
-        request.setAttribute("allNewsList", allNewsList);
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
+        }
+
+        int totalNewsCount = newsDAO.getTotalNewsCount();
+        int totalPages = (int) Math.ceil((double) totalNewsCount / pageSize);
+
+        List<News> newsList = newsDAO.getNewsPaged(page, pageSize);
+
+        request.setAttribute("allNewsList", newsList);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
 
         request.getRequestDispatcher("listNews.jsp").forward(request, response);
-
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-
-    }
-
 }
