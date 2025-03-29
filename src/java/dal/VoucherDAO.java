@@ -37,8 +37,7 @@ public class VoucherDAO extends DBContext {
                     .code(rs.getString("code"))
                     .discountAmount(rs.getBigDecimal("discount_amount"))
                     .validFrom(rs.getTimestamp("valid_from"))
-                    .validTo(rs.getTimestamp("valid_to"))
-                    .quantity(rs.getInt("quantity"))
+                    .validTo(rs.getTimestamp("valid_to") != null ? rs.getTimestamp("valid_to") : null)
                     .status(rs.getInt("status"))
                     .createdBy(rs.getInt("created_by"))
                     .build();
@@ -72,9 +71,9 @@ public class VoucherDAO extends DBContext {
     }
     
     public void sellerAddVoucher(String code,BigDecimal discount,String valid_from,
-            String valid_to,int quantity,int sellerid,int status){
+            String valid_to,int quantity,int user_id){
         String sql = """
-                     INSERT INTO Voucher (code, discount_amount, valid_from, valid_to, quantity,created_by,status)
+                     INSERT INTO Voucher (code, discount_amount, valid_from, valid_to, quantity ,created_by ,status)
                      VALUES (?,?,?,?,?,?,0)                 
                      """;
         try {
@@ -87,20 +86,23 @@ public class VoucherDAO extends DBContext {
             pre.setTimestamp(3, validfrom);
             pre.setTimestamp(4, validto);
             pre.setInt(5, quantity);
-            pre.setInt(6, sellerid);
+            pre.setInt(6, user_id);
             pre.executeUpdate();
         } catch (Exception e) {
         }
+        DAOforAdmin dao = new DAOforAdmin();
+        dao.recordChange("Add Voucher", user_id, "Seller");
+        
     }
     
-    public void editVoucher (int id ,BigDecimal discount,String valid_from,String valid_to,int quantity,int status){
+    public void editVoucher (int id ,BigDecimal discount,String valid_from,String valid_to,int quantity,int status,int user_id){
         String sql = """
                      UPDATE Voucher                      
                      SET discount_amount = ?,
                          valid_from = ?,
                          valid_to = ?,
                          quantity = ?,
-                         status = ?,
+                         status = ?
                      WHERE id = ?                  
                      """;
         try {
@@ -117,6 +119,8 @@ public class VoucherDAO extends DBContext {
             pre.executeUpdate();
         } catch (Exception e) {
         }
+        DAOforAdmin dao = new DAOforAdmin();
+        dao.recordChange("Edit Voucher", user_id, "Seller");
     }
     
     public Voucher getVoucherById(int sellerid){
@@ -139,4 +143,25 @@ public class VoucherDAO extends DBContext {
         return null;
     }
      
+    
+    public void deleteVoucher(int voucherid,int user_id){
+        String sql = """
+                     UPDATE Voucher
+                     SET status = 3
+                     WHERE id = ?
+                     """;
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, voucherid);
+            pre.executeUpdate();
+        } catch (Exception e) {
+        }
+        DAOforAdmin dao = new DAOforAdmin();
+        dao.recordChange("Delete Voucher", user_id, "Seller");
+ 
+    }
+    public static void main(String[] args) {
+        VoucherDAO dao = new VoucherDAO();
+        dao.deleteVoucher(2, 4);
+    }
 }

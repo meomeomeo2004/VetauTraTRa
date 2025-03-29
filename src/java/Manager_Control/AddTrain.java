@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Seller;
+import model.User;
 
 /**
  *
@@ -55,7 +56,9 @@ public class AddTrain extends HttpServlet {
             throws ServletException, IOException {
         ManagerDAO dao = new ManagerDAO();
         request.setCharacterEncoding("UTF-8");
-
+        HttpSession session = request.getSession();
+        User a = (User) session.getAttribute("account");
+        int b = a.getId();
         // Lấy dữ liệu thông tin tàu
         String trainModel = request.getParameter("train_model");
         int totalSeats = Integer.parseInt(request.getParameter("total_seats"));
@@ -63,7 +66,7 @@ public class AddTrain extends HttpServlet {
         int owner = Integer.parseInt(request.getParameter("owner"));
 
         // Thêm train và lấy trainId
-        int trainId = dao.AddTrain(trainModel, totalSeats, numCabin, owner);
+        int trainId = dao.AddTrain(trainModel, totalSeats, numCabin, owner,b);
         if (trainId > 0) {
             // Lấy dữ liệu các cabin từ form, bao gồm cả cabinPrice
             String[] cabinNames = request.getParameterValues("cabinName");
@@ -84,7 +87,6 @@ public class AddTrain extends HttpServlet {
                     }
                 }
             }
-            HttpSession session = request.getSession();
             session.setAttribute("message", "Add Train Sucessful");
             response.sendRedirect("listtrain");
         } else {

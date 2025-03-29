@@ -5,7 +5,6 @@
 
 package Seller_Control;
 
-import dal.SellerDAO;
 import dal.VoucherDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,18 +14,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import model.User;
-import model.Voucher;
 
 /**
  *
  * @author ASUS
  */
-@WebServlet(name="ViewListVoucher", urlPatterns={"/ViewListVoucher"})
-public class ViewListVoucher extends HttpServlet {
+@WebServlet(name="VoucherDelete", urlPatterns={"/VoucherDelete"})
+public class VoucherDelete extends HttpServlet {
    
-
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
@@ -36,10 +32,10 @@ public class ViewListVoucher extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewListVoucher</title>");  
+            out.println("<title>Servlet VoucherDelete</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewListVoucher at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet VoucherDelete at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -49,32 +45,16 @@ public class ViewListVoucher extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        VoucherDAO dao = new VoucherDAO();
         HttpSession session = request.getSession();
-//        SellerDAO sdao = new SellerDAO();
         User a = (User) session.getAttribute("account");
-        int b = a.getId();
-        List<Voucher> listv = dao.getVoucherBySellerId(b);
-        String message = (String) session.getAttribute("message");
-        String editc = (String) session.getAttribute("edit");
-        String del = (String) session.getAttribute("deletesuces");
-        // Xóa message sau khi lấy để tránh hiển thị lại khi refresh trang
-        session.removeAttribute("message");
-        session.removeAttribute("edit");
-        session.removeAttribute("deletesuces");
-        if(message != null){
-            request.setAttribute("addsucess", message);
-        }
-        if(editc != null){
-            request.setAttribute("editsucess", editc);
-        }
-        if(del != null){
-            request.setAttribute("delsucess", del);
-        }
-        request.setAttribute("listvoucher", listv);
-        request.getRequestDispatcher("Seller_ManageVoucher.jsp").forward(request, response);
+        int user_id = a.getId();
+        int voucherid = Integer.parseInt(request.getParameter("id"));
+        VoucherDAO dao = new VoucherDAO();
+        dao.deleteVoucher(voucherid, user_id);
+        session.setAttribute("deletesuces", "Delete Voucher Sucessful");
+        response.sendRedirect("ViewListVoucher");
+        
     } 
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

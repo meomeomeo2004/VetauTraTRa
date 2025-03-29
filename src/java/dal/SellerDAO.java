@@ -68,7 +68,7 @@ public class SellerDAO extends DBContext {
 
     public void addRoute(int trainid, String routecode,
             String describe, String departureDateTime, String arrivalDateTime, String departureStation,
-            String arrivalStation) {
+            String arrivalStation,int user_id) {
         String sql = "INSERT INTO Route (train_id, route_code, description, departure_time, arrival_time, departure_station, arrival_station) "
                 + "VALUES (?,?,?,?,?,?,?)";
 
@@ -92,8 +92,8 @@ public class SellerDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace(); // In lỗi để dễ dàng debug
         }
-        
-        
+        DAOforAdmin dao = new DAOforAdmin();
+        dao.recordChange("Add Route", user_id, "Seller");
     }
 
     public List<Route> getListRouteBySeller(int user_id) {
@@ -174,7 +174,7 @@ public class SellerDAO extends DBContext {
 
     public void updateRoute(int trainId, String routeCode,
             String describe, String departureDateTime, String arrivalDateTime, String departureStation,
-            String arrivalStation, int id) {
+            String arrivalStation, int id,int user_id) {
         String sql = "UPDATE Route\n"
                 + "SET \n"
                 + "    train_id = ?,\n"
@@ -206,6 +206,8 @@ public class SellerDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace(); // In lỗi để dễ dàng debug
         }
+        DAOforAdmin dao = new DAOforAdmin();
+        dao.recordChange("Update Route", user_id, "Seller");
     }
 
     public Route getRoutebyCode(int routeid) {
@@ -242,7 +244,7 @@ public class SellerDAO extends DBContext {
         }
     }
 
-    public void deleteRouteByCode(int routeid) {
+    public void deleteRouteByCode(int routeid,int user_id) {
         String sql = "UPDATE Route\n"
                 + "SET status = 4\n"
                 + "WHERE id = ?";
@@ -252,6 +254,8 @@ public class SellerDAO extends DBContext {
             pre.executeUpdate();
         } catch (Exception e) {
         }
+        DAOforAdmin dao = new DAOforAdmin();
+        dao.recordChange("Delete Route", user_id, "Seller");
     }
     
     public Route getRouteDetails(int routeid){

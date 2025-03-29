@@ -67,6 +67,78 @@
                 color: red;
                 font-weight: bold;
             }
+            .pagination {
+                text-align: center;
+                margin: 20px 0;
+            }
+
+            .pagination-list {
+                list-style: none;
+                display: inline-flex;
+                gap: 5px;
+                padding: 0;
+            }
+
+            .pagination-list li {
+                display: inline;
+            }
+
+            .pagination-list li a {
+                color: #007bff;
+                padding: 8px 12px;
+                text-decoration: none;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+
+            .pagination-list li.active a {
+                background-color: #007bff;
+                color: white;
+            }
+
+            .pagination-list li a:hover {
+                background-color: #0056b3;
+                color: white;
+                .pagination {
+                    display: flex;
+                    justify-content: center;
+                    margin: 20px 0;
+                }
+
+                .pagination-list {
+                    display: flex;
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                .pagination-list li {
+                    margin: 0 5px;
+                }
+
+                .pagination-list li a {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 4px;
+                    color: #22577a;
+                    text-decoration: none;
+                    font-weight: 500;
+                    transition: all 0.2s ease;
+                }
+
+                .pagination-list li:not(.active) a:hover {
+                    background-color: #f0f0f0;
+                }
+
+                .pagination-list li.active a {
+                    background-color: #22577a;
+                    color: white;
+                    border-bottom: 2px solid #ffbe0b;
+                }
+            }
         </style>
     </head>
     <body>
@@ -177,6 +249,17 @@
                                 <div class="transaction-summary">
                                     <p>Total transactions: <span class="count">${fn:length(transactions)}</span></p>
                                 </div>
+                                <div class="pagination">
+                                    <c:if test="${totalPages > 1}">
+                                        <ul class="pagination-list">
+                                            <c:forEach var="i" begin="1" end="${totalPages}">
+                                                <li class="${i == currentPage ? 'active' : ''}">
+                                                    <a href="transaction?page=${i}">${i}</a>
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </c:if>
+                                </div>
 
                             </c:if>
 
@@ -191,6 +274,7 @@
                             </c:if>
                             <a href="index.jsp" class="btn-back">Back to Home</a>
                         </div>
+
                     </div>
                 </div>
             </div>

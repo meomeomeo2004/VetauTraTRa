@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import model.Cabin;
 import model.Seller;
 import model.Train;
 import model.Seat;
+import model.User;
 
 @WebServlet("/editTrain")
 public class EditTrain extends HttpServlet {
@@ -44,6 +46,10 @@ public class EditTrain extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession();
+//        SellerDAO sdao = new SellerDAO();
+        User a = (User) session.getAttribute("account");
+        int b = a.getId();
         int trainId = Integer.parseInt(request.getParameter("trainId")); // hidden field từ form
         String trainModel = request.getParameter("train_model");
         int totalSeats = Integer.parseInt(request.getParameter("total_seats"));
@@ -75,7 +81,7 @@ public class EditTrain extends HttpServlet {
         }
         
         // Cập nhật thông tin train
-        boolean trainUpdated = dao.updateTrain(trainId, trainModel, totalSeats, numCabin, owner);
+        boolean trainUpdated = dao.updateTrain(trainId, trainModel, totalSeats, numCabin, owner,b);
         
         if (!trainUpdated) {
             request.setAttribute("errorMessage", "Cập nhật thông tin train thất bại.");
@@ -83,9 +89,6 @@ public class EditTrain extends HttpServlet {
             return;
         }
         
-        // Vì update cabin theo kiểu xóa toàn bộ rồi thêm lại đã được áp dụng trong AddTrain,
-        // ta sẽ xóa các cabin cũ của train và tạo lại từ dữ liệu form.
-        // (Do ràng buộc ON DELETE CASCADE, các Seat cũ cũng bị xóa theo)
         boolean cabinsDeleted = dao.deleteCabinsByTrainId(trainId);
         if (!cabinsDeleted) {
             request.setAttribute("errorMessage", "Xóa dữ liệu cabin cũ thất bại.");

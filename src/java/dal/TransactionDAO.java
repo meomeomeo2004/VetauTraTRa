@@ -50,7 +50,7 @@ public class TransactionDAO extends DBContext {
         List<Transaction> list = dao.getTransactionByCustomerId(1);
         System.out.println(list);
     }
-    
+
     public boolean createTransaction(int customerId, String paymentMethod, int quantity, double amountPaid, String voucherCode) {
         String sql = "INSERT INTO transaction (customer_id, payment_method, quantity, amount_paid, voucher_code) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -67,12 +67,12 @@ public class TransactionDAO extends DBContext {
             return false;
         }
     }
-    
+
     public Transaction getLatestTransactionByCustomerId(int customerId) {
         String sql = "SELECT * FROM transaction WHERE customer_id = ? ORDER BY id DESC LIMIT 1";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, customerId);
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Transaction transaction = new Transaction();
@@ -84,7 +84,7 @@ public class TransactionDAO extends DBContext {
                     transaction.setAmountPaid(rs.getDouble("amount_paid"));
                     transaction.setVouchercode(rs.getString("voucher_code"));
                     transaction.setPaymentDate(rs.getTimestamp("payment_date"));
-                    
+
                     return transaction;
                 }
             }
@@ -92,5 +92,49 @@ public class TransactionDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public int getTransactionCountByCustomerId(int customerID) {
+        String sql = "SELECT COUNT(*) AS total FROM Transaction WHERE customer_id = ?";
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setInt(1, customerID);
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return 0;
+    }
+
+    public List<Transaction> getTransactionByCustomerIdPaged(int customerID, int page, int pageSize) {
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM Transaction WHERE customer_id = ? ORDER BY payment_date DESC LIMIT ?, ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            int offset = (page - 1) * pageSize;
+            pre.setInt(1, customerID);
+            pre.setInt(2, offset);
+            pre.setInt(3, pageSize);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Transaction transaction = new Transaction(
+                    rs.getInt("id"),
+                    rs.getInt("customer_id"),
+                    rs.getString("payment_method"),
+                    rs.getInt("payment_status"),
+                    rs.getDate("payment_date"),
+                    rs.getInt("quantity"),
+                    rs.getDouble("amount_paid"),
+                    rs.getString("voucher_code")
+                );
+                transactions.add(transaction);
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return transactions;
     }
 }

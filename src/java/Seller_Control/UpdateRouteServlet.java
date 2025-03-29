@@ -72,7 +72,9 @@ public class UpdateRouteServlet extends HttpServlet {
             throws ServletException, IOException {
 
         SellerDAO dao = new SellerDAO();
-
+        HttpSession session = request.getSession();
+        User c = (User) session.getAttribute("account");
+        int b = c.getId();
         // Lấy tham số từ form
         String trainIdParam = request.getParameter("trainid");
         String routeCode = request.getParameter("routecode");
@@ -126,7 +128,7 @@ public class UpdateRouteServlet extends HttpServlet {
             dao.updateRoute(trainId, routeCode, description,
                     departureDateTime, arrivalDateTime,
                     departureStation, arrivalStation,
-                    routeId);
+                    routeId,b);
 
             // Chuyển hướng về trang danh sách (thành công)
             response.sendRedirect("viewlistroute");

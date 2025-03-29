@@ -77,8 +77,8 @@ public class TicketDetail extends HttpServlet {
     }
 
     private static boolean canCanceled(Timestamp departureTime) {
-        //Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        Timestamp currentTime = Timestamp.valueOf("2024-03-20 12:34:56");
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        //Timestamp currentTime = Timestamp.valueOf("2024-03-20 12:34:56");
         Instant instantB = departureTime.toInstant();
         Instant instantA = currentTime.toInstant();
         Duration duration = Duration.between(instantA, instantB);
