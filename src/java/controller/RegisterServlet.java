@@ -67,8 +67,8 @@ public class RegisterServlet extends HttpServlet {
         }
 
         // Kiểm tra mật khẩu có chứa chữ và số
-        if (!password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
-            errors.add("Password must contain letters and numbers");
+        if (password.length() < 8 || !password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
+            errors.add("Password must be at least 8 characters long and contain both letters and numbers");
         }
 
         // Kiểm tra định dạng tên
