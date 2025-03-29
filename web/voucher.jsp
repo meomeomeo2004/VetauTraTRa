@@ -260,6 +260,74 @@
                 transform: translateY(-1px);
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
             }
+            /* Pagination Styling */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                margin: 30px 0;
+            }
+
+            .pagination-list {
+                display: flex;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .pagination-list li {
+                margin: 0;
+                border-right: 1px solid rgba(0, 0, 0, 0.05);
+            }
+
+            .pagination-list li:last-child {
+                border-right: none;
+            }
+
+            .pagination-list li a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 40px;
+                height: 40px;
+                padding: 0 15px;
+                color: var(--navy);
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                background-color: white;
+            }
+
+            .pagination-list li:not(.active) a:hover {
+                background-color: rgba(255, 190, 11, 0.15);
+                color: var(--navy-dark);
+            }
+
+            .pagination-list li.active a {
+                background-color: var(--navy);
+                color: white;
+                position: relative;
+            }
+
+            .pagination-list li.active a::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background-color: var(--yellow);
+            }
+
+            /* Prev/Next buttons */
+            .pagination-list li a[href*="prev"],
+            .pagination-list li a[href*="next"] {
+                font-weight: 600;
+                padding: 0 15px;
+            }
+
 
             /* Responsive adjustments */
             @media (max-width: 768px) {
@@ -278,6 +346,12 @@
                 .voucher-table {
                     box-shadow: none;
                     border-radius: 0;
+                }
+                .pagination-list li a {
+                    min-width: 35px;
+                    height: 35px;
+                    padding: 0 10px;
+                    font-size: 14px;
                 }
             }
         </style>
@@ -365,6 +439,24 @@
                                 <a href="/tratra" class="btn-home">Back to Home</a>
                             </div>
                         </c:if>
+                        <%-- Pagination --%>
+                        <div class="pagination">
+                            <c:if test="${totalPages > 1}">
+                                <ul class="pagination-list">
+                                    <c:if test="${currentPage > 1}">
+                                        <li><a href="voucher?page=${currentPage - 1}">&laquo; Prev</a></li>
+                                        </c:if>
+                                        <c:forEach var="i" begin="1" end="${totalPages}">
+                                        <li class="${i == currentPage ? 'active' : ''}">
+                                            <a href="voucher?page=${i}">${i}</a>
+                                        </li>
+                                    </c:forEach>
+                                    <c:if test="${currentPage < totalPages}">
+                                        <li><a href="voucher?page=${currentPage + 1}">Next &raquo;</a></li>
+                                        </c:if>
+                                </ul>
+                            </c:if>
+                        </div>
 
                         <c:if test="${not empty vouchers}">
                             <div class="text-center mt-4">
