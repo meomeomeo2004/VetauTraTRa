@@ -17,6 +17,12 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-icons"></i></div>
                     Profile
                 </a>
+                <a href="../logout" class="nav-link">
+                    <div class="sb-nav-link-icon">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    Logout
+                </a>
             </div>
         </div>
     </nav>
