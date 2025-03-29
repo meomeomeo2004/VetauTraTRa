@@ -85,18 +85,21 @@
                                     <label class="form-label fw-bold" for="phonenumber">Phone Number</label>
                                     <input value="${requestScope.phonenumber}" type="number" name="phonenumber" id="phonenumber" 
                                            class="form-control form-control-lg bg-light" required/>
+                                    <p style="color: red"><c:out value="${requestScope.phoneError}"/></p>
                                 </div>
 
                                 <div class="mb-4">
                                     <label class="form-label fw-bold" for="fullname">Full Name</label>
                                     <input value="${requestScope.fullname}" type="text" name="fullname" id="fullname" 
                                            class="form-control form-control-lg bg-light" required/>
+                                    <p style="color: red"><c:out value="${requestScope.nameError}"/></p>
                                 </div>
 
                                 <div class="mb-4">
                                     <label class="form-label fw-bold" for="address">Address</label>
                                     <input value="${requestScope.address}" type="text" name="address" id="password" 
-                                           class="form-control form-control-lg bg-light" required/>
+                                           class="form-control form-control-lg bg-light"/>
+                                    <p style="color: red"><c:out value="${requestScope.addressError}"/></p>
                                 </div>
 
                                 <div class="text-center mt-5">

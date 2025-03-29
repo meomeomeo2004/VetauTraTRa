@@ -79,25 +79,28 @@
                                     <label class="form-label fw-bold" for="email">Email</label>
                                     <input value="${requestScope.email}" type="email" name="email" id="email" 
                                            class="form-control form-control-lg bg-light" required/>
-                                    <p style="color: red"><c:out value="${requestScope.error}"/></p>
+                                    <p style="color: red"><c:out value="${requestScope.emailError}"/></p>
                                 </div>
 
                                 <div class="mb-4">
                                     <label class="form-label fw-bold" for="phonenumber">Phone Number</label>
                                     <input value="${requestScope.phonenumber}" type="number" name="phonenumber" id="phonenumber" 
                                            class="form-control form-control-lg bg-light" required/>
+                                    <p style="color: red"><c:out value="${requestScope.phoneError}"/></p>
                                 </div>
 
                                 <div class="mb-4">
                                     <label class="form-label fw-bold" for="fullname">Full Name</label>
                                     <input value="${requestScope.fullname}" type="text" name="fullname" id="fullname" 
                                            class="form-control form-control-lg bg-light" required/>
+                                    <p style="color: red"><c:out value="${requestScope.nameError}"/></p>
                                 </div>
 
                                 <div class="mb-4">
                                     <label class="form-label fw-bold" for="password">Password</label>
-                                    <input value="${requestScope.password}" type="password" name="password" id="password" 
+                                    <input value="" type="password" name="password" id="password" 
                                            class="form-control form-control-lg bg-light" required/>
+                                    <p style="color: red"><c:out value="${requestScope.passError}"/></p>
                                 </div>
 
                                 <div class="mb-4">
@@ -109,6 +112,7 @@
                                         <option value="Staff" ${requestScope.role eq 'Staff' ? 'selected' : ''}>Staff</option>
                                         <option value="Customer" ${requestScope.role eq 'Customer' ? 'selected' : ''}>Customer</option>
                                     </select>
+                                    <p style="color: red"><c:out value="${requestScope.roleError}"/></p>
                                 </div>
 
                                 <div class="text-center mt-5">

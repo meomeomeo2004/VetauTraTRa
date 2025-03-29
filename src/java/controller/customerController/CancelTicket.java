@@ -28,7 +28,7 @@ public class CancelTicket extends HttpServlet {
                 System.out.println("Cancel reason: " + cancelReason);
 
                 // Cập nhật trạng thái của ticket về 0 (Canceled)
-                boolean success = ticketDAO.changeTicketStatus(ticketId);
+                boolean success = ticketDAO.changeTicketStatus(ticketId, -1);
 
                 if (success) {
                     request.getSession().setAttribute("ticketId", ticketId);

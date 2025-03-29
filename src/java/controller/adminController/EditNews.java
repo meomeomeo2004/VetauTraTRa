@@ -68,7 +68,6 @@ public class EditNews extends HttpServlet {
 
             request.setAttribute("title", n.getTitle());
             request.setAttribute("content", n.getContent());
-            request.setAttribute("status", n.getStatus());
 
             HttpSession session = request.getSession();
             session.setAttribute("id", String.valueOf(id));
@@ -90,14 +89,60 @@ public class EditNews extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setAttribute("titleError", null);
+        request.setAttribute("contetnError", null);
+
         DAOforAdmin dao = new DAOforAdmin();
         String title = request.getParameter("newsTitle");
         String content = request.getParameter("newsContent");
-        
-        HttpSession session = request.getSession();
-        int id = Integer.parseInt(String.valueOf(session.getAttribute("id")));
-        dao.editNew(content, title, id);
-        session.setAttribute("id", null);
+
+        boolean allvalid = true;
+        String titleError = null;
+        String contentError = null;
+
+        try {
+            if (title == null) {
+                allvalid = false;
+                titleError = "Title must be from 1 to 100 character";
+            }
+            if (content == null) {
+                allvalid = false;
+                contentError = "Content must be from 1 to 60,000 character";
+            }
+            if (!allvalid) {
+                throw new Exception();
+            }
+
+            content = content.trim();
+            title = title.trim();
+
+            if (title.length() < 1 || title.length() > 100) {
+                allvalid = false;
+                titleError = "Title must be from 1 to 100 character";
+            }
+            if (content.length() < 1 || content.length() > 60000) {
+                allvalid = false;
+                contentError = "Content must be from 1 to 60,000 character";
+            }
+            if (!allvalid) {
+                throw new Exception();
+            }
+
+
+            HttpSession session = request.getSession();
+            int id = Integer.parseInt(String.valueOf(session.getAttribute("id")));
+            dao.editNew(content, title, id);
+            session.setAttribute("id", null);
+        } catch (Exception e) {
+            request.setAttribute("content", content);
+            request.setAttribute("title", title);
+            request.setAttribute("contentError", contentError);
+            request.setAttribute("titleError", titleError);
+            
+            request.getRequestDispatcher("EditNews.jsp").forward(request, response);
+            return;
+        }
+
         response.sendRedirect("NewsList");
     }
 

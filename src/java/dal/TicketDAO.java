@@ -103,11 +103,16 @@ public class TicketDAO extends DBContext {
         return null;
     }
 
-    public boolean changeTicketStatus(int ticketId) {
+    public boolean changeTicketStatus(int ticketId, int staffId) {
         String sql = "UPDATE Ticket SET status = CASE WHEN status = 0 THEN 1 ELSE 0 END WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, ticketId);
             int rowsAffected = stmt.executeUpdate();
+
+            if (staffId != -1) {
+                DAOforAdmin dao = new DAOforAdmin();
+                dao.recordChange("Changed a ticket's status", staffId, "staff");
+            }
             return rowsAffected > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,7 +122,7 @@ public class TicketDAO extends DBContext {
 
     public void updateTicketDetail(int ticketId, Integer luggageType,
             String phoneNumber, String fullName,
-            String address) {
+            String address, int staffId) {
         String sql = "UPDATE ticket t "
                 + "JOIN transaction tr ON t.transaction_id = tr.id "
                 + "JOIN customer c ON tr.customer_id = c.id "
@@ -156,6 +161,8 @@ public class TicketDAO extends DBContext {
             int rowsUpdated = stmt.executeUpdate();
             System.out.println("Rows updated: " + rowsUpdated);
 
+            DAOforAdmin dao = new DAOforAdmin();
+            dao.recordChange("Edited a ticket", staffId, "staff");
         } catch (Exception e) {
             e.printStackTrace();
         }

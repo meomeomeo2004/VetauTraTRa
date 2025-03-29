@@ -65,6 +65,7 @@ public class EditAccount extends HttpServlet {
         String role = request.getParameter("role");
         int id = Integer.parseInt(request.getParameter("id"));
         UserDetail user = acc_dao.getChoosedUser(role, id);
+
         request.setAttribute("fullname", user.getFullname());
         request.setAttribute("phonenumber", user.getPhonenumber());
         request.setAttribute("address", user.getAddress());
@@ -87,22 +88,82 @@ public class EditAccount extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        request.setAttribute("nameError", null);
+        request.setAttribute("phoneError", null);
 
+        HttpSession session = request.getSession();
         String fullname = request.getParameter("fullname");
         String phonenumber = request.getParameter("phonenumber");
-        String role = String.valueOf(session.getAttribute("role"));
         String address = request.getParameter("address");
+        if (address == null) {
+            address = "";
+        }
+        String role = String.valueOf(session.getAttribute("role"));
         int id = Integer.parseInt(String.valueOf(session.getAttribute("id")));
 
-        DAOforAdmin acc_dao = new DAOforAdmin();
+        boolean allvalid = true;
+        String nameError = null;
+        String phoneError = null;
+        String addressError = null;
 
-        acc_dao.editAcc(fullname, phonenumber, address, role, id);
+        try {
+            if (fullname == null) {
+                allvalid = false;
+                nameError = "Full Name must be from 1 to 100 character";
+            }
+            if (phonenumber == null) {
+                allvalid = false;
+                phoneError = "Phone Number must be from 3 to 20 character";
+            }
+            if (!allvalid) {
+                throw new Exception();
+            }
 
-        session.setAttribute("email", null);
-        session.setAttribute("id", null);
-        session.setAttribute("role", null);
+            fullname = fullname.trim();
+            phonenumber = phonenumber.trim();
+            address.trim();
 
+            if (!fullname.matches("^[a-zA-Z\\s]*$")) {
+                allvalid = false;
+                nameError = "Full Name contains alphabetical characters only ";
+            }
+            if (!phonenumber.matches("^[0-9]*$")) {
+                allvalid = false;
+                phoneError = "Phone Number contains numberic characters only";
+            }
+
+            if (fullname.length() < 1 || fullname.length() > 100) {
+                allvalid = false;
+                nameError = "Full Name must be from 1 to 100 character";
+            }
+            if (phonenumber.length() < 3 || phonenumber.length() > 20) {
+                allvalid = false;
+                phoneError = "Phone Number must be from 3 to 20 character";
+            }
+            if (address.length() > 255) {
+                allvalid = false;
+                addressError = "Address must have less than 255 character";
+            }
+            if (!allvalid) {
+                throw new Exception();
+            }
+
+            DAOforAdmin acc_dao = new DAOforAdmin();
+            acc_dao.editAcc(fullname, phonenumber, address, role, id);
+            session.setAttribute("email", null);
+            session.setAttribute("id", null);
+            session.setAttribute("role", null);
+        } catch (Exception e) {
+            request.setAttribute("fullname", fullname);
+            request.setAttribute("phonenumber", phonenumber);
+            request.setAttribute("address", address);
+            request.setAttribute("nameError", nameError);
+            request.setAttribute("phoneError", phoneError);
+            request.setAttribute("addressError", addressError);
+            
+            request.getRequestDispatcher("EditAccount.jsp").forward(request, response);
+            return;
+        }
         response.sendRedirect("AccountList?role=" + role);
     }
 

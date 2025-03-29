@@ -289,13 +289,13 @@
                             <div class="form-group">
                                 <label for="newsTitle">Title <span class="required">*</span></label>
                                 <input type="text" id="newsTitle" name="newsTitle" value="${requestScope.title}" placeholder="Enter the title here..." required>
-                                <div class="error-message" id="titleError"></div>
+                                <div class="error-message" id="titleError"><c:out value="${requestScope.titleError}"/></div>
                             </div>
 
                             <div class="form-group">
                                 <label for="newsContent">Content <span class="required">*</span></label>
                                 <textarea id="newsContent" name="newsContent" rows="10" placeholder="Enter news's content here..." required>${requestScope.content}</textarea>
-                                <div class="error-message" id="contentError"></div>
+                                <div class="error-message" id="contentError"><c:out value="${requestScope.contentError}"/></div>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" id="submitBtn" class="btn btn-submit">Add News</button>

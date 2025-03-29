@@ -86,6 +86,9 @@ public class RefundDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        DAOforAdmin dao = new DAOforAdmin();
+        dao.recordChange("Refunded a ticket", staffId, "staff");
         return false;
     }
 

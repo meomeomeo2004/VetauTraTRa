@@ -287,14 +287,14 @@
                         <form id="AddNews" method="POST">
                             <div class="form-group">
                                 <label for="newsTitle">Title <span class="required">*</span></label>
-                                <input type="text" id="newsTitle" name="newsTitle" placeholder="Enter the title here..." required>
-                                <div class="error-message" id="titleError"></div>
+                                <input value="${requestScope.title}" type="text" id="newsTitle" name="newsTitle" placeholder="Enter the title here..." required>
+                                <div class="error-message" id="titleError"><c:out value="${requestScope.titleError}"/></div>
                             </div>
 
                             <div class="form-group">
                                 <label for="newsContent">Content <span class="required">*</span></label>
-                                <textarea id="newsContent" name="newsContent" rows="10" placeholder="Enter news's content here..." required></textarea>
-                                <div class="error-message" id="contentError"></div>
+                                <textarea id="newsContent" name="newsContent" rows="10" placeholder="Enter news's content here..." required><c:out value="${requestScope.content}"/></textarea>
+                                <div class="error-message" id="contentError"><c:out value="${requestScope.contentError}"/></div>
                             </div>
 
                             <div class="form-group status-group">
@@ -309,6 +309,7 @@
                                         <span class="radio-text">Hidden</span>
                                     </label>
                                 </div>
+                                <div class="error-message" id="statusError"><c:out value="${requestScope.statusError}"/></div>
                             </div>
 
                             <div class="form-actions">
