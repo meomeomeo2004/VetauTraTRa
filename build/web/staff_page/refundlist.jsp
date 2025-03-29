@@ -62,7 +62,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="refund" items="${sessionScope.refund}">
+                                        <c:forEach var="refund" items="${refund}">
                                             <tr>
                                                 <td><c:out value="${refund.id}" /></td>
                                                 <td><c:out value="${refund.userId}" /></td>
