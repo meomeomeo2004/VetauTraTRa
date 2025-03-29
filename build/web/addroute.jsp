@@ -15,8 +15,9 @@
     </head>
     <body>
         <header class="header">
-            <h1 class="header-title"><i class="fas fa-train"></i> TraTra Train Tickets</h1>
+            <h1 class="header-title"><i class="fas fa-train"></i> TraTra Tickets</h1>
         </header>
+        <!-- Warning message display area -->
 
         <div class="main-content">
             <aside class="sidebar">
@@ -38,27 +39,27 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Schedules</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a href="ViewAllTrain" class="nav-link">
                             <i class="fas fa-subway"></i>
                             <span>Trains</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>User Accounts</span>
+                        <a href="ViewListVoucher" class="nav-link">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Voucher</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="seller-profile" class="nav-link">
                             <i class="fas fa-user-circle"></i>
-                            <span>Account Info</span>
+                            <span>Account Information</span>
+                        </a>
+                    </li>                    
+                    <li class="nav-item mt-4">
+                        <a href="./logout" class="nav-link text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
                         </a>
                     </li>
                 </ul>
@@ -69,19 +70,23 @@
                     <div class="card-header">
                         <h5 class="card-title">Add New Train Route</h5>
                     </div>
+                    <c:if test="${not empty abc}">
+                        <div class="alert alert-warning alert-dismissible fade show m-3" role="alert">
+                            <strong>Warning!</strong> ${abc}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </c:if>
                     <c:if test="${not empty exist}">
-                    <div class="alert-notification p-3 d-flex align-items-center" id="errorAlert">
-                        <div class="alert-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
+                        <div class="alert alert-warning alert-dismissible fade show m-3" role="alert">
+                            <strong>Warning!</strong> ${exist}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <div class="flex-grow-1">
-                            <h5 class="mb-1">Failed</h5>
-                            <p class="mb-0">${exist}</p>
+                    </c:if>
+                    <c:if test="${not empty differ}">
+                        <div class="alert alert-warning alert-dismissible fade show m-3" role="alert">
+                            <strong>Warning!</strong> ${differ}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <div class="close-btn" onclick="closeErrorAlert()">
-                            <i class="fas fa-times"></i>
-                        </div>
-                    </div>
                     </c:if>
                     <div class="card-body">
                         <form action="AddRoute" method="POST" onsubmit="return validateForm()">
@@ -167,83 +172,88 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-                                   window.addEventListener("load", function () {
-                                       // Lấy thời gian hiện tại
-                                       let now = new Date();
-                                       // Cộng thêm 2 giờ
-                                       now.setHours(now.getHours() + 2);
+                                    window.addEventListener("load", function () {
+                                        // Lấy thời gian hiện tại
+                                        let now = new Date();
+                                        // Cộng thêm 2 ngày
+                                        now.setDate(now.getDate() + 2);
 
-                                       // Chuyển thành định dạng datetime-local
-                                       let minDeparture = now.toISOString().slice(0, 16);
+                                        // Chuyển thành định dạng datetime-local
+                                        let minDeparture = now.toISOString().slice(0, 16);
 
-                                       // Gán cho Departure Date & Time
-                                       document.getElementById("departureDateTime").min = minDeparture;
-                                   });
+                                        // Gán cho Departure Date & Time
+                                        document.getElementById("departureDateTime").min = minDeparture;
+                                    });
 
-                                   function handleDepartureChange() {
-                                       const departureInput = document.getElementById("departureDateTime");
-                                       const arrivalInput = document.getElementById("returnDateTime");
+                                    function handleDepartureChange() {
+                                        const departureInput = document.getElementById("departureDateTime");
+                                        const arrivalInput = document.getElementById("returnDateTime");
 
-                                       let departureValue = departureInput.value;
-                                       if (!departureValue)
-                                           return;
+                                        let departureValue = departureInput.value;
+                                        if (!departureValue)
+                                            return;
 
-                                       let departureDate = new Date(departureValue);
+                                        let departureDate = new Date(departureValue);
 
-                                       // Cộng thêm 30 phút
-                                       let minArrival = new Date(departureDate.getTime() + 30 * 60000);
-                                       arrivalInput.min = minArrival.toISOString().slice(0, 16);
+                                        // Cộng thêm 30 phút
+                                        let minArrival = new Date(departureDate.getTime() + 30 * 60000);
+                                        arrivalInput.min = minArrival.toISOString().slice(0, 16);
 
-                                       // Nếu arrival đang nhỏ hơn min, reset lại
-                                       if (arrivalInput.value && arrivalInput.value < arrivalInput.min) {
-                                           arrivalInput.value = "";
-                                       }
-                                   }
-
-                                   function validateForm() {
-                                       const now = new Date();
-                                       // Giờ hiện tại + 2 tiếng
-                                       let nowPlus2h = new Date(now.getTime() + 2 * 3600000);
-
-                                       const departureInput = document.getElementById("departureDateTime");
-                                       const arrivalInput = document.getElementById("returnDateTime");
-
-                                       let departureDate = new Date(departureInput.value);
-                                       let arrivalDate = new Date(arrivalInput.value);
-
-                                       // Kiểm tra Departure >= giờ hiện tại + 2 tiếng
-                                       if (departureDate < nowPlus2h) {
-                                           alert("Departure time must be at least 2 hours from now!");
-                                           return false;
-                                       }
-
-                                       // Kiểm tra Arrival >= Departure + 30 phút
-                                       let departurePlus30m = new Date(departureDate.getTime() + 30 * 60000);
-                                       if (arrivalDate < departurePlus30m) {
-                                           alert("Arrival time must be at least 30 minutes before departure time!");
-                                           return false;
-                                       }
-                                       return true;
-                                   }
-                                   
-                                   if (document.getElementById('errorAlert')) {
-                                        setTimeout(function() {
-                                            closeErrorAlert();
-                                        }, 5000);
-                                    }
-
-                                    // Function to close the error alert
-                                    function closeErrorAlert() {
-                                        const alert = document.getElementById('errorAlert');
-                                        if (alert) {
-                                            alert.style.opacity = '0';
-                                            alert.style.transition = 'opacity 0.5s';
-                                            setTimeout(function() {
-                                                alert.style.display = 'none';
-                                            }, 500);
+                                        // Nếu arrival đang nhỏ hơn min, reset lại
+                                        if (arrivalInput.value && arrivalInput.value < arrivalInput.min) {
+                                            arrivalInput.value = "";
                                         }
                                     }
+
+                                    function validateForm() {
+                                        const now = new Date();
+                                        // Giờ hiện tại + 2 ngày
+                                        let nowPlus2d = new Date(now.getTime() + 2 * 24 * 3600000);
+
+                                        const departureInput = document.getElementById("departureDateTime");
+                                        const arrivalInput = document.getElementById("returnDateTime");
+
+                                        let departureDate = new Date(departureInput.value);
+                                        let arrivalDate = new Date(arrivalInput.value);
+
+                                        // Kiểm tra Departure >= giờ hiện tại + 2 ngày
+                                        if (departureDate < nowPlus2d) {
+                                            alert("Departure time must be at least 2 days from now!");
+                                            return false;
+                                        }
+
+                                        // Kiểm tra Arrival >= Departure + 30 phút
+                                        let departurePlus30m = new Date(departureDate.getTime() + 30 * 60000);
+                                        if (arrivalDate < departurePlus30m) {
+                                            alert("Arrival time must be at least 30 minutes after departure time!");
+                                            return false;
+                                        }
+                                        return true;
+                                    }
+                                    function validateRouteCode() {
+                                        const routeCodeInput = document.getElementById("routecode");
+                                        const routeCode = routeCodeInput.value;
+
+                                        // Kiểm tra độ dài tối thiểu là 5 ký tự
+                                        if (routeCode.length < 5) {
+                                            alert("Route code must be at least 5 characters!");
+                                            routeCodeInput.focus();
+                                            return false;
+                                        }
+                                        return true;
+                                    }
+
+                                    // Gán sự kiện cho form để kiểm tra khi submit
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        const form = document.querySelector("form");
+                                        form.addEventListener("submit", function (event) {
+                                            if (!validateRouteCode()) {
+                                                event.preventDefault(); // Ngăn chặn submit nếu không hợp lệ
+                                            }
+                                        });
+                                    });
         </script>
+
     </body>
 </html>
 

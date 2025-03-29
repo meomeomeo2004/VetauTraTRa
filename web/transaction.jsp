@@ -307,7 +307,7 @@
     </head>
     <body>
         <div class="header">
-            <h1>Transaction details<</h1>
+            <h1>Transaction details</h1>
         </div>
 
         <div class="container">

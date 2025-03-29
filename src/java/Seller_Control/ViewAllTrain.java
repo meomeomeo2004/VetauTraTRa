@@ -50,6 +50,11 @@ public class ViewAllTrain extends HttpServlet {
         int b = a.getId();
         SellerDAO dao = new SellerDAO();               
         List<Train> listT = dao.getListTrainBySellerId(b);
+        String trainstatus = (String) session.getAttribute("trainstatus");
+        session.removeAttribute("trainstatus");
+        if(trainstatus != null){
+            request.setAttribute("trainstatus", trainstatus);
+        }
         request.setAttribute("trainList", listT);
         request.getRequestDispatcher("Seller_MyTrain.jsp").forward(request, response);
     } 

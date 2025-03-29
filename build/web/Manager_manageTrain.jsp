@@ -12,6 +12,18 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/managetraincss.css">
+        <style>
+            .custom-alert {
+                background-color: #fff;
+                transition: all 0.3s ease;
+            }
+            .custom-alert:hover {
+                transform: translateY(-2px);
+            }
+            .btn-close:focus {
+                box-shadow: none;
+            }
+        </style>
     </head>
     <body>
         <aside class="sidebar">
@@ -29,7 +41,7 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-users"></i>
-                        <span>Manage Users</span>
+                        <span>Manage Seller</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -41,39 +53,51 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-route"></i>
-                        <span>Manage Routes</span>
+                        <span>Manage Station</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="manager-profile" class="nav-link">
                         <i class="fas fa-user-circle"></i>
                         <span>Account</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Reports</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </a>
+                        <a href="./logout" class="nav-link text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
                 </li>
             </ul>
         </aside>
 
         <main class="content">
             <h2 class="page-title"><i class="fas fa-subway"></i> Train Management</h2>
-
+            <c:if test="${not empty message}">
+                    <div class="alert custom-alert shadow-sm border-start border-success border-4 rounded-3 p-3 mb-4" id="difAlert">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-3">
+                                <i class="fas fa-check-circle text-success fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="fw-bold mb-1 text-success">Success</h5>
+                                <p class="mb-0 text-secondary">${message}</p>
+                            </div>
+                            <button type="button" class="btn-close" onclick="document.getElementById('difAlert').remove()" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </c:if>
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Train Fleet</h5>
-                    <a href="AddTrain" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Add New Train
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="AddTrain" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add New Train
+                        </a>
+                        <a href="waiting" class="btn btn-secondary">
+                            <i class="fas fa-clock"></i> Waiting
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="filter-section">
@@ -121,42 +145,39 @@
                             </thead>
                             <tbody>
                                 <c:forEach items="${alltrain}" var="t">
-                                    <c:if test="${t.status == 1}">                                    
+                                    <c:if test="${t.status == 1}">
                                         <tr>
                                             <td>${t.id}</td>
                                             <td><strong>${t.trainid}</strong></td>
                                             <td>${t.totalSeats}</td>
                                             <td>${t.numCabin}</td>
                                             <td>
-                                                        <div class="status-badge status-active">
-                                                            <i class="fas fa-check-circle"></i>
-                                                            <span>Active</span>
-                                                        </div>
+                                                <div class="status-badge status-active">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    <span>Active</span>
+                                                </div>
                                             </td>
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>
                                                 <div class="action-buttons">
-                                                    <a href="editTrain?id=${t.id}" class="btn btn-warning btn-icon" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
                                                     <a href="DetailsTrain?id=${t.id}" class="btn btn-info btn-icon" title="Details">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                 </div>
                                             </td>
-                                        </tr>     
+                                        </tr>
                                     </c:if>
-                                    <c:if test="${t.status == 2}">                                    
+                                    <c:if test="${t.status == 2}">
                                         <tr>
                                             <td>${t.id}</td>
                                             <td><strong>${t.trainid}</strong></td>
                                             <td>${t.totalSeats}</td>
                                             <td>${t.numCabin}</td>
                                             <td>
-                                                        <div class="status-badge status-maintenance">
-                                                            <i class="fas fa-exclamation-triangle"></i>
-                                                            <span>Maintenance</span>
-                                                        </div>
+                                                <div class="status-badge status-maintenance">
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                    <span>Maintenance</span>
+                                                </div>
                                             </td>
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>
@@ -169,19 +190,19 @@
                                                     </a>
                                                 </div>
                                             </td>
-                                        </tr>     
+                                        </tr>
                                     </c:if>
-                                    <c:if test="${t.status == 0}">                                    
+                                    <c:if test="${t.status == 0}">
                                         <tr>
                                             <td>${t.id}</td>
                                             <td><strong>${t.trainid}</strong></td>
                                             <td>${t.totalSeats}</td>
                                             <td>${t.numCabin}</td>
                                             <td>
-                                                        <div class="status-badge status-inactive">
-                                                            <i class="fas fa-times-circle"></i>
-                                                            <span>Inactive</span>
-                                                        </div>
+                                                <div class="status-badge status-inactive">
+                                                    <i class="fas fa-times-circle"></i>
+                                                    <span>Inactive</span>
+                                                </div>
                                             </td>
                                             <td>${sellerMap[t.owner]}</td>
                                             <td>
@@ -194,7 +215,7 @@
                                                     </a>
                                                 </div>
                                             </td>
-                                        </tr>     
+                                        </tr>
                                     </c:if>
                                 </c:forEach>
 
@@ -203,7 +224,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Train Statistics Card -->
             <div class="card">
                 <div class="card-header">
@@ -268,6 +288,16 @@
         </main>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function closeSuccessAlert() {
+                    document.getElementById("successAlert").style.display = "none";
+                }
+                setTimeout(() => {
+                    const successAlert = document.getElementById("successAlert");
+                    if (successAlert)
+                        successAlert.style.display = "none";
+                }, 3000);
+        </script>        
     </body>
 </html>
 

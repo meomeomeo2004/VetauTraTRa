@@ -35,7 +35,7 @@
                 --border-radius: 0.5rem;
                 --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
                 --transition: all 0.3s ease;
-                
+
                 /* Chart colors */
                 --chart-1: #4361ee;
                 --chart-2: #3a0ca3;
@@ -376,18 +376,18 @@
                 .main-content {
                     flex-direction: column;
                 }
-                
+
                 .sidebar {
                     width: 100%;
                     height: auto;
                     position: relative;
                     top: 0;
                 }
-                
+
                 .content {
                     padding: 1.5rem;
                 }
-                
+
                 .card-header {
                     flex-direction: column;
                     gap: 1rem;
@@ -399,11 +399,11 @@
                 .header {
                     padding: 1rem;
                 }
-                
+
                 .content {
                     padding: 1rem;
                 }
-                
+
                 .stats-grid {
                     grid-template-columns: 1fr;
                 }
@@ -412,9 +412,9 @@
     </head>
     <body>
         <header class="header">
-            <h1 class="header-title"><i class="fas fa-train"></i> TraTra Train Tickets</h1>
+            <h1 class="header-title"><i class="fas fa-train"></i> TraTra Tickets</h1>
         </header>
-        
+
         <div class="main-content">
             <aside class="sidebar">
                 <div class="sidebar-header">
@@ -435,36 +435,35 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Schedules</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a href="ViewAllTrain" class="nav-link">
                             <i class="fas fa-subway"></i>
                             <span>Trains</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>User Accounts</span>
+                        <a href="ViewListVoucher" class="nav-link">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Voucher</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="seller-profile" class="nav-link">
                             <i class="fas fa-user-circle"></i>
-                            <span>Account Info</span>
+                            <span>Account Information</span>
+                        </a>
+                    </li>                    
+                    <li class="nav-item mt-4">
+                        <a href="./logout" class="nav-link text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
                         </a>
                     </li>
-                    <li><a class="dropdown-item text-danger" href="./logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </aside>
-            
+
             <main class="content">
                 <h2 class="page-title">Dashboard</h2>
-                
+
                 <!-- Summary Stats Cards -->
                 <div class="row">
                     <div class="col-md-6 col-lg-3 mb-4">
@@ -524,7 +523,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Customer Statistics -->
                 <div class="row">
                     <div class="col-lg-8 mb-4">
@@ -557,7 +556,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Train Model Popularity -->
                 <div class="row">
                     <div class="col-lg-6 mb-4">
@@ -646,7 +645,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Revenue Statistics -->
                 <div class="row">
                     <div class="col-12 mb-4">
@@ -667,7 +666,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Top Routes -->
                 <div class="row">
                     <div class="col-12 mb-4">
@@ -758,7 +757,7 @@
                 </div>
             </main>
         </div>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             // Customer Statistics Chart
@@ -768,13 +767,13 @@
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     datasets: [{
-                        label: 'Customers',
-                        data: [320, 345, 385, 410, 450, 480, 520, 550, 590, 620, 670, 720],
-                        borderColor: '#4361ee',
-                        backgroundColor: 'rgba(67, 97, 238, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    }]
+                            label: 'Customers',
+                            data: [320, 345, 385, 410, 450, 480, 520, 550, 590, 620, 670, 720],
+                            borderColor: '#4361ee',
+                            backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }]
                 },
                 options: {
                     responsive: true,
@@ -799,7 +798,7 @@
                     }
                 }
             });
-            
+
             // Demographics Chart
             const demographicsCtx = document.getElementById('demographicsChart').getContext('2d');
             const demographicsChart = new Chart(demographicsCtx, {
@@ -807,15 +806,15 @@
                 data: {
                     labels: ['Adults', 'Seniors', 'Students', 'Children'],
                     datasets: [{
-                        data: [45, 20, 25, 10],
-                        backgroundColor: [
-                            '#4361ee',
-                            '#3a0ca3',
-                            '#7209b7',
-                            '#f72585'
-                        ],
-                        borderWidth: 0
-                    }]
+                            data: [45, 20, 25, 10],
+                            backgroundColor: [
+                                '#4361ee',
+                                '#3a0ca3',
+                                '#7209b7',
+                                '#f72585'
+                            ],
+                            borderWidth: 0
+                        }]
                 },
                 options: {
                     responsive: true,
@@ -828,7 +827,7 @@
                     cutout: '70%'
                 }
             });
-            
+
             // Train Model Chart
             const trainModelCtx = document.getElementById('trainModelChart').getContext('2d');
             const trainModelChart = new Chart(trainModelCtx, {
@@ -836,18 +835,18 @@
                 data: {
                     labels: ['Express 2000', 'Bullet X500', 'Commuter 350', 'Metro 100', 'Cargo 750'],
                     datasets: [{
-                        label: 'Customers',
-                        data: [1245, 987, 876, 654, 432],
-                        backgroundColor: [
-                            '#4361ee',
-                            '#2a9d8f',
-                            '#ff9f1c',
-                            '#4cc9f0',
-                            '#e63946'
-                        ],
-                        borderWidth: 0,
-                        borderRadius: 4
-                    }]
+                            label: 'Customers',
+                            data: [1245, 987, 876, 654, 432],
+                            backgroundColor: [
+                                '#4361ee',
+                                '#2a9d8f',
+                                '#ff9f1c',
+                                '#4cc9f0',
+                                '#e63946'
+                            ],
+                            borderWidth: 0,
+                            borderRadius: 4
+                        }]
                 },
                 options: {
                     responsive: true,
@@ -872,7 +871,7 @@
                     }
                 }
             });
-            
+
             // Revenue Chart
             const revenueCtx = document.getElementById('revenueChart').getContext('2d');
             const revenueChart = new Chart(revenueCtx, {
@@ -880,13 +879,13 @@
                 data: {
                     labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
                     datasets: [{
-                        label: 'Revenue',
-                        data: [45678, 52456, 48765, 56789],
-                        borderColor: '#2a9d8f',
-                        backgroundColor: 'rgba(42, 157, 143, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    }]
+                            label: 'Revenue',
+                            data: [45678, 52456, 48765, 56789],
+                            borderColor: '#2a9d8f',
+                            backgroundColor: 'rgba(42, 157, 143, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }]
                 },
                 options: {
                     responsive: true,
@@ -903,7 +902,7 @@
                                 drawBorder: false
                             },
                             ticks: {
-                                callback: function(value) {
+                                callback: function (value) {
                                     return '$' + value.toLocaleString();
                                 }
                             }
@@ -916,18 +915,18 @@
                     }
                 }
             });
-            
+
             // Toggle buttons for customer statistics
             document.querySelectorAll('#customerTimeToggle .btn').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     document.querySelectorAll('#customerTimeToggle .btn').forEach(btn => {
                         btn.classList.remove('active');
                     });
                     this.classList.add('active');
-                    
+
                     const period = this.getAttribute('data-period');
                     let labels, data;
-                    
+
                     if (period === 'day') {
                         labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
                         data = [42, 38, 45, 50, 55, 65, 60];
@@ -938,24 +937,24 @@
                         labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         data = [320, 345, 385, 410, 450, 480, 520, 550, 590, 620, 670, 720];
                     }
-                    
+
                     customerChart.data.labels = labels;
                     customerChart.data.datasets[0].data = data;
                     customerChart.update();
                 });
             });
-            
+
             // Toggle buttons for revenue statistics
             document.querySelectorAll('#revenueTimeToggle .btn').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     document.querySelectorAll('#revenueTimeToggle .btn').forEach(btn => {
                         btn.classList.remove('active');
                     });
                     this.classList.add('active');
-                    
+
                     const period = this.getAttribute('data-period');
                     let labels, data;
-                    
+
                     if (period === 'week') {
                         labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
                         data = [45678, 52456, 48765, 56789];
@@ -966,7 +965,7 @@
                         labels = ['2019', '2020', '2021', '2022', '2023'];
                         data = [450000, 520000, 580000, 650000, 720000];
                     }
-                    
+
                     revenueChart.data.labels = labels;
                     revenueChart.data.datasets[0].data = data;
                     revenueChart.update();

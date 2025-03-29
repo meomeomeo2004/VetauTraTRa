@@ -3,8 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package Seller_Control;
 
+import dal.VoucherDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +13,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
- * @author hoatu
+ * @author ASUS
  */
-@WebServlet(name="CreateTicketServlet", urlPatterns={"/CreateTicketServlet"})
-public class CreateTicketServlet extends HttpServlet {
+@WebServlet(name="VoucherDelete", urlPatterns={"/VoucherDelete"})
+public class VoucherDelete extends HttpServlet {
    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -28,49 +32,35 @@ public class CreateTicketServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CreateTicketServlet</title>");  
+            out.println("<title>Servlet VoucherDelete</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CreateTicketServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet VoucherDelete at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        User a = (User) session.getAttribute("account");
+        int user_id = a.getId();
+        int voucherid = Integer.parseInt(request.getParameter("id"));
+        VoucherDAO dao = new VoucherDAO();
+        dao.deleteVoucher(voucherid, user_id);
+        session.setAttribute("deletesuces", "Delete Voucher Sucessful");
+        response.sendRedirect("ViewListVoucher");
+        
     } 
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

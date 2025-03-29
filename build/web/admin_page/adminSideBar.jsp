@@ -1,6 +1,4 @@
 <style>
-
-
     .sidebar {
         width: 280px;
         background-color: white;
@@ -86,12 +84,6 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="fas fa-dollar nli"></i>
-                <span>Revenue Report</span>
-            </a>
-        </li>
-        <li class="nav-item">
             <a href="NewsList" class="nav-link ">
                 <i class="fas fa-paper-plane nli"></i>
                 <span>News Management</span>
@@ -110,8 +102,14 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a class="nav-link" href="AdminViewProfile">                
                 <i class="fas fa-user-circle nli"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="../logout" class="nav-link">
+                <i class="fas fa-door-open nli"></i>
                 <span>Logout</span>
             </a>
         </li>

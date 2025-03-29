@@ -48,6 +48,7 @@ public class UpdateStatusRoute extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         try {
             // Lấy tham số từ form
             String id = request.getParameter("trainId");
@@ -66,7 +67,8 @@ public class UpdateStatusRoute extends HttpServlet {
             // Gọi hàm DAO để cập nhật trạng thái
             ManagerDAO dao = new ManagerDAO();
             dao.updateTrainStatus(train_id, newStatus);
-
+            Train train = dao.getTrainById(train_id);
+            session.setAttribute("trainstatus","Update status train "+train.getTrainid() + " successful!" );
             // Chuyển hướng về trang danh sách tàu
             response.sendRedirect("ViewAllTrain");
 

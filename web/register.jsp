@@ -212,17 +212,22 @@
                 color: #666;
                 margin-top: 5px;
             }
+            .requirement {
+        color: red;
+        font-size: 12px;
+        margin-top: 4px;
+    }
 
             @media (max-width: 480px) {
                 .container {
                     padding: 30px 20px;
                 }
-                
+
                 .train-icon {
                     width: 70px;
                     height: 70px;
                 }
-                
+
                 .train-icon i {
                     font-size: 30px;
                 }
@@ -245,53 +250,56 @@
             <h1>Register Customer</h1>
 
             <c:if test="${not empty registerErrors}">
-    <div class="error-message">
-        <ul>
-            <c:forEach var="error" items="${registerErrors}">
-                <li>${error}</li>
-            </c:forEach>
-        </ul>
-    </div>
-</c:if>
+                <div class="error-message">
+                    <ul>
+                        <c:forEach var="error" items="${registerErrors}">
+                            <li>${error}</li>
+                            </c:forEach>
+                    </ul>
+                </div>
+            </c:if>
 
             <form action="register" method="POST">
-            <div class="form-group">
-                <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" name="fullName" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone"  required>
-            </div>
-            
-            <div class="form-group">
-                <label for="address">Address</label>
-                <textarea id="address" name="address" required></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required>
-            </div>
-     
-            <button type="submit" class="register-btn">REGISTER</button>
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+               <div class="form-group">
+    <label for="phone">Phone Number <span style="color: red;">*</span></label>
+    <input type="tel" id="phone" name="phone" required>
+    <p class="requirement">Phone number must start with '0' and contain exactly 10 digits</p>
+</div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" required></textarea>
+                </div>
+
+                <div class="form-group">
+    <label for="password">Password <span style="color: red;">*</span></label>
+    <input type="password" id="password" name="password" required>
+    <p class="requirement">Password must be at least 8 characters long and contain both letters and numbers</p>
+</div>
+
+<div class="form-group">
+    <label for="confirmPassword">Confirm Password <span style="color: red;">*</span></label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+    <p class="requirement">Password must be at least 8 characters long and contain both letters and numbers</p>
+</div>
+
+                <button type="submit" class="register-btn">REGISTER</button>
 
                 <!-- Login Link -->
                 <a href="customer/login" class="login-link">Already have an account? Login here</a>
             </form>
         </div>
 
-        
+
     </body>
 </html>

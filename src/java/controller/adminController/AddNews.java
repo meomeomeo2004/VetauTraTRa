@@ -73,17 +73,73 @@ public class AddNews extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setAttribute("titleError", null);
+        request.setAttribute("contetnError", null);
+        request.setAttribute("statusError", null);
+
         DAOforAdmin dao = new DAOforAdmin();
         String title = request.getParameter("newsTitle");
         String content = request.getParameter("newsContent");
         String status = request.getParameter("status");
-        int s = 0;
-        if(status.equalsIgnoreCase("published")){
-            s = 1;
+
+        boolean allvalid = true;
+        String titleError = null;
+        String contentError = null;
+        String statusError = null;
+
+        try {
+            if (title == null) {
+                allvalid = false;
+                titleError = "Title must be from 1 to 100 character";
+            }
+            if (content == null) {
+                allvalid = false;
+                contentError = "Content must be from 1 to 60,000 character";
+            }
+            if (status == null) {
+                allvalid = false;
+                statusError = "Incorrect status";
+            }
+            if (!allvalid) {
+                throw new Exception();
+            }
+
+            title = title.trim();
+            content = content.trim();
+            status = status.trim();
+
+            if (!status.matches("^(hidden|published)$")) {
+                allvalid = false;
+                statusError = "Invalid status";
+            }
+            if (title.length() < 1 || title.length() > 100) {
+                allvalid = false;
+                titleError = "Title must be from 1 to 100 character";
+            }
+            if (content.length() < 1 || content.length() > 60000) {
+                allvalid = false;
+                contentError = "Content must be from 1 to 60,000 character";
+            }
+            if (!allvalid) {
+                throw new Exception();
+            }
+
+            int s = 0;
+            if (status.equalsIgnoreCase("published")) {
+                s = 1;
+            }
+            dao.addNew(title, content, s);
+        } catch (Exception e) {
+            request.setAttribute("title", title);
+            request.setAttribute("content", content);
+            request.setAttribute("status", status);
+            request.setAttribute("titleError", titleError);
+            request.setAttribute("contentError", contentError);
+            request.setAttribute("statusError", statusError);
+            request.getRequestDispatcher("AddNews.jsp").forward(request, response);
+            return;
         }
-        
-        dao.addNew(title, content, s);
-        
+
         response.sendRedirect("NewsList");
     }
 

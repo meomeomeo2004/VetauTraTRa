@@ -44,9 +44,9 @@ public class ChangeStatusRefund extends HttpServlet {
             id = Integer.parseInt(id_raw);
             HttpSession session = request.getSession();
             User acc = (User) session.getAttribute("account");
-            Staff staff = staffDAO.getStaffByUserId(acc.getId());
+//            Staff staff = staffDAO.getStaffByUserId(acc.getId());
 
-            fdao.changeRefundStatus(id, staff.getId());
+            fdao.changeRefundStatus(id, acc.getId());
             Refund rf = fdao.getRefundById(id);
             TicketDetail tk = tdao.getTicketDetailById(rf.getTicketId());
             Seat seat = sDAO.getSeatById(tk.getSeatId());

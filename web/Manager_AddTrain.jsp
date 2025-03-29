@@ -1,9 +1,3 @@
-<%-- 
-    Document   : Manager_AddTrain
-    Created on : Mar 2, 2025, 8:53:19 PM
-    Author     : ASUS
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -17,462 +11,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-        <style>
-            :root {
-                --primary: #22577a;
-                --primary-dark: #1a4562;
-                --primary-light: #38a3a5;
-                --secondary: #bc986a;
-                --secondary-light: #d4b48c;
-                --secondary-dark: #a68659;
-                --danger: #e63946;
-                --warning: #ff9f1c;
-                --success: #2a9d8f;
-                --light: #f8f9fa;
-                --dark: #212529;
-                --gray-100: #f8f9fa;
-                --gray-200: #e9ecef;
-                --gray-300: #dee2e6;
-                --gray-400: #ced4da;
-                --gray-500: #adb5bd;
-                --gray-600: #6c757d;
-                --gray-700: #495057;
-                --gray-800: #343a40;
-                --gray-900: #212529;
-                --border-radius: 0.5rem;
-                --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
-                --transition: all 0.3s ease;
-            }
-
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            body {
-                display: flex;
-                min-height: 100vh;
-                margin: 0;
-                font-family: 'Roboto', sans-serif;
-                background-color: var(--gray-100);
-                color: var(--gray-800);
-            }
-
-            .sidebar {
-                width: 280px;
-                background-color: white;
-                color: var(--gray-800);
-                padding: 2rem 1.5rem;
-                box-shadow: var(--box-shadow);
-                transition: var(--transition);
-                height: 100vh;
-                position: fixed;
-                overflow-y: auto;
-                z-index: 1000;
-            }
-
-            .sidebar-header {
-                margin-bottom: 2rem;
-                text-align: center;
-            }
-
-            .sidebar-title {
-                font-size: 1.5rem;
-                color: var(--primary);
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-                letter-spacing: 0.5px;
-            }
-
-            .sidebar-divider {
-                height: 1px;
-                background-color: var(--gray-300);
-                margin: 1rem 0;
-            }
-
-            .nav-list {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            .nav-item {
-                margin-bottom: 0.5rem;
-            }
-
-            .nav-link {
-                display: flex;
-                align-items: center;
-                text-decoration: none;
-                color: var(--gray-700);
-                font-weight: 500;
-                padding: 0.75rem 1rem;
-                border-radius: var(--border-radius);
-                transition: var(--transition);
-            }
-
-            .nav-link:hover, .nav-link.active {
-                background-color: var(--primary);
-                color: white;
-            }
-
-            .nav-link i {
-                margin-right: 0.75rem;
-                font-size: 1.1rem;
-                width: 1.5rem;
-                text-align: center;
-            }
-
-            .content {
-                flex: 1;
-                padding: 2rem;
-                margin-left: 280px;
-                width: calc(100% - 280px);
-            }
-
-            .page-title {
-                font-size: 1.75rem;
-                font-weight: 700;
-                margin-bottom: 1.5rem;
-                color: var(--primary);
-                display: flex;
-                align-items: center;
-            }
-
-            .page-title i {
-                margin-right: 0.75rem;
-                font-size: 1.5rem;
-                color: var(--primary);
-            }
-
-            .card {
-                background-color: white;
-                border-radius: var(--border-radius);
-                box-shadow: var(--box-shadow);
-                border: none;
-                margin-bottom: 2rem;
-                overflow: hidden;
-            }
-
-            .card-header {
-                background-color: white;
-                border-bottom: 1px solid var(--gray-200);
-                padding: 1.25rem 1.5rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .card-title {
-                font-size: 1.25rem;
-                font-weight: 600;
-                margin: 0;
-                color: var(--gray-800);
-            }
-
-            .card-body {
-                padding: 1.5rem;
-            }
-
-            .btn {
-                font-weight: 500;
-                padding: 0.625rem 1.25rem;
-                border-radius: var(--border-radius);
-                transition: var(--transition);
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 0.5rem;
-                border: none;
-            }
-
-            .btn-primary {
-                background-color: var(--primary);
-                color: white;
-            }
-
-            .btn-primary:hover {
-                background-color: var(--primary-dark);
-            }
-
-            .btn-success {
-                background-color: var(--success);
-                color: white;
-            }
-
-            .btn-success:hover {
-                background-color: #248a7e;
-            }
-
-            .btn-danger {
-                background-color: var(--danger);
-                color: white;
-            }
-
-            .btn-danger:hover {
-                background-color: #d62b39;
-            }
-
-            .btn-warning {
-                background-color: var(--warning);
-                color: white;
-            }
-
-            .btn-warning:hover {
-                background-color: #e58e19;
-            }
-
-            .btn-secondary {
-                background-color: var(--gray-500);
-                color: white;
-            }
-
-            .btn-secondary:hover {
-                background-color: var(--gray-600);
-            }
-
-            .form-control, .form-select {
-                border-radius: var(--border-radius);
-                border: 1px solid var(--gray-300);
-                padding: 0.625rem 1rem;
-                font-size: 0.95rem;
-                transition: var(--transition);
-            }
-
-            .form-control:focus, .form-select:focus {
-                border-color: var(--primary);
-                box-shadow: 0 0 0 0.25rem rgba(34, 87, 122, 0.15);
-            }
-
-            .form-control::placeholder {
-                color: var(--gray-500);
-            }
-
-            .form-label {
-                font-weight: 500;
-                color: var(--gray-700);
-                margin-bottom: 0.5rem;
-            }
-
-            .form-group {
-                margin-bottom: 1.5rem;
-            }
-
-            .form-text {
-                color: var(--gray-600);
-                font-size: 0.875rem;
-                margin-top: 0.25rem;
-            }
-
-            .cabin-card {
-                border: 1px solid var(--gray-300);
-                border-radius: var(--border-radius);
-                padding: 1.5rem;
-                background-color: var(--gray-100);
-                transition: var(--transition);
-            }
-
-            .cabin-card:hover {
-                box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
-                border-color: var(--secondary);
-            }
-
-            .cabin-header {
-                display: flex;
-                align-items: center;
-                margin-bottom: 1rem;
-                padding-bottom: 0.75rem;
-                border-bottom: 1px solid var(--gray-300);
-            }
-
-            .cabin-icon {
-                font-size: 1.5rem;
-                color: var(--secondary);
-                margin-right: 0.75rem;
-            }
-
-            .cabin-title {
-                font-size: 1.25rem;
-                font-weight: 600;
-                color: var(--primary);
-                margin: 0;
-            }
-
-            .disabled-section {
-                opacity: 0.6;
-                pointer-events: none;
-            }
-
-            .alert {
-                border-radius: var(--border-radius);
-                padding: 1rem 1.5rem;
-                margin-bottom: 1.5rem;
-                border: none;
-            }
-
-            .alert-danger {
-                background-color: rgba(230, 57, 70, 0.1);
-                color: var(--danger);
-                border-left: 4px solid var(--danger);
-            }
-
-            .alert-warning {
-                background-color: rgba(255, 159, 28, 0.1);
-                color: var(--warning);
-                border-left: 4px solid var(--warning);
-            }
-
-            .hidden {
-                display: none;
-            }
-
-            .progress-steps {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 2rem;
-                position: relative;
-            }
-
-            .progress-steps::before {
-                content: '';
-                position: absolute;
-                top: 1.25rem;
-                left: 0;
-                width: 100%;
-                height: 2px;
-                background-color: var(--gray-300);
-                z-index: 1;
-            }
-
-            .step {
-                position: relative;
-                z-index: 2;
-                background-color: white;
-                padding: 0 1rem;
-                text-align: center;
-                flex: 1;
-            }
-
-            .step-number {
-                width: 2.5rem;
-                height: 2.5rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                background-color: var(--gray-300);
-                color: var(--gray-700);
-                font-weight: 600;
-                margin: 0 auto 0.5rem;
-            }
-
-            .step.active .step-number {
-                background-color: var(--primary);
-                color: white;
-            }
-
-            .step.completed .step-number {
-                background-color: var(--success);
-                color: white;
-            }
-
-            .step-label {
-                font-size: 0.875rem;
-                font-weight: 500;
-                color: var(--gray-600);
-            }
-
-            .step.active .step-label {
-                color: var(--primary);
-                font-weight: 600;
-            }
-
-            .step.completed .step-label {
-                color: var(--success);
-            }
-
-            .seat-summary {
-                background-color: var(--gray-100);
-                border-radius: var(--border-radius);
-                padding: 1rem;
-                margin-top: 1.5rem;
-                border: 1px solid var(--gray-300);
-            }
-
-            .seat-summary-title {
-                font-weight: 600;
-                margin-bottom: 0.5rem;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            @media (max-width: 992px) {
-                .sidebar {
-                    width: 240px;
-                }
-
-                .content {
-                    margin-left: 240px;
-                    width: calc(100% - 240px);
-                }
-
-                .cabin-grid {
-                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                }
-            }
-
-            @media (max-width: 768px) {
-                body {
-                    flex-direction: column;
-                }
-
-                .sidebar {
-                    width: 100%;
-                    height: auto;
-                    position: relative;
-                    padding: 1rem;
-                }
-
-                .content {
-                    margin-left: 0;
-                    width: 100%;
-                    padding: 1.5rem;
-                }
-
-                .cabin-grid {
-                    grid-template-columns: 1fr;
-                }
-            }
-
-            @media (max-width: 576px) {
-                .content {
-                    padding: 1rem;
-                }
-
-                .progress-steps {
-                    flex-direction: column;
-                    align-items: flex-start;
-                    gap: 1rem;
-                }
-
-                .progress-steps::before {
-                    display: none;
-                }
-
-                .step {
-                    display: flex;
-                    align-items: center;
-                    width: 100%;
-                    padding: 0;
-                }
-
-                .step-number {
-                    margin: 0 1rem 0 0;
-                }
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/addtraincss.css">
     </head>
     <body>
         <aside class="sidebar">
@@ -490,7 +29,7 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-users"></i>
-                        <span>Manage Users</span>
+                        <span>Manage Seller</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -502,26 +41,20 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-route"></i>
-                        <span>Manage Routes</span>
+                        <span>Manage Station</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="manager-profile" class="nav-link">
                         <i class="fas fa-user-circle"></i>
                         <span>Account</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Reports</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </a>
+                        <a href="./logout" class="nav-link text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
                 </li>
             </ul>
         </aside>
@@ -541,7 +74,6 @@
             </div>
 
             <form action="AddTrain" method="post" id="addTrainForm">
-                <!-- Train Information Card -->
                 <div class="card" id="trainInfoCard">
                     <div class="card-header">
                         <h5 class="card-title"><i class="fas fa-train me-2"></i>Train Information</h5>
@@ -592,14 +124,13 @@
                     </div>
                 </div>
 
-                <!-- Cabin Details Card -->
                 <div class="card disabled-section" id="cabinDetailsCard">
                     <div class="card-header">
                         <h5 class="card-title"><i class="fas fa-door-open me-2"></i>Cabin Details</h5>
                     </div>
                     <div class="card-body">
                         <div class="cabin-grid row" id="cabinContainer">
-                            <!-- Các cabin card sẽ được tạo tự động tại đây -->
+                              
                         </div>
 
                         <div class="seat-summary" id="seatSummary">
@@ -641,6 +172,9 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            // Store cabin data between steps
+            var cabinDataStore = [];
+            
             // Check if train info is complete
             function isTrainInfoComplete() {
                 var model = document.getElementById("train_model").value.trim();
@@ -654,19 +188,47 @@
             function generateCabins() {
                 var numCabinValue = parseInt(document.getElementById("numcabin").value);
                 var cabinContainer = document.getElementById("cabinContainer");
+                
+                // Store existing cabin data before clearing the container
+                if (cabinDataStore.length === 0 || cabinDataStore.length !== numCabinValue) {
+                    // Only initialize the array if it's empty or size has changed
+                    cabinDataStore = new Array(numCabinValue);
+                    for (var i = 0; i < numCabinValue; i++) {
+                        cabinDataStore[i] = {
+                            name: "",
+                            cabinClass: "",
+                            price: "",
+                            seats: "",
+                            imgUrl: ""
+                        };
+                    }
+                } else {
+                    // Save current values before regenerating
+                    var existingCabinInputs = document.querySelectorAll("#cabinContainer .cabin-card");
+                    for (var i = 0; i < existingCabinInputs.length && i < cabinDataStore.length; i++) {
+                        var cabinCard = existingCabinInputs[i];
+                        cabinDataStore[i] = {
+                            name: cabinCard.querySelector('input[name="cabinName"]').value,
+                            cabinClass: cabinCard.querySelector('input[name="cabinClass"]').value,
+                            price: cabinCard.querySelector('input[name="cabinPrice"]').value,
+                            seats: cabinCard.querySelector('input[name="cabinNumseat"]').value,
+                            imgUrl: cabinCard.querySelector('input[name="cabinImgUrl"]').value
+                        };
+                    }
+                }
+                
                 cabinContainer.innerHTML = "";
 
-                // Tạo card cabin theo kiểu Bootstrap (3 cột trên màn hình rộng)
+                // Create cabin cards
                 for (var i = 0; i < numCabinValue; i++) {
-                     console.log("Đang tạo Cabin " + (i + 1));
-                    // col-md-4 => 3 cột
+                    console.log("Creating Cabin " + (i + 1));
                     var cabinCol = document.createElement("div");
                     cabinCol.className = "col-md-4";
 
                     var cabinCard = document.createElement("div");
                     cabinCard.className = "cabin-card card mb-3";
 
-                    // Header hiển thị Cabin 1, Cabin 2, ...
+                    // Header
                     var cabinHeader = document.createElement("div");
                     cabinHeader.className = "card-header";
                     cabinHeader.innerHTML = `
@@ -674,30 +236,39 @@
                         <h5 class="cabin-title">Cabin ${i + 1}</h5>
                     `;
 
-                    // Body (nội dung form cabin)
+                    // Get saved data for this cabin
+                    var savedData = cabinDataStore[i] || {
+                        name: "",
+                        cabinClass: "",
+                        price: "",
+                        seats: "",
+                        imgUrl: ""
+                    };
+
+                    // Body with preserved values
                     var cabinBody = document.createElement("div");
                     cabinBody.className = "card-body";
                     cabinBody.innerHTML = `
                         <div class="form-group mb-2">
                             <label class="form-label">Cabin Name</label>
-                            <input type="text" class="form-control" name="cabinName" required>
+                            <input type="text" class="form-control" name="cabinName" value="${savedData.name}" required>
                         </div>
                         <div class="form-group mb-2">
                             <label class="form-label">Cabin Class</label>
-                            <input type="text" class="form-control" name="cabinClass" required>
+                            <input type="text" class="form-control" name="cabinClass" value="${savedData.cabinClass}" required>
                         </div>
                         <div class="form-group mb-2">
                             <label class="form-label">Price</label>
-                            <input type="number" step="0.01" class="form-control" name="cabinPrice" required>
+                            <input type="number" step="0.01" class="form-control" name="cabinPrice" value="${savedData.price}" required>
                         </div>
                         <div class="form-group mb-2">
                             <label class="form-label">Number of Seats</label>
-                            <input type="number" class="form-control cabin-seats" name="cabinNumseat"
-                                   required onchange="updateSeatSummary()">
+                            <input type="number" class="form-control cabin-seats" name="cabinNumseat" 
+                                   value="${savedData.seats}" required onchange="updateSeatSummary()">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Image URL</label>
-                            <input type="text" class="form-control" name="cabinImgUrl" required>
+                            <input type="text" class="form-control" name="cabinImgUrl" value="${savedData.imgUrl}" required>
                         </div>
                     `;
 
@@ -707,11 +278,9 @@
                     cabinContainer.appendChild(cabinCol);
                 }
 
-                // Sau khi tạo xong cabin, cập nhật seat summary
+                // After creating cabins, update seat summary
                 updateSeatSummary();
             }
-
-
 
             // Update seat summary
             function updateSeatSummary() {
@@ -750,12 +319,42 @@
                 document.getElementById("step1").classList.add("completed");
                 document.getElementById("step2").classList.add("active");
 
-                // Generate cabin cards
-                generateCabins();
+                // Check if cabins already exist
+                var existingCabins = document.querySelectorAll("#cabinContainer .cabin-card");
+                var numCabinValue = parseInt(document.getElementById("numcabin").value);
+                
+                // Only regenerate cabins if the number has changed or no cabins exist yet
+                if (existingCabins.length !== numCabinValue) {
+                    generateCabins();
+                } else {
+                    // Just update the seat summary
+                    updateSeatSummary();
+                }
             });
 
             // Back to train info
             document.getElementById("btnBackToTrain").addEventListener("click", function () {
+                // Save current cabin data before going back
+                var existingCabinInputs = document.querySelectorAll("#cabinContainer .cabin-card");
+                var numCabinValue = parseInt(document.getElementById("numcabin").value);
+                
+                // Make sure cabinDataStore is initialized with the right size
+                if (cabinDataStore.length !== numCabinValue) {
+                    cabinDataStore = new Array(numCabinValue);
+                }
+                
+                for (var i = 0; i < existingCabinInputs.length && i < cabinDataStore.length; i++) {
+                    var cabinCard = existingCabinInputs[i];
+                    cabinDataStore[i] = {
+                        name: cabinCard.querySelector('input[name="cabinName"]').value,
+                        cabinClass: cabinCard.querySelector('input[name="cabinClass"]').value,
+                        price: cabinCard.querySelector('input[name="cabinPrice"]').value,
+                        seats: cabinCard.querySelector('input[name="cabinNumseat"]').value,
+                        imgUrl: cabinCard.querySelector('input[name="cabinImgUrl"]').value
+                    };
+                }
+                
+                // Switch to train info view
                 document.getElementById("trainInfoCard").classList.remove("disabled-section");
                 document.getElementById("cabinDetailsCard").classList.add("disabled-section");
                 document.getElementById("step1").classList.add("active");
@@ -763,19 +362,28 @@
                 document.getElementById("step2").classList.remove("active");
             });
 
-            // Reset cabin details if train info changes
-            var trainFields = ["train_model", "total_seats", "numcabin", "owner"];
-            trainFields.forEach(function (id) {
-                document.getElementById(id).addEventListener("change", function () {
-                    // If we're not on the train info step, go back to it
-                    if (!document.getElementById("step1").classList.contains("active")) {
+            // Special handling for fields that affect cabin generation
+            document.getElementById("numcabin").addEventListener("change", function() {
+                if (!document.getElementById("step1").classList.contains("active")) {
+                    if (confirm("Changing the number of cabins will reset your cabin details. Do you want to continue?")) {
+                        // User confirmed, go back to train info
                         document.getElementById("trainInfoCard").classList.remove("disabled-section");
                         document.getElementById("cabinDetailsCard").classList.add("disabled-section");
                         document.getElementById("step1").classList.add("active");
                         document.getElementById("step1").classList.remove("completed");
                         document.getElementById("step2").classList.remove("active");
+                    } else {
+                        // User canceled, revert the change
+                        this.value = document.querySelectorAll("#cabinContainer .cabin-card").length;
                     }
-                });
+                }
+            });
+
+            document.getElementById("total_seats").addEventListener("change", function() {
+                if (!document.getElementById("step1").classList.contains("active")) {
+                    // Just update the seat summary without resetting cabin details
+                    updateSeatSummary();
+                }
             });
 
             // Form submission validation
@@ -813,3 +421,4 @@
         </script>
     </body>
 </html>
+

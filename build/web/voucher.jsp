@@ -202,6 +202,64 @@
                 color: #666;
                 margin-bottom: 20px;
             }
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-size: 12px;
+                font-weight: 600;
+                position: relative;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Active badge */
+            .status-badge.active {
+                background-color: #e8f5e9; /* Light green background */
+                color: #2e7d32; /* Dark green text */
+                border-left: 3px solid #2e7d32; /* Green left border */
+            }
+
+            .status-badge.active::before {
+                content: "●";
+                color: #2e7d32;
+                margin-right: 6px;
+                font-size: 10px;
+            }
+
+            /* Inactive badge */
+            .status-badge.inactive {
+                background-color: #ffebee; /* Light red background */
+                color: #c62828; /* Dark red text */
+                border-left: 3px solid #c62828; /* Red left border */
+            }
+
+            .status-badge.inactive::before {
+                content: "●";
+                color: #c62828;
+                margin-right: 6px;
+                font-size: 10px;
+            }
+
+            /* Blue inactive alternative */
+            .status-badge.inactive-blue {
+                background-color: #e3f2fd; /* Light blue background */
+                color: #1565c0; /* Dark blue text */
+                border-left: 3px solid #1565c0; /* Blue left border */
+            }
+
+            .status-badge.inactive-blue::before {
+                content: "●";
+                color: #1565c0;
+                margin-right: 6px;
+                font-size: 10px;
+            }
+
+            /* Hover effect */
+            .status-badge:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+            }
 
             /* Responsive adjustments */
             @media (max-width: 768px) {
@@ -260,9 +318,7 @@
                                                 <th>ID</th>
                                                 <th>Code</th>
                                                 <th>Discount</th>
-                                                <th>Valid From</th>
                                                 <th>Valid To</th>
-                                                <th>Quantity</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
@@ -272,16 +328,25 @@
                                                     <td>${voucher.id}</td>
                                                     <td><span class="voucher-code">${voucher.code}</span></td>
                                                     <td><fmt:formatNumber value="${voucher.discountAmount}" type="currency" currencySymbol="$" /></td>
-                                                    <td><fmt:formatDate value="${voucher.validFrom}" pattern="dd/MM/yyyy HH:mm" /></td>
-                                                    <td><fmt:formatDate value="${voucher.validTo}" pattern="dd/MM/yyyy HH:mm" /></td>
-                                                    <td>${voucher.quantity}</td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${voucher.validTo == null}">
+                                                                Non-expiring
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <fmt:formatDate value="${voucher.validTo}" pattern="dd/MM/yyyy HH:mm" />
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${voucher.status == 1}">
-                                                                <span class="badge-active">Active</span>
+                                                                <span class="status-badge active">Active</span>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <span class="badge-inactive">Inactive</span>
+                                                                <span class="status-badge inactive">Inactive</span>
+                                                                <!-- Or use the blue version: -->
+                                                                <!-- <span class="status-badge inactive-blue">Inactive</span> -->
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>
