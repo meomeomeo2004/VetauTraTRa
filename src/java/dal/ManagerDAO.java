@@ -137,7 +137,7 @@ public class ManagerDAO extends DBContext {
         return list;
     }
 
-    public int AddTrain(String model, int totalseat, int numcabin, int owner) {
+    public int AddTrain(String model, int totalseat, int numcabin, int owner,int user_id) {
         String sql = """
                  INSERT INTO Train (train_model, total_seats,numcabin,status, owner)
                  VALUES (?,?,?,4,?)
@@ -161,6 +161,9 @@ public class ManagerDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        DAOforAdmin dao = new DAOforAdmin();
+        dao.recordChange("Add Train", user_id, "Manager");
+        
         return -1; // 
     }
 
@@ -202,11 +205,11 @@ public class ManagerDAO extends DBContext {
             pre.executeBatch(); // Thực hiện toàn bộ batch một lần
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }        
     }
 
     // Cập nhật thông tin Train
-    public boolean updateTrain(int trainId, String model, int totalSeats, int numCabin, int owner) {
+    public boolean updateTrain(int trainId, String model, int totalSeats, int numCabin, int owner,int user_id) {
         String sql = "UPDATE Train SET train_model = ?, total_seats = ?, numcabin = ?, owner = ?, status = 5 WHERE id = ? ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -220,6 +223,8 @@ public class ManagerDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        DAOforAdmin dao = new DAOforAdmin();
+        dao.recordChange("Edit Train", user_id, "Manager");
         return false;
     }
 

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : Manager_AddTrain
-    Created on : Mar 2, 2025, 8:53:19 PM
-    Author     : ASUS
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -172,6 +166,9 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            // Store cabin data between steps
+            var cabinDataStore = [];
+            
             // Check if train info is complete
             function isTrainInfoComplete() {
                 var model = document.getElementById("train_model").value.trim();
@@ -185,19 +182,47 @@
             function generateCabins() {
                 var numCabinValue = parseInt(document.getElementById("numcabin").value);
                 var cabinContainer = document.getElementById("cabinContainer");
+                
+                // Store existing cabin data before clearing the container
+                if (cabinDataStore.length === 0 || cabinDataStore.length !== numCabinValue) {
+                    // Only initialize the array if it's empty or size has changed
+                    cabinDataStore = new Array(numCabinValue);
+                    for (var i = 0; i < numCabinValue; i++) {
+                        cabinDataStore[i] = {
+                            name: "",
+                            cabinClass: "",
+                            price: "",
+                            seats: "",
+                            imgUrl: ""
+                        };
+                    }
+                } else {
+                    // Save current values before regenerating
+                    var existingCabinInputs = document.querySelectorAll("#cabinContainer .cabin-card");
+                    for (var i = 0; i < existingCabinInputs.length && i < cabinDataStore.length; i++) {
+                        var cabinCard = existingCabinInputs[i];
+                        cabinDataStore[i] = {
+                            name: cabinCard.querySelector('input[name="cabinName"]').value,
+                            cabinClass: cabinCard.querySelector('input[name="cabinClass"]').value,
+                            price: cabinCard.querySelector('input[name="cabinPrice"]').value,
+                            seats: cabinCard.querySelector('input[name="cabinNumseat"]').value,
+                            imgUrl: cabinCard.querySelector('input[name="cabinImgUrl"]').value
+                        };
+                    }
+                }
+                
                 cabinContainer.innerHTML = "";
 
-                // Tạo card cabin theo kiểu Bootstrap (3 cột trên màn hình rộng)
+                // Create cabin cards
                 for (var i = 0; i < numCabinValue; i++) {
-                     console.log("Đang tạo Cabin " + (i + 1));
-                    // col-md-4 => 3 cột
+                    console.log("Creating Cabin " + (i + 1));
                     var cabinCol = document.createElement("div");
                     cabinCol.className = "col-md-4";
 
                     var cabinCard = document.createElement("div");
                     cabinCard.className = "cabin-card card mb-3";
 
-                    // Header hiển thị Cabin 1, Cabin 2, ...
+                    // Header
                     var cabinHeader = document.createElement("div");
                     cabinHeader.className = "card-header";
                     cabinHeader.innerHTML = `
@@ -205,30 +230,39 @@
                         <h5 class="cabin-title">Cabin ${i + 1}</h5>
                     `;
 
-                    // Body (nội dung form cabin)
+                    // Get saved data for this cabin
+                    var savedData = cabinDataStore[i] || {
+                        name: "",
+                        cabinClass: "",
+                        price: "",
+                        seats: "",
+                        imgUrl: ""
+                    };
+
+                    // Body with preserved values
                     var cabinBody = document.createElement("div");
                     cabinBody.className = "card-body";
                     cabinBody.innerHTML = `
                         <div class="form-group mb-2">
                             <label class="form-label">Cabin Name</label>
-                            <input type="text" class="form-control" name="cabinName" required>
+                            <input type="text" class="form-control" name="cabinName" value="${savedData.name}" required>
                         </div>
                         <div class="form-group mb-2">
                             <label class="form-label">Cabin Class</label>
-                            <input type="text" class="form-control" name="cabinClass" required>
+                            <input type="text" class="form-control" name="cabinClass" value="${savedData.cabinClass}" required>
                         </div>
                         <div class="form-group mb-2">
                             <label class="form-label">Price</label>
-                            <input type="number" step="0.01" class="form-control" name="cabinPrice" required>
+                            <input type="number" step="0.01" class="form-control" name="cabinPrice" value="${savedData.price}" required>
                         </div>
                         <div class="form-group mb-2">
                             <label class="form-label">Number of Seats</label>
-                            <input type="number" class="form-control cabin-seats" name="cabinNumseat"
-                                   required onchange="updateSeatSummary()">
+                            <input type="number" class="form-control cabin-seats" name="cabinNumseat" 
+                                   value="${savedData.seats}" required onchange="updateSeatSummary()">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Image URL</label>
-                            <input type="text" class="form-control" name="cabinImgUrl" required>
+                            <input type="text" class="form-control" name="cabinImgUrl" value="${savedData.imgUrl}" required>
                         </div>
                     `;
 
@@ -238,11 +272,9 @@
                     cabinContainer.appendChild(cabinCol);
                 }
 
-                // Sau khi tạo xong cabin, cập nhật seat summary
+                // After creating cabins, update seat summary
                 updateSeatSummary();
             }
-
-
 
             // Update seat summary
             function updateSeatSummary() {
@@ -281,12 +313,42 @@
                 document.getElementById("step1").classList.add("completed");
                 document.getElementById("step2").classList.add("active");
 
-                // Generate cabin cards
-                generateCabins();
+                // Check if cabins already exist
+                var existingCabins = document.querySelectorAll("#cabinContainer .cabin-card");
+                var numCabinValue = parseInt(document.getElementById("numcabin").value);
+                
+                // Only regenerate cabins if the number has changed or no cabins exist yet
+                if (existingCabins.length !== numCabinValue) {
+                    generateCabins();
+                } else {
+                    // Just update the seat summary
+                    updateSeatSummary();
+                }
             });
 
             // Back to train info
             document.getElementById("btnBackToTrain").addEventListener("click", function () {
+                // Save current cabin data before going back
+                var existingCabinInputs = document.querySelectorAll("#cabinContainer .cabin-card");
+                var numCabinValue = parseInt(document.getElementById("numcabin").value);
+                
+                // Make sure cabinDataStore is initialized with the right size
+                if (cabinDataStore.length !== numCabinValue) {
+                    cabinDataStore = new Array(numCabinValue);
+                }
+                
+                for (var i = 0; i < existingCabinInputs.length && i < cabinDataStore.length; i++) {
+                    var cabinCard = existingCabinInputs[i];
+                    cabinDataStore[i] = {
+                        name: cabinCard.querySelector('input[name="cabinName"]').value,
+                        cabinClass: cabinCard.querySelector('input[name="cabinClass"]').value,
+                        price: cabinCard.querySelector('input[name="cabinPrice"]').value,
+                        seats: cabinCard.querySelector('input[name="cabinNumseat"]').value,
+                        imgUrl: cabinCard.querySelector('input[name="cabinImgUrl"]').value
+                    };
+                }
+                
+                // Switch to train info view
                 document.getElementById("trainInfoCard").classList.remove("disabled-section");
                 document.getElementById("cabinDetailsCard").classList.add("disabled-section");
                 document.getElementById("step1").classList.add("active");
@@ -294,19 +356,28 @@
                 document.getElementById("step2").classList.remove("active");
             });
 
-            // Reset cabin details if train info changes
-            var trainFields = ["train_model", "total_seats", "numcabin", "owner"];
-            trainFields.forEach(function (id) {
-                document.getElementById(id).addEventListener("change", function () {
-                    // If we're not on the train info step, go back to it
-                    if (!document.getElementById("step1").classList.contains("active")) {
+            // Special handling for fields that affect cabin generation
+            document.getElementById("numcabin").addEventListener("change", function() {
+                if (!document.getElementById("step1").classList.contains("active")) {
+                    if (confirm("Changing the number of cabins will reset your cabin details. Do you want to continue?")) {
+                        // User confirmed, go back to train info
                         document.getElementById("trainInfoCard").classList.remove("disabled-section");
                         document.getElementById("cabinDetailsCard").classList.add("disabled-section");
                         document.getElementById("step1").classList.add("active");
                         document.getElementById("step1").classList.remove("completed");
                         document.getElementById("step2").classList.remove("active");
+                    } else {
+                        // User canceled, revert the change
+                        this.value = document.querySelectorAll("#cabinContainer .cabin-card").length;
                     }
-                });
+                }
+            });
+
+            document.getElementById("total_seats").addEventListener("change", function() {
+                if (!document.getElementById("step1").classList.contains("active")) {
+                    // Just update the seat summary without resetting cabin details
+                    updateSeatSummary();
+                }
             });
 
             // Form submission validation
@@ -344,3 +415,4 @@
         </script>
     </body>
 </html>
+
