@@ -75,7 +75,7 @@ public class RefundList extends HttpServlet {
             Seat seat = sDAO.getSeatById(tk.getSeatId());
             refund1.setPrice(seat.getPrice());
         }
-        request.getSession().setAttribute("refund", refund);
+        request.setAttribute("refund", refund);
         request.getRequestDispatcher("refundlist.jsp").forward(request, response);
     }
 
