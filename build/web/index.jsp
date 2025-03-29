@@ -2,10 +2,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
 <!doctype html>
 <html lang="en">
     <head>
@@ -14,217 +10,272 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="image/favicon.png" type="image/png">
         <title>TraTra</title>
+
+        <!-- Include your existing styles -->
         <%@include file="components/Style.jsp" %>
-        <style>
-            /* Modern Search Ticket Form Styles */
-            .search-form-container {
-                background-color: #0a0f1e;
-                border-radius: 8px;
-                padding: 30px;
-                width: 100%;
-            }
 
-            .search-form {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
+        <!-- Include the new modern styles -->
+        <link rel="stylesheet" href="css/modern-style.css">
 
-            @media (min-width: 768px) {
-                .search-form {
-                    grid-template-columns: 2fr 10fr;
-                    align-items: center;
-                }
-            }
+        <!-- Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-            .search-title {
-                color: white;
-                font-size: 28px;
-                font-weight: bold;
-                line-height: 1.2;
-            }
-
-            .search-fields {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            @media (min-width: 768px) {
-                .search-fields {
-                    grid-template-columns: repeat(12, 1fr);
-                }
-
-                .field-departure, .field-arrival {
-                    grid-column: span 3;
-                }
-
-                .field-departure-date, .field-return-date, .field-type {
-                    grid-column: span 2;
-                }
-
-                .field-search-button {
-                    grid-column: 7 / span 6;
-                }
-            }
-
-            .form-input {
-                height: 56px;
-                width: 100%;
-                padding: 0 15px;
-                border: none;
-                border-radius: 4px;
-                font-size: 16px;
-                background-color: white;
-                color: black;
-            }
-
-            .form-input::placeholder {
-                color: #666;
-            }
-
-            .form-select {
-                height: 56px;
-                width: 100%;
-                padding: 0 15px;
-                border: none;
-                border-radius: 4px;
-                font-size: 16px;
-                background-color: white;
-                color: black;
-                appearance: none;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-                background-repeat: no-repeat;
-                background-position: right 15px center;
-                background-size: 16px;
-            }
-
-            .date-input {
-                height: 56px;
-                width: 100%;
-                padding: 0 15px;
-                border: none;
-                border-radius: 4px;
-                font-size: 16px;
-                background-color: white;
-                color: black;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
-                background-repeat: no-repeat;
-                background-position: right 15px center;
-                background-size: 16px;
-                cursor: pointer;
-            }
-
-            .search-button {
-                height: 56px;
-                width: 100%;
-                background-color: #ffc107;
-                color: black;
-                border: none;
-                border-radius: 4px;
-                font-size: 16px;
-                font-weight: bold;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .search-button:hover {
-                background-color: #ffb300;
-            }
-
-            .error-message {
-                color: #ff3333;
-                margin-bottom: 10px;
-            }
-
-            /* Override hotel_booking_area styles */
-            .hotel_booking_area.position {
-                margin-top: 0;
-                padding: 30px 0;
-            }
-        </style>
+        <!-- Flatpickr for date picking -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     </head>
     <body>
         <!--================Header Area =================-->
         <%@include file="components/Header.jsp" %>
         <!--================Header Area =================-->
 
-        <!--================Banner Area =================-->
-        <section class="banner_area">
-            <div class="booking_table d_flex align-items-center">
-                <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
-                <div class="container">
-                    <div class="banner_content text-center">
-                        <h6>Live to experience</h6>
-                        <h2>Pack up and go</h2>
-                        <p>At least once in your life, you must see the place you want to see and go to the place you want to go<br> 
-                            See through the train window and go by train gears.</p>
-                        <a href="#" class="btn theme_btn button_hover">Get Started</a>
-                    </div>
+        <!--================Hero Section =================-->
+        <section class="hero-section">
+            <div class="hero-background" style="background-image: url('image/banner_bg.jpg');"></div>
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <h6 class="hero-subtitle">LIVE TO EXPERIENCE</h6>
+                    <h2 class="hero-title">Pack up and go</h2>
+                    <p class="hero-description">
+                        At least once in your life, you must see the place you want to see and go to the place you want to go.
+                        See through the train window and go by train gears.
+                    </p>
+                    <a href="#" class="btn-primary">Get Started</a>
                 </div>
             </div>
+        </section>
 
-            <div class="hotel_booking_area position">
-                <div class="container">
-                    <div class="search-form-container">
-                        <form action="Search" method="post" id="ticketSearchForm" class="search-form">
-                            <div class="search-title-container">
-                                <h2 class="search-title">SEARCH<br>TICKET</h2>
-                            </div>
+        <!--================Search Form Section =================-->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-card">
+                    <div class="search-grid">
+                        <div class="search-sidebar">
+                            <h2 class="search-title">SEARCH TICKET</h2>
+                            <p class="search-subtitle">Find your perfect journey</p>
+                        </div>
 
-                            <div class="search-fields">
+                        <div class="search-form-container">
+                            <form action="Search" method="post" id="ticketSearchForm">
                                 <c:if test="${not empty requestScope.error}">
-                                    <div class="error-message" style="grid-column: 1 / -1; margin-bottom: 10px;">
+                                    <div class="error-message">
                                         <c:out value="${requestScope.error}"/>
                                     </div>
                                 </c:if>
 
-                                <!-- First row: Stations and Type -->
-                                <div class="field-departure" style="grid-column: span 4;">
-                                    <input type="text" id="departure_station" class="form-input" placeholder="Departure station" required>
-                                    <input type="hidden" name="departureStation" id="departureStationHidden">
-                                </div>
+                                <div class="form-grid">
+                                    <!-- Departure Station -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="departure_station">Departure Station</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-map-marker-alt input-icon"></i>
+                                            <input type="text" id="departure_station" class="form-control" placeholder="Enter departure station" required>
+                                            <input type="hidden" name="departureStation" id="departureStationHidden">
+                                        </div>
+                                    </div>
 
-                                <div class="field-arrival" style="grid-column: span 4;">
-                                    <input type="text" id="arrival_station" class="form-input" placeholder="Arrival station" required>
-                                    <input type="hidden" name="arrivalStation" id="arrivalStationHidden">
-                                </div>
+                                    <!-- Arrival Station -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="arrival_station">Arrival Station</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-map-marker-alt input-icon"></i>
+                                            <input type="text" id="arrival_station" class="form-control" placeholder="Enter arrival station" required>
+                                            <input type="hidden" name="arrivalStation" id="arrivalStationHidden">
+                                        </div>
+                                    </div>
 
-                                <div class="field-type" style="grid-column: span 4;">
-                                    <select id="trip_type" class="form-select">
-                                        <option value="" disabled selected>Type</option>
-                                        <option value="oneWay">One way</option>
-                                        <option value="roundTrip">Round trip</option>
-                                    </select>
-                                    <input type="hidden" name="tripType" id="tripTypeHidden">
-                                </div>
+                                    <!-- Trip Type -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="trip_type">Trip Type</label>
+                                        <select id="trip_type" class="form-select">
+                                            <option value="" disabled selected>Select trip type</option>
+                                            <option value="oneWay">One way</option>
+                                            <option value="roundTrip">Round trip</option>
+                                        </select>
+                                        <input type="hidden" name="tripType" id="tripTypeHidden">
+                                    </div>
 
-                                <!-- Second row: Dates and Search button -->
-                                <div class="field-departure-date" style="grid-column: span 4;">
-                                    <input type="text" id="departure_date" class="date-input" placeholder="Departure Date">
-                                    <input type="hidden" name="departureDate" id="departureDateHidden">
-                                </div>
+                                    <!-- Departure Date -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="departure_date">Departure Date</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-calendar input-icon"></i>
+                                            <input type="text" id="departure_date" class="form-control" placeholder="Select departure date">
+                                            <input type="hidden" name="departureDate" id="departureDateHidden">
+                                        </div>
+                                    </div>
 
-                                <div class="field-return-date" style="grid-column: span 4;">
-                                    <input type="text" id="arrival_date" class="date-input" placeholder="Return Date">
-                                    <input type="hidden" name="arrivalDate" id="arrivalDateHidden">
-                                </div>
+                                    <!-- Return Date -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="arrival_date">Return Date</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-calendar input-icon"></i>
+                                            <input type="text" id="arrival_date" class="form-control" placeholder="Select return date">
+                                            <input type="hidden" name="arrivalDate" id="arrivalDateHidden">
+                                        </div>
+                                    </div>
 
-                                <div class="field-search-button" style="grid-column: span 4;">
-                                    <button type="submit" class="search-button">SEARCH</button>
+                                    <!-- Search Button -->
+                                    <div class="form-group">
+                                        <label class="form-label" style="visibility: hidden;">Search</label>
+                                        <button type="submit" class="btn-search">SEARCH</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </section>
-        <!-- Optional JavaScript -->
+
+        <!--================Destinations Section =================-->
+        <section class="section">
+            <div class="container">
+                <div class="section-title-container">
+                    <h2 class="section-title">Popular Destinations</h2>
+                    <p class="section-description">
+                        Discover the most popular train destinations across the country. 
+                        Experience breathtaking views and unforgettable journeys.
+                    </p>
+                </div>
+
+                <div class="destinations-grid">
+                    <!-- Destination 1 -->
+                    <div class="destination-card">
+                        <img src="image/destinations/hanoi.jpg" alt="Hanoi" class="destination-image">
+                        <div class="destination-overlay">
+                            <h3 class="destination-name">Hanoi</h3>
+                            <a href="#" class="btn-outline">Explore</a>
+                        </div>
+                    </div>
+
+                    <!-- Destination 2 -->
+                    <div class="destination-card">
+                        <img src="image/destinations/ho-chi-minh.jpg" alt="Ho Chi Minh City" class="destination-image">
+                        <div class="destination-overlay">
+                            <h3 class="destination-name">Ho Chi Minh City</h3>
+                            <a href="#" class="btn-outline">Explore</a>
+                        </div>
+                    </div>
+
+                    <!-- Destination 3 -->
+                    <div class="destination-card">
+                        <img src="image/destinations/da-nang.jpg" alt="Da Nang" class="destination-image">
+                        <div class="destination-overlay">
+                            <h3 class="destination-name">Da Nang</h3>
+                            <a href="#" class="btn-outline">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--================Features Section =================-->
+        <section class="features-section">
+            <div class="container">
+                <div class="section-title-container">
+                    <h2 class="section-title">Why Choose TraTra</h2>
+                    <p class="section-description">
+                        We provide the best train travel experience with comfortable seats, 
+                        scenic routes, and excellent service.
+                    </p>
+                </div>
+
+                <div class="features-grid">
+                    <!-- Feature 1 -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt fa-3x"></i>
+                        </div>
+                        <h3 class="feature-title">Easy Booking</h3>
+                        <p class="feature-description">Simple and fast online booking process</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-train fa-3x"></i>
+                        </div>
+                        <h3 class="feature-title">Best Prices</h3>
+                        <p class="feature-description">Competitive prices and regular promotions</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset fa-3x"></i>
+                        </div>
+                        <h3 class="feature-title">24/7 Support</h3>
+                        <p class="feature-description">Customer support available all day, every day</p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-couch fa-3x"></i>
+                        </div>
+                        <h3 class="feature-title">Comfortable Travel</h3>
+                        <p class="feature-description">Modern trains with all necessary amenities</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--================Footer =================-->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div>
+                        <h3 class="footer-brand">TraTra</h3>
+                        <p class="footer-description">
+                            Your reliable partner for train travel. Explore the country with comfort and style.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="footer-heading">Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="footer-heading">Popular Routes</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">Hanoi - Ho Chi Minh</a></li>
+                            <li><a href="#">Hanoi - Da Nang</a></li>
+                            <li><a href="#">Ho Chi Minh - Nha Trang</a></li>
+                            <li><a href="#">Da Nang - Hue</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="footer-heading">Contact Us</h4>
+                        <address class="footer-address">
+                            <p>123 Train Street</p>
+                            <p>Hanoi, Vietnam</p>
+                            <p>Email: info@tratra.com</p>
+                            <p>Phone: +84 123 456 789</p>
+                        </address>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>&copy; <%= new java.util.Date().getYear() + 1900 %> TraTra. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Include your existing scripts -->
         <%@include file="components/Script.jsp" %>
 
         <!-- Flatpickr for date picking -->
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+        <!-- Your custom JavaScript -->
         <script>
             // Biến lưu trữ các ga hợp lệ
             let validDepartureStations = [];
@@ -381,8 +432,8 @@
                     event.preventDefault(); // Ngăn form submit nếu validation thất bại
                 }
             });
-        </script>
-        <script>
+
+            // Initialize Flatpickr date pickers
             const departurePicker = flatpickr("#departure_date", {
                 dateFormat: "Y-m-d",
                 minDate: "today",
@@ -435,4 +486,3 @@
         </script>
     </body>
 </html>
-
