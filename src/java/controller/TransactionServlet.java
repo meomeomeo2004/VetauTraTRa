@@ -25,6 +25,8 @@ public class TransactionServlet extends HttpServlet {
         String vnp_TransactionStatus = request.getParameter("vnp_TransactionStatus");
 
         List<Map<String, Object>> transactions = (List<Map<String, Object>>) request.getSession().getAttribute("transactions");
+        String voucherCode = request.getSession().getAttribute("voucherCode").toString();
+        request.getSession().removeAttribute("voucherCode");
         int routeId = Integer.parseInt(request.getSession().getAttribute("routeId").toString());
         long amount = (long) request.getSession().getAttribute("amount");
         String numSeats = (String) request.getSession().getAttribute("numSeats");
@@ -40,7 +42,7 @@ public class TransactionServlet extends HttpServlet {
                     "VNPay",
                     Integer.parseInt(numSeats),
                     (double) amount,
-                    null
+                    voucherCode
             );
 
             if (isSuccess) {

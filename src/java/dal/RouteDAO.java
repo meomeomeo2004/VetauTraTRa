@@ -36,14 +36,14 @@ public class RouteDAO extends DBContext {
         return list;
     }
 
-    public List<Route> searchRoute(String departureStation, String arrivalStation, String departureDate, String arrivalDate) {
+    public List<Route> searchRouteOneWay(String departureStation, String arrivalStation, String departureDate) {
         List<Route> list = new ArrayList<>();
         try {
             // Xây dựng câu SQL động
             StringBuilder sql = new StringBuilder("SELECT r.id, r.train_id, r.route_code, r.description, dep.name AS departure_station_name, arr.name AS arrival_station_name, r.departure_time, r.arrival_time, r.status "
                     + " FROM Route r "
                     + " JOIN Station dep ON r.departure_station = dep.station_code "
-                    + " JOIN Station arr ON r.arrival_station = arr.station_code WHERE 1=1"); // 1=1 để dễ dàng thêm các điều kiện sau
+                    + " JOIN Station arr ON r.arrival_station = arr.station_code WHERE r.departure_time > NOW() + INTERVAL 3 HOUR "); // 1=1 để dễ dàng thêm các điều kiện sau
 
             if (departureStation != null && !departureStation.trim().isEmpty()) {
                 sql.append(" AND dep.name LIKE ?");
@@ -53,9 +53,6 @@ public class RouteDAO extends DBContext {
             }
             if (departureDate != null && !departureDate.trim().isEmpty()) {
                 sql.append(" AND r.departure_time LIKE ?");
-            }
-            if (arrivalDate != null && !arrivalDate.trim().isEmpty()) {
-                sql.append(" AND r.arrival_time LIKE ?");
             }
 
             // Sử dụng PreparedStatement với câu SQL động
@@ -72,8 +69,65 @@ public class RouteDAO extends DBContext {
             if (departureDate != null && !departureDate.trim().isEmpty()) {
                 stm.setString(parameterIndex++, "%" + departureDate + "%");
             }
-            if (arrivalDate != null && !arrivalDate.trim().isEmpty()) {
-                stm.setString(parameterIndex++, "%" + arrivalDate + "%");
+
+            // Thực thi câu truy vấn
+            ResultSet rs = stm.executeQuery();
+
+            // Duyệt qua kết quả trả về và tạo đối tượng Route
+            while (rs.next()) {
+                list.add(new Route(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getTimestamp(7),
+                        rs.getTimestamp(8),
+                        rs.getInt(9)));
+            }
+
+            // Đảm bảo đóng ResultSet và PreparedStatement
+            rs.close();
+            stm.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return list;
+    }
+    
+    public List<Route> searchRouteRoundTrip(String departureStation, String arrivalStation, String returnDate) {
+        List<Route> list = new ArrayList<>();
+        try {
+            // Xây dựng câu SQL động
+            StringBuilder sql = new StringBuilder("SELECT r.id, r.train_id, r.route_code, r.description, dep.name AS departure_station_name, arr.name AS arrival_station_name, r.departure_time, r.arrival_time, r.status "
+                    + " FROM Route r "
+                    + " JOIN Station dep ON r.departure_station = dep.station_code "
+                    + " JOIN Station arr ON r.arrival_station = arr.station_code WHERE r.departure_time > NOW() + INTERVAL 3 HOUR "); // 1=1 để dễ dàng thêm các điều kiện sau
+
+            if (departureStation != null && !departureStation.trim().isEmpty()) {
+                sql.append(" AND arr.name LIKE ?");
+            }
+            if (arrivalStation != null && !arrivalStation.trim().isEmpty()) {
+                sql.append(" AND dep.name LIKE ?");
+            }
+            if (returnDate != null && !returnDate.trim().isEmpty()) {
+                sql.append(" AND r.departure_time LIKE ?");
+            }
+
+            // Sử dụng PreparedStatement với câu SQL động
+            PreparedStatement stm = connection.prepareStatement(sql.toString());
+
+            // Gán các giá trị cho PreparedStatement
+            int parameterIndex = 1;
+            if (departureStation != null && !departureStation.trim().isEmpty()) {
+                stm.setString(parameterIndex++, "%" + departureStation + "%");
+            }
+            if (arrivalStation != null && !arrivalStation.trim().isEmpty()) {
+                stm.setString(parameterIndex++, "%" + arrivalStation + "%");
+            }
+            if (returnDate != null && !returnDate.trim().isEmpty()) {
+                stm.setString(parameterIndex++, "%" + returnDate + "%");
             }
 
             // Thực thi câu truy vấn

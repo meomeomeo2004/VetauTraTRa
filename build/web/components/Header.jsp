@@ -102,8 +102,6 @@
             <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                 <ul class="nav navbar-nav menu_nav ml-auto">
                     <li class="nav-item active"><a class="nav-link" href="/tratra">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.html">About us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="RouteServlet">Route</a></li>
                     <li class="nav-item"><a class="nav-link" href="voucher">Voucher</a></li>
                         <c:choose>
                             <c:when test="${not empty sessionScope.account}">

@@ -51,21 +51,23 @@ public class Search extends HttpServlet {
         String arrivalStation = request.getParameter("arrivalStation");
         String departureDate = request.getParameter("departureDate");
         String tripType = request.getParameter("tripType");
-        String arrivalDate = null;
+        String returnDate = null;
+        RouteDAO routeDAO = new RouteDAO();
+        List<Route> routeRTs = null;
         if (tripType.equals("roundTrip")) {
-            arrivalDate = request.getParameter("arrivalDate");
+            returnDate = request.getParameter("arrivalDate");
+            routeRTs = routeDAO.searchRouteRoundTrip(departureStation, arrivalStation, returnDate);
         }
 
-        RouteDAO routeDAO = new RouteDAO();
-        List<Route> routes = routeDAO.searchRoute(departureStation, arrivalStation, departureDate, arrivalDate);
+        List<Route> routeOWs = routeDAO.searchRouteOneWay(departureStation, arrivalStation, departureDate);
 
         HttpSession session = request.getSession();
         session.setAttribute("departureStation", departureStation);
         session.setAttribute("arrivalStation", arrivalStation);
         session.setAttribute("departureDate", departureDate);
-        session.setAttribute("arrivalDate", arrivalDate);
-        session.setAttribute("routes", routes);
-
+        session.setAttribute("arrivalDate", returnDate);
+        session.setAttribute("routeRTs", routeRTs);
+        session.setAttribute("routes", routeOWs);
         response.sendRedirect("search.jsp");
     }
 
