@@ -31,7 +31,7 @@ public class TransactionHistory extends HttpServlet {
         User account = (User) session.getAttribute("account");
 
         int page = 1;
-        int pageSize = 10;
+        int pageSize = 5;
 
         String pageParam = request.getParameter("page");
         if (pageParam != null) {
@@ -42,28 +42,53 @@ public class TransactionHistory extends HttpServlet {
             }
         }
 
+        String paymentDate = request.getParameter("paymentDate");
+        request.setAttribute("paymentDate", paymentDate);
+        String minAmountStr = request.getParameter("minAmount");
+        request.setAttribute("minAmount", minAmountStr);
+        String maxAmountStr = request.getParameter("maxAmount");
+        request.setAttribute("maxAmount", maxAmountStr);
+
+        Double minAmount = minAmountStr != null && !minAmountStr.isEmpty() ? Double.parseDouble(minAmountStr) : null;
+        Double maxAmount = maxAmountStr != null && !maxAmountStr.isEmpty() ? Double.parseDouble(maxAmountStr) : null;
+
         if (account != null) {
             try {
                 Customer customer = customerDAO.getCustomerById(account.getId());
 
-                int totalTransactions = transactionDAO.getTransactionCountByCustomerId(customer.getId());
-                int totalPages = (int) Math.ceil((double) totalTransactions / pageSize);
+                List<Transaction> transactions;
+                int totalTransactions;
+                int totalPages;
 
-                List<Transaction> transactions = transactionDAO.getTransactionByCustomerIdPaged(customer.getId(), page, pageSize);
+                if ((paymentDate != null && !paymentDate.isEmpty()) || minAmount != null || maxAmount != null) {
+                    // Lọc giao dịch với các điều kiện
+                    transactions = transactionDAO.filterTransactionsPaged(customer.getId(), paymentDate, minAmount, maxAmount, page, pageSize);
+                    // Đếm số lượng giao dịch đã lọc
+                    totalTransactions = transactionDAO.countFilteredTransactions(customer.getId(), paymentDate, minAmount, maxAmount);
+                } else {
+                    // Lấy tất cả giao dịch không có bộ lọc
+                    transactions = transactionDAO.getTransactionByCustomerIdPaged(customer.getId(), page, pageSize);
+                    totalTransactions = transactionDAO.getTransactionCountByCustomerId(customer.getId());
+                }
+
+                // Tính tổng số trang
+                totalPages = (int) Math.ceil((double) totalTransactions / pageSize);
 
                 request.setAttribute("transactions", transactions);
                 request.setAttribute("currentPage", page);
                 request.setAttribute("totalPages", totalPages);
+                request.setAttribute("paymentDate", paymentDate);
+                request.setAttribute("minAmount", minAmountStr);
+                request.setAttribute("maxAmount", maxAmountStr);
 
                 request.getRequestDispatcher("transactionOfCustomer.jsp").forward(request, response);
             } catch (NumberFormatException e) {
-                request.setAttribute("error", "Invalid customer ID!");
+                request.setAttribute("error", "Invalid input format!");
                 request.getRequestDispatcher("transactionOfCustomer.jsp").forward(request, response);
             }
         } else {
-            request.setAttribute("error", "Please enter customer ID!");
+            request.setAttribute("error", "Please log in to view your transactions!");
             request.getRequestDispatcher("transactionOfCustomer.jsp").forward(request, response);
         }
     }
-
 }
