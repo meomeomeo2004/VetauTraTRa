@@ -473,9 +473,17 @@
                             </div>
                             <div class="stats-info">
                                 <div class="stats-label">Total Customers</div>
-                                <h3 class="stats-value">3,845</h3>
+                                <h3 class="stats-value"><c:out value="${requestScope.customerThisMonth}"/></h3>
                                 <div class="stats-change positive">
-                                    <i class="fas fa-arrow-up"></i> 12.5% from last month
+                                    <c:choose>
+                                        <c:when test="${requestScope.customerThisMonthSign eq '1'}">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fas fa-arrow-down"></i>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <c:out value="${requestScope.customerThisMonthPercent}"/>% from last month
                                 </div>
                             </div>
                         </div>
@@ -487,9 +495,17 @@
                             </div>
                             <div class="stats-info">
                                 <div class="stats-label">Tickets Sold</div>
-                                <h3 class="stats-value">12,721</h3>
+                                <h3 class="stats-value"><c:out value="${requestScope.ticket}"/></h3>
                                 <div class="stats-change positive">
-                                    <i class="fas fa-arrow-up"></i> 8.3% from last month
+                                    <c:choose>
+                                        <c:when test="${requestScope.ticketSign eq '1'}">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fas fa-arrow-down"></i>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <c:out value="${requestScope.ticketPercent}"/>% from last month
                                 </div>
                             </div>
                         </div>
@@ -501,9 +517,17 @@
                             </div>
                             <div class="stats-info">
                                 <div class="stats-label">Active Routes</div>
-                                <h3 class="stats-value">87</h3>
+                                <h3 class="stats-value"><c:out value="${requestScope.routeThisMonth}"/></h3>
                                 <div class="stats-change positive">
-                                    <i class="fas fa-arrow-up"></i> 5.2% from last month
+                                    <c:choose>
+                                        <c:when test="${requestScope.routeThisMonthSign eq '1'}">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fas fa-arrow-down"></i>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <c:out value="${requestScope.routeThisMonthPercent}"/>% from last month
                                 </div>
                             </div>
                         </div>
@@ -515,30 +539,37 @@
                             </div>
                             <div class="stats-info">
                                 <div class="stats-label">Total Revenue</div>
-                                <h3 class="stats-value">$256,890</h3>
+                                <h3 class="stats-value">$<c:out value="${requestScope.reThisMonth}"/></h3>
                                 <div class="stats-change positive">
-                                    <i class="fas fa-arrow-up"></i> 15.7% from last month
+                                    <c:choose>
+                                        <c:when test="${requestScope.reThisMonthSign eq '1'}">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fas fa-arrow-down"></i>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <c:out value="${requestScope.reThisMonthPercent}"/>% from last month
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Customer Statistics -->
                 <div class="row">
                     <div class="col-lg-8 mb-4">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title">Customer Statistics</h5>
-                                <div class="btn-group-toggle" id="customerTimeToggle">
-                                    <button class="btn active" data-period="day">Daily</button>
-                                    <button class="btn" data-period="week">Weekly</button>
-                                    <button class="btn" data-period="month">Monthly</button>
+                                <h5 class="card-title">Ticket Sales Statistics</h5>
+                                <div class="btn-group-toggle" id="ticketTimeToggle">
+                                    <button class="btn active" data-period="week">Week</button>
+                                    <button class="btn" data-period="month">Month</button>
+                                    <button class="btn" data-period="year">Year</button>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="chart-container">
-                                    <canvas id="customerChart"></canvas>
+                                    <canvas id="ticketChart"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -546,7 +577,7 @@
                     <div class="col-lg-4 mb-4">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title">Customer Demographics</h5>
+                                <h5 class="card-title">Train Distribution</h5>
                             </div>
                             <div class="card-body">
                                 <div class="chart-container">
@@ -556,96 +587,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Train Model Popularity -->
-                <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Train Model Popularity</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-container">
-                                    <canvas id="trainModelChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Popular Train Models</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Model</th>
-                                                <th>Customers</th>
-                                                <th>Popularity</th>
-                                                <th>Trend</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Express 2000</td>
-                                                <td>1,245</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-primary" style="width: 85%"></div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="text-success"><i class="fas fa-arrow-up"></i> 12%</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Bullet X500</td>
-                                                <td>987</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-success" style="width: 72%"></div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="text-success"><i class="fas fa-arrow-up"></i> 8%</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Commuter 350</td>
-                                                <td>876</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-warning" style="width: 65%"></div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="text-success"><i class="fas fa-arrow-up"></i> 5%</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Metro 100</td>
-                                                <td>654</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-info" style="width: 48%"></div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="text-danger"><i class="fas fa-arrow-down"></i> 3%</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cargo 750</td>
-                                                <td>432</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-danger" style="width: 32%"></div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="text-success"><i class="fas fa-arrow-up"></i> 2%</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Revenue Statistics -->
                 <div class="row">
                     <div class="col-12 mb-4">
@@ -653,9 +594,9 @@
                             <div class="card-header">
                                 <h5 class="card-title">Revenue Statistics</h5>
                                 <div class="btn-group-toggle" id="revenueTimeToggle">
-                                    <button class="btn active" data-period="week">Weekly</button>
-                                    <button class="btn" data-period="month">Monthly</button>
-                                    <button class="btn" data-period="year">Yearly</button>
+                                    <button class="btn active" data-period="week">Week</button>
+                                    <button class="btn" data-period="month">Month</button>
+                                    <button class="btn" data-period="year">Year</button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -666,312 +607,11 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Top Routes -->
-                <div class="row">
-                    <div class="col-12 mb-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Top Performing Routes</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Route</th>
-                                                <th>Departure</th>
-                                                <th>Arrival</th>
-                                                <th>Tickets Sold</th>
-                                                <th>Revenue</th>
-                                                <th>Occupancy Rate</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>RT-1001</td>
-                                                <td>Hanoi</td>
-                                                <td>Ho Chi Minh City</td>
-                                                <td>1,245</td>
-                                                <td>$45,678</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-primary" style="width: 92%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>RT-1002</td>
-                                                <td>Da Nang</td>
-                                                <td>Hue</td>
-                                                <td>987</td>
-                                                <td>$32,456</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-success" style="width: 85%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>RT-1003</td>
-                                                <td>Ho Chi Minh City</td>
-                                                <td>Nha Trang</td>
-                                                <td>876</td>
-                                                <td>$28,765</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-warning" style="width: 78%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>RT-1004</td>
-                                                <td>Hanoi</td>
-                                                <td>Hai Phong</td>
-                                                <td>654</td>
-                                                <td>$21,543</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-info" style="width: 65%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>RT-1005</td>
-                                                <td>Vinh</td>
-                                                <td>Thanh Hoa</td>
-                                                <td>432</td>
-                                                <td>$15,432</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-danger" style="width: 52%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </main>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            // Customer Statistics Chart
-            const customerCtx = document.getElementById('customerChart').getContext('2d');
-            const customerChart = new Chart(customerCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{
-                            label: 'Customers',
-                            data: [320, 345, 385, 410, 450, 480, 520, 550, 590, 620, 670, 720],
-                            borderColor: '#4361ee',
-                            backgroundColor: 'rgba(67, 97, 238, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                drawBorder: false
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Demographics Chart
-            const demographicsCtx = document.getElementById('demographicsChart').getContext('2d');
-            const demographicsChart = new Chart(demographicsCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Adults', 'Seniors', 'Students', 'Children'],
-                    datasets: [{
-                            data: [45, 20, 25, 10],
-                            backgroundColor: [
-                                '#4361ee',
-                                '#3a0ca3',
-                                '#7209b7',
-                                '#f72585'
-                            ],
-                            borderWidth: 0
-                        }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    },
-                    cutout: '70%'
-                }
-            });
-
-            // Train Model Chart
-            const trainModelCtx = document.getElementById('trainModelChart').getContext('2d');
-            const trainModelChart = new Chart(trainModelCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Express 2000', 'Bullet X500', 'Commuter 350', 'Metro 100', 'Cargo 750'],
-                    datasets: [{
-                            label: 'Customers',
-                            data: [1245, 987, 876, 654, 432],
-                            backgroundColor: [
-                                '#4361ee',
-                                '#2a9d8f',
-                                '#ff9f1c',
-                                '#4cc9f0',
-                                '#e63946'
-                            ],
-                            borderWidth: 0,
-                            borderRadius: 4
-                        }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                drawBorder: false
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Revenue Chart
-            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-            const revenueChart = new Chart(revenueCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                    datasets: [{
-                            label: 'Revenue',
-                            data: [45678, 52456, 48765, 56789],
-                            borderColor: '#2a9d8f',
-                            backgroundColor: 'rgba(42, 157, 143, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                drawBorder: false
-                            },
-                            ticks: {
-                                callback: function (value) {
-                                    return '$' + value.toLocaleString();
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Toggle buttons for customer statistics
-            document.querySelectorAll('#customerTimeToggle .btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    document.querySelectorAll('#customerTimeToggle .btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    this.classList.add('active');
-
-                    const period = this.getAttribute('data-period');
-                    let labels, data;
-
-                    if (period === 'day') {
-                        labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-                        data = [42, 38, 45, 50, 55, 65, 60];
-                    } else if (period === 'week') {
-                        labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                        data = [180, 195, 210, 225];
-                    } else if (period === 'month') {
-                        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                        data = [320, 345, 385, 410, 450, 480, 520, 550, 590, 620, 670, 720];
-                    }
-
-                    customerChart.data.labels = labels;
-                    customerChart.data.datasets[0].data = data;
-                    customerChart.update();
-                });
-            });
-
-            // Toggle buttons for revenue statistics
-            document.querySelectorAll('#revenueTimeToggle .btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    document.querySelectorAll('#revenueTimeToggle .btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    this.classList.add('active');
-
-                    const period = this.getAttribute('data-period');
-                    let labels, data;
-
-                    if (period === 'week') {
-                        labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                        data = [45678, 52456, 48765, 56789];
-                    } else if (period === 'month') {
-                        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                        data = [42000, 45000, 48000, 52000, 56000, 60000, 65000, 68000, 72000, 75000, 78000, 82000];
-                    } else if (period === 'year') {
-                        labels = ['2019', '2020', '2021', '2022', '2023'];
-                        data = [450000, 520000, 580000, 650000, 720000];
-                    }
-
-                    revenueChart.data.labels = labels;
-                    revenueChart.data.datasets[0].data = data;
-                    revenueChart.update();
-                });
-            });
-        </script>
+        <script src="js/SellerDashboard.js"></script>
     </body>
 </html>
 

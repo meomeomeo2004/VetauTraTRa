@@ -28,17 +28,17 @@ public class RefundDAO extends DBContext {
         try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Refund refund = new Refund(
-                    rs.getInt("id"),
-                    rs.getInt("status"),
-                    rs.getInt("userId"),
-                    (Integer) rs.getObject("staffId"),
-                    rs.getInt("ticketId"),
-                    rs.getString("userBankName"),
-                    rs.getString("userBankNumber"),
-                    rs.getString("userBankAccountName"),
-                    rs.getTimestamp("created_at").toLocalDateTime(),
-                    rs.getTimestamp("handle_time") != null ? rs.getTimestamp("handle_time").toLocalDateTime() : null,
-                    null
+                        rs.getInt("id"),
+                        rs.getInt("status"),
+                        rs.getInt("userId"),
+                        (Integer) rs.getObject("staffId"),
+                        rs.getInt("ticketId"),
+                        rs.getString("userBankName"),
+                        rs.getString("userBankNumber"),
+                        rs.getString("userBankAccountName"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getTimestamp("handle_time") != null ? rs.getTimestamp("handle_time").toLocalDateTime() : null,
+                        null
                 );
                 refunds.add(refund);
             }
@@ -56,17 +56,17 @@ public class RefundDAO extends DBContext {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Refund(
-                        rs.getInt("id"),
-                        rs.getInt("status"),
-                        rs.getInt("userId"),
-                        (Integer) rs.getObject("staffId"),
-                        rs.getInt("ticketId"),
-                        rs.getString("userBankName"),
-                        rs.getString("userBankNumber"),
-                        rs.getString("userBankAccountName"),
-                        rs.getTimestamp("created_at").toLocalDateTime(),
-                        rs.getTimestamp("handle_time") != null ? rs.getTimestamp("handle_time").toLocalDateTime() : null,
-                        null
+                            rs.getInt("id"),
+                            rs.getInt("status"),
+                            rs.getInt("userId"),
+                            (Integer) rs.getObject("staffId"),
+                            rs.getInt("ticketId"),
+                            rs.getString("userBankName"),
+                            rs.getString("userBankNumber"),
+                            rs.getString("userBankAccountName"),
+                            rs.getTimestamp("created_at").toLocalDateTime(),
+                            rs.getTimestamp("handle_time") != null ? rs.getTimestamp("handle_time").toLocalDateTime() : null,
+                            null
                     );
                 }
             }
@@ -82,13 +82,13 @@ public class RefundDAO extends DBContext {
             stmt.setInt(1, staffId);  // Set the staffId parameter
             stmt.setInt(2, refundId);  // Set the refundId parameter
             int rowsAffected = stmt.executeUpdate();
+            DAOforAdmin dao = new DAOforAdmin();
+            dao.recordChange("Refunded a ticket", staffId, "staff");
             return rowsAffected > 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        DAOforAdmin dao = new DAOforAdmin();
-        dao.recordChange("Refunded a ticket", staffId, "staff");
+
         return false;
     }
 
