@@ -256,7 +256,7 @@
                                 <div class="cardcard saleChart" style="background: #dc3545" onclick="selectCard(this)">
                                     <p class="mb-1">Total Sales</p>
                                     <div class="stat-box">
-                                        <h3 class="auto-resize-text">${requestScope.sale}$</h3>
+                                        <h3 class="auto-resize-text">${requestScope.sale}K $</h3>
                                         <span class="stat-icon green">
                                             <c:choose>
                                                 <c:when test="${requestScope.saleSign eq '1'}">
@@ -274,7 +274,7 @@
                                             </c:choose>
                                         </span>
                                     </div>
-                                    <small class="text-truncate">You made <span style="font-weight: bold" class="auto-resize-text">${requestScope.saleDiff}$ ${requestScope.saleSign eq '1' ? 'more' : 'less'}</span> than last month</small>
+                                    <small class="text-truncate">You made <span style="font-weight: bold" class="auto-resize-text">${requestScope.saleDiff}K $ ${requestScope.saleSign eq '1' ? 'more' : 'less'}</span> than last month</small>
                                 </div>
                             </a>
                         </div>

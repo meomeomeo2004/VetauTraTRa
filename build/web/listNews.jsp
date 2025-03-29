@@ -407,6 +407,7 @@
                     </ul>
                 </c:if>
             </div>
+        
     </div>
 
     <%@ include file="components/Footer.jsp" %>
