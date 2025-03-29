@@ -27,7 +27,9 @@ public class VoucherDAO extends DBContext {
     public List<Voucher> getAllVoucher() {
         List<Voucher> vouchers = new ArrayList<>();
         String sql = """
-                    select * from voucher where status = 1""";
+                    SELECT * FROM voucher 
+                    WHERE status = 1 AND quantity > 0
+                     """;
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
@@ -53,7 +55,7 @@ public class VoucherDAO extends DBContext {
         List<Voucher> vouchers = new ArrayList<>();
         String sql = """
                 SELECT * FROM voucher
-                WHERE status = 1
+                WHERE status = 1 AND quantity > 0
                 ORDER BY id DESC
                 LIMIT ?, ?
                 """;
@@ -206,7 +208,7 @@ public class VoucherDAO extends DBContext {
  
     }
     public Voucher getVoucherByCode(String code) {
-        String sql = "SELECT * FROM voucher WHERE code = ? AND status = 1";
+        String sql = "SELECT * FROM voucher WHERE code = ? AND status = 1 AND quantity > 0";
         try (PreparedStatement pre = connection.prepareStatement(sql)) {
             pre.setString(1, code);
             ResultSet rs = pre.executeQuery();
@@ -226,6 +228,20 @@ public class VoucherDAO extends DBContext {
         return null;  // Trả về null nếu không tìm thấy
     }
     
+    
+    public void updatequantity(String vouchercode){
+        String sql = """
+                     UPDATE Voucher
+                     SET quantity = quantity - 1
+                     WHERE code = ? AND quantity > 0;
+                     """;
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setString(1, vouchercode);
+            pre.executeUpdate();           
+        } catch (SQLException ex) {
+         
+        }
+    }
     public static void main(String[] args) {
         VoucherDAO dao = new VoucherDAO();
         dao.deleteVoucher(2, 4);

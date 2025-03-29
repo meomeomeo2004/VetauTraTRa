@@ -13,6 +13,7 @@ import VNPayConfig.Config;
 import dal.CustomerDAO;
 import dal.TicketDAO;
 import dal.TransactionDAO;
+import dal.VoucherDAO;
 import model.Ticket;
 import model.Transaction;
 
@@ -48,7 +49,8 @@ public class TransactionServlet extends HttpServlet {
             if (isSuccess) {
                 Transaction latestTransaction = transactionDAO.getLatestTransactionByCustomerId(customerIdreal);
                 TicketDAO ticketDAO = new TicketDAO();
-
+                VoucherDAO vdao = new VoucherDAO();
+                vdao.updatequantity(voucherCode);
                 boolean ticketsCreated = ticketDAO.createTicketsForTransaction(
                         latestTransaction.getId(),
                         routeId,

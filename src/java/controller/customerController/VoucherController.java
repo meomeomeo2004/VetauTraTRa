@@ -39,7 +39,7 @@ public class VoucherController extends HttpServlet {
         int totalPages = (int) Math.ceil((double) totalVouchers / pageSize);
 
         List<Voucher> vouchers = voucherDAO.getVouchersPaged(page, pageSize);
-
+        
         request.setAttribute("vouchers", vouchers);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
