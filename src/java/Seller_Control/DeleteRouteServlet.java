@@ -9,6 +9,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 
 @WebServlet(name="DeleteRouteServlet", urlPatterns={"/deleteroute"})
@@ -37,10 +39,13 @@ public class DeleteRouteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         SellerDAO dao = new SellerDAO();
+        HttpSession session = request.getSession();
+        User c = (User) session.getAttribute("account");
+        int b = c.getId();
         String rotid = request.getParameter("routeid");
         int a = Integer.parseInt(rotid);
-        dao.deleteRouteByCode(a);
-         response.sendRedirect("viewlistroute");
+        dao.deleteRouteByCode(a,b);
+        response.sendRedirect("viewlistroute");
     } 
 
 

@@ -132,7 +132,7 @@ public class AddRoute extends HttpServlet {
             // Nếu mọi kiểm tra đều OK -> thêm vào DB
             dao.addRoute(trainid, rcode, description,
                     depDateTimeParam, arrDateTimeParam,
-                    depStation, arrStation);
+                    depStation, arrStation,b);
             
             // Chuyển hướng về danh sách routes
             response.sendRedirect("viewlistroute");

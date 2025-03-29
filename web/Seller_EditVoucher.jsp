@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +45,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="Seller_ManageVoucher.jsp" class="nav-link active">
+                        <a href="ViewListVoucher" class="nav-link active">
                             <i class="fas fa-ticket-alt"></i>
                             <span>Voucher</span>
                         </a>
@@ -102,12 +103,12 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Edit Voucher Details</h5>
-                        <a href="Seller_ManageVoucher.jsp" class="btn btn-secondary">
+                        <a href="ViewListVoucher" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-1"></i> Back to Vouchers
                         </a>
                     </div>
                     <div class="card-body">
-                        <form action="UpdateVoucher" method="post" id="editVoucherForm" onsubmit="return validateVoucherForm()">
+                        <form action="VoucherEdit" method="post" id="editVoucherForm" onsubmit="return validateVoucherForm()">
                             <input type="hidden" name="id" value="${voucher.id}">
 
                             <div class="row mb-3">
@@ -118,29 +119,35 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="discountAmount" class="form-label">Discount Amount (%) <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="discountAmount" name="discountAmount" value="${voucher.discountAmount}" min="1" max="100" required>
-                                    <div class="form-text">Percentage discount (1-100)</div>
+                                    <label for="discountAmount" class="form-label">Discount Amount (VND)<span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="discountAmount" name="discountAmount" value="${voucher.discountAmount}" min="10000" step="1000" required required>
+                                    <div class="form-text">Fixed discount amount (minimum 10,000 VND))</div>
                                 </div>
                             </div>
+                            <fmt:formatDate value="${voucher.validFrom}" pattern="yyyy-MM-dd'T'HH:mm" var="validFromFormatted" />
+                            <fmt:formatDate value="${voucher.validTo}" pattern="yyyy-MM-dd'T'HH:mm" var="validToFormatted" />
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="validFrom" class="form-label">Valid From <span class="text-danger">*</span></label>
+                                        <!-- Định dạng validFrom trước khi hiển thị -->
+                                        <fmt:formatDate value="${voucher.validFrom}" pattern="yyyy-MM-dd'T'HH:mm" var="validFromFormatted" />
                                         <input type="datetime-local" class="form-control" id="validFrom" name="validFrom"
-                                               value="${voucher.validFrom}" required>
+                                               value="${validFromFormatted}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="validTo" class="form-label">Valid To</label>
+                                        <!-- Định dạng validTo trước khi hiển thị -->
+                                        <fmt:formatDate value="${voucher.validTo}" pattern="yyyy-MM-dd'T'HH:mm" var="validToFormatted" />
                                         <input type="datetime-local" class="form-control" id="validTo" name="validTo"
-                                               value="${voucher.validTo}">
-                                        <div class="form-text">Leave empty for non-expiring vouchers</div>
+                                               value="${validToFormatted}">
                                     </div>
                                 </div>
                             </div>
+
 
 
                             <div class="row mb-3">
@@ -208,34 +215,6 @@
                                         }
                                     }
 
-                                    // Form validation
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        const form = document.getElementById('editVoucherForm');
-                                        const validFrom = document.getElementById('validFrom');
-                                        const validTo = document.getElementById('validTo');
-
-                                        form.addEventListener('submit', function (event) {
-                                            // Check if validTo is after validFrom
-                                            if (validTo.value && new Date(validTo.value) <= new Date(validFrom.value)) {
-                                                event.preventDefault();
-                                                alert('Valid To date must be after Valid From date');
-                                                validTo.focus();
-                                            }
-                                        });
-
-                                        // Set minimum date for validTo based on validFrom
-                                        validFrom.addEventListener('change', function () {
-                                            if (this.value) {
-                                                validTo.min = this.value;
-                                            }
-                                        });
-
-                                        // Initialize validTo min attribute
-                                        if (validFrom.value) {
-                                            validTo.min = validFrom.value;
-                                        }
-                                    });
-
                                     // Hàm cập nhật min cho validTo dựa trên validFrom
                                     function updateValidToMin() {
                                         let validFromInput = document.getElementById("validFrom");
@@ -244,9 +223,8 @@
                                         if (!validFromInput.value)
                                             return;
 
-                                        // Chuyển validFrom sang đối tượng Date
+                                        // Chuyển validFrom sang đối tượng Date và cộng thêm 1 phút để đảm bảo validTo > validFrom
                                         let validFromDate = new Date(validFromInput.value);
-                                        // Cộng thêm 1 phút để đảm bảo validTo > validFrom (có thể thay đổi nếu cần)
                                         let minValidTo = new Date(validFromDate.getTime() + 1 * 60000);
                                         let minValidToStr = minValidTo.toISOString().slice(0, 16);
                                         validToInput.min = minValidToStr;
@@ -257,11 +235,12 @@
                                         }
                                     }
 
+                                    // Khi cửa sổ load, đặt giá trị min cho validFrom và cập nhật validTo
                                     window.addEventListener("load", function () {
                                         let validFromInput = document.getElementById("validFrom");
                                         let validToInput = document.getElementById("validTo");
 
-                                        // Tính thời gian hiện tại + 1 tiếng
+                                        // Tính thời gian hiện tại + 1 tiếng (lưu ý: nếu bạn cần thay đổi khoảng thời gian này, chỉnh sửa ở đây)
                                         let now = new Date();
                                         now.setHours(now.getHours() + 1);
                                         let minValidFromStr = now.toISOString().slice(0, 16);
@@ -269,7 +248,7 @@
                                         // Đặt giá trị min cho validFrom
                                         validFromInput.min = minValidFromStr;
 
-                                        // Nếu giá trị hiện có của validFrom không hợp lệ thì cập nhật
+                                        // Nếu giá trị hiện có của validFrom không hợp lệ thì cập nhật lại
                                         if (validFromInput.value && validFromInput.value < minValidFromStr) {
                                             validFromInput.value = minValidFromStr;
                                         }
@@ -281,10 +260,47 @@
                                     // Khi validFrom thay đổi thì cập nhật validTo.min
                                     document.getElementById("validFrom").addEventListener("change", updateValidToMin);
 
-                                    // Hàm kiểm tra trước khi submit form
+                                    // Form validation (cho form có id "editVoucherForm")
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const form = document.getElementById('editVoucherForm');
+                                        const validFrom = document.getElementById('validFrom');
+                                        const validTo = document.getElementById('validTo');
+                                        const discountAmount = document.getElementById('discountAmount');
+                                        const quantity = document.getElementById('quantity');
+
+                                        form.addEventListener('submit', function (event) {
+                                            // Kiểm tra validTo phải lớn hơn validFrom
+                                            if (validTo.value && new Date(validTo.value) <= new Date(validFrom.value)) {
+                                                event.preventDefault();
+                                                alert('Valid To date must be after Valid From date');
+                                                validTo.focus();
+                                                return;
+                                            }
+
+                                            // Kiểm tra discount amount: phải ít nhất 10,000 và là số nguyên
+                                            if (discountAmount.value < 10000 || !Number.isInteger(parseFloat(discountAmount.value))) {
+                                                event.preventDefault();
+                                                alert('Discount amount must be at least 10,000 VND and a whole number.');
+                                                discountAmount.focus();
+                                                return;
+                                            }
+
+                                            // Kiểm tra quantity: phải là số nguyên dương (>= 1)
+                                            if (parseInt(quantity.value) < 1 || !Number.isInteger(parseFloat(quantity.value))) {
+                                                event.preventDefault();
+                                                alert('Quantity must be a positive integer.');
+                                                quantity.focus();
+                                                return;
+                                            }
+                                        });
+                                    });
+
+                                    // Hàm kiểm tra trước khi submit form (nếu sử dụng thuộc tính onsubmit)
                                     function validateVoucherForm() {
                                         let validFromInput = document.getElementById("validFrom");
                                         let validToInput = document.getElementById("validTo");
+                                        let discountAmount = document.getElementById("discountAmount");
+                                        let quantity = document.getElementById("quantity");
 
                                         // Kiểm tra validFrom: phải lớn hơn thời gian hiện tại + 1 tiếng
                                         let now = new Date();
@@ -295,16 +311,29 @@
                                             return false;
                                         }
 
-                                        // Nếu validTo có giá trị thì phải lớn hơn validFrom
+                                        // Kiểm tra validTo: nếu có thì phải lớn hơn validFrom
                                         if (validToInput.value) {
                                             if (validToInput.value <= validFromInput.value) {
                                                 alert("Valid To must be later than Valid From!");
                                                 return false;
                                             }
                                         }
+
+                                        // Kiểm tra discount amount
+                                        if (discountAmount.value < 10000 || !Number.isInteger(parseFloat(discountAmount.value))) {
+                                            alert("Discount amount must be at least 10,000 VND and a whole number.");
+                                            return false;
+                                        }
+
+                                        // Kiểm tra quantity
+                                        if (parseInt(quantity.value) < 1 || !Number.isInteger(parseFloat(quantity.value))) {
+                                            alert("Quantity must be a positive integer.");
+                                            return false;
+                                        }
+
                                         return true;
                                     }
-
         </script>
+
     </body>
 </html>
