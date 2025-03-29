@@ -419,8 +419,6 @@
                                                             </c:when>
                                                             <c:otherwise>
                                                                 <span class="status-badge inactive">Inactive</span>
-                                                                <!-- Or use the blue version: -->
-                                                                <!-- <span class="status-badge inactive-blue">Inactive</span> -->
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>
