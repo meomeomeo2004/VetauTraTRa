@@ -10,6 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Refund;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,17 +28,17 @@ public class RefundDAO extends DBContext {
         try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Refund refund = new Refund(
-                        rs.getInt("id"),
-                        rs.getInt("status"),
-                        rs.getInt("userId"),
-                        (Integer) rs.getObject("staffId"),
-                        rs.getInt("ticketId"),
-                        rs.getString("userBankName"),
-                        rs.getString("userBankNumber"),
-                        rs.getString("userBankAccountName"),
-                        rs.getTimestamp("created_at").toLocalDateTime(),
-                        rs.getTimestamp("handle_time") != null ? rs.getTimestamp("handle_time").toLocalDateTime() : null,
-                        null
+                    rs.getInt("id"),
+                    rs.getInt("status"),
+                    rs.getInt("userId"),
+                    (Integer) rs.getObject("staffId"),
+                    rs.getInt("ticketId"),
+                    rs.getString("userBankName"),
+                    rs.getString("userBankNumber"),
+                    rs.getString("userBankAccountName"),
+                    rs.getTimestamp("created_at").toLocalDateTime(),
+                    rs.getTimestamp("handle_time") != null ? rs.getTimestamp("handle_time").toLocalDateTime() : null,
+                    null
                 );
                 refunds.add(refund);
             }
@@ -52,17 +56,17 @@ public class RefundDAO extends DBContext {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Refund(
-                            rs.getInt("id"),
-                            rs.getInt("status"),
-                            rs.getInt("userId"),
-                            (Integer) rs.getObject("staffId"),
-                            rs.getInt("ticketId"),
-                            rs.getString("userBankName"),
-                            rs.getString("userBankNumber"),
-                            rs.getString("userBankAccountName"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            rs.getTimestamp("handle_time") != null ? rs.getTimestamp("handle_time").toLocalDateTime() : null,
-                            null
+                        rs.getInt("id"),
+                        rs.getInt("status"),
+                        rs.getInt("userId"),
+                        (Integer) rs.getObject("staffId"),
+                        rs.getInt("ticketId"),
+                        rs.getString("userBankName"),
+                        rs.getString("userBankNumber"),
+                        rs.getString("userBankAccountName"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getTimestamp("handle_time") != null ? rs.getTimestamp("handle_time").toLocalDateTime() : null,
+                        null
                     );
                 }
             }
@@ -84,4 +88,30 @@ public class RefundDAO extends DBContext {
         }
         return false;
     }
+
+    public int insertRefund(Refund refund) {
+        int n = 0;
+        String sql = """
+        INSERT INTO refund (status, userId, ticketId, userBankName, userBankNumber, userBankAccountName, created_at)
+                VALUES (0, ?, ?, ?, ?, ?, ?)
+    """;
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            int index = 1;
+            pre.setInt(index++, refund.getUserId());
+            pre.setInt(index++, refund.getTicketId());
+            pre.setString(index++, refund.getUserBankName());
+            pre.setString(index++, refund.getUserBankNumber());
+            pre.setString(index++, refund.getUserBankAccountName());
+            pre.setTimestamp(index++, Timestamp.valueOf(refund.getCreatedAt()));
+            n = pre.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(RefundDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return n;
+    }
+
 }

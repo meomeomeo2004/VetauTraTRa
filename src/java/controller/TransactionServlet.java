@@ -63,10 +63,12 @@ public class TransactionServlet extends HttpServlet {
                 request.setAttribute("success", "Payment success!");
                 request.getRequestDispatcher("/transaction.jsp").forward(request, response);
             } else {
-                response.getWriter().println("Lỗi khi lưu giao dịch vào cơ sở dữ liệu!");
+                request.setAttribute("fail", "Payment Failed!");
+                request.getRequestDispatcher("/PayFailed.jsp").forward(request, response);
             }
         } else {
-            response.getWriter().println("Giao dịch thất bại! Mã lỗi: " + vnp_ResponseCode);
+            request.setAttribute("fail", "Payment Failed!");
+            request.getRequestDispatcher("/PayFailed.jsp").forward(request, response);
         }
     }
 

@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Seller;
 
@@ -47,7 +48,6 @@ public class AddTrain extends HttpServlet {
         List<Seller> list = dao.getAllSeller();
         request.setAttribute("listseller", list);
         request.getRequestDispatcher("Manager_AddTrain.jsp").forward(request, response);
-
     }
 
     @Override
@@ -64,7 +64,6 @@ public class AddTrain extends HttpServlet {
 
         // Thêm train và lấy trainId
         int trainId = dao.AddTrain(trainModel, totalSeats, numCabin, owner);
-
         if (trainId > 0) {
             // Lấy dữ liệu các cabin từ form, bao gồm cả cabinPrice
             String[] cabinNames = request.getParameterValues("cabinName");
@@ -85,6 +84,8 @@ public class AddTrain extends HttpServlet {
                     }
                 }
             }
+            HttpSession session = request.getSession();
+            session.setAttribute("message", "Add Train Sucessful");
             response.sendRedirect("listtrain");
         } else {
             request.setAttribute("errorMessage", "Có lỗi xảy ra trong quá trình thêm tàu.");
@@ -94,3 +95,4 @@ public class AddTrain extends HttpServlet {
     }
 
 }
+

@@ -296,7 +296,7 @@
                     <input type="radio" name="paymentMethod" value="vnpay" class="radio-input" checked>
                     <span class="radio-custom"></span>
                     <div class="payment-option-header">
-                        <img src="/placeholder.svg?height=80&width=80" alt="VNPay Logo" class="payment-logo">
+                        <img src="image/paymentMethod/vnpay.png" alt="VNPay Logo" class="payment-logo">
                     </div>
                     <div class="payment-name">VNPay</div>
                     <div class="payment-description">Fast and secure payment with VNPay gateway</div>
@@ -307,7 +307,7 @@
                     <input type="radio" name="paymentMethod" value="vietqr" class="radio-input">
                     <span class="radio-custom"></span>
                     <div class="payment-option-header">
-                        <img src="/placeholder.svg?height=80&width=80" alt="VietQR Logo" class="payment-logo">
+                        <img src="image/paymentMethod/vietqr.png" alt="VietQR Logo" class="payment-logo">
                     </div>
                     <div class="payment-name">VietQR</div>
                     <div class="payment-description">Scan QR code with your banking app</div>

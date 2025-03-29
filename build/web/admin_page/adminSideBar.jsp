@@ -84,12 +84,6 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="fas fa-dollar nli"></i>
-                <span>Revenue Report</span>
-            </a>
-        </li>
-        <li class="nav-item">
             <a href="NewsList" class="nav-link ">
                 <i class="fas fa-paper-plane nli"></i>
                 <span>News Management</span>
@@ -108,7 +102,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="../admin-profile">                
+            <a class="nav-link" href="AdminViewProfile">                
                 <i class="fas fa-user-circle nli"></i>
                 <span>Profile</span>
             </a>

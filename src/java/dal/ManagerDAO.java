@@ -137,7 +137,7 @@ public class ManagerDAO extends DBContext {
         return list;
     }
 
-    public int AddTrain(String model, int totalseat, int numcabin, int owner ) {
+    public int AddTrain(String model, int totalseat, int numcabin, int owner) {
         String sql = """
                  INSERT INTO Train (train_model, total_seats,numcabin,status, owner)
                  VALUES (?,?,?,4,?)

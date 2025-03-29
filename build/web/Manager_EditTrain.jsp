@@ -476,7 +476,7 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-users"></i>
-                        <span>Manage Users</span>
+                        <span>Manage Seller</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -488,25 +488,13 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-route"></i>
-                        <span>Manage Routes</span>
+                        <span>Manage Station</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="manager-profile" class="nav-link">
                         <i class="fas fa-user-circle"></i>
                         <span>Account</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Reports</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
                     </a>
                 </li>
             </ul>
