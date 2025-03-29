@@ -187,6 +187,122 @@
                 color: white;
             }
 
+            /* Pagination Styling */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                margin: 25px 0;
+            }
+
+            .pagination-list {
+                display: flex;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .pagination-list li {
+                margin: 0;
+                border-right: 1px solid rgba(0, 0, 0, 0.05);
+            }
+
+            .pagination-list li:last-child {
+                border-right: none;
+            }
+
+            .pagination-list li button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 40px;
+                height: 40px;
+                padding: 0 15px;
+                background-color: white;
+                color: var(--navy);
+                border: none;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .pagination-list li:not(.active) button:hover {
+                background-color: rgba(255, 190, 11, 0.15);
+            }
+
+            .pagination-list li.active button {
+                background-color: var(--navy);
+                color: white;
+                position: relative;
+            }
+
+            .pagination-list li.active button::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background-color: var(--yellow);
+            }
+            /* Filter Form Styling */
+            .filter-form {
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                border-left: 4px solid var(--navy);
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                align-items: center;
+            }
+
+            .filter-form input[type="text"],
+            .filter-form input[type="date"] {
+                padding: 10px 15px;
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+                font-size: 14px;
+                flex: 1;
+                min-width: 200px;
+                transition: all 0.3s ease;
+            }
+
+            .filter-form input[type="text"]:focus,
+            .filter-form input[type="date"]:focus {
+                border-color: var(--navy);
+                box-shadow: 0 0 0 3px rgba(34, 87, 122, 0.1);
+                outline: none;
+            }
+
+            .filter-form button {
+                background-color: var(--yellow);
+                color: var(--navy-dark);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                min-width: 100px;
+            }
+
+            .filter-form button:hover {
+                background-color: var(--yellow-dark);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(255, 190, 11, 0.3);
+            }
+
+            .filter-form button:active {
+                transform: translateY(0);
+            }
+
+
+
             /* Responsive adjustments */
             @media (max-width: 768px) {
                 .news-hero {
@@ -203,6 +319,19 @@
 
                 .news-item h3 {
                     font-size: 20px;
+                }
+                .filter-form {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+
+                .filter-form input[type="text"],
+                .filter-form input[type="date"] {
+                    width: 100%;
+                }
+
+                .filter-form button {
+                    width: 100%;
                 }
             }
         </style>
@@ -229,40 +358,56 @@
 
     <!-- News List Section -->
     <div class="news-container mt-5">
-        <c:if test="${not empty allNewsList}">
-            <c:forEach var="news" items="${allNewsList}">
-                <div class="news-item">
-                    <h3>${news.title}</h3>
-                    <p class="news-date">
-                        <i class="fa fa-calendar"></i>
-                        <fmt:formatDate value="${news.createdAt}" pattern="MMMM d, yyyy" />
-                    </p>
-                    <div class="news-content">
-                        ${fn:substring(news.content, 0, 200)}...
+        <form class="filter-form" action="list-news" method="get" >
+            <input type="text" name="title" placeholder="Search by title" value="${title}">
+            <input type="date" name="createdAt" value="${createdAt}">
+            <button type="submit">Filter</button>
+
+            <c:if test="${not empty allNewsList}">
+                <c:forEach var="news" items="${allNewsList}">
+                    <div class="news-item">
+                        <h3>${news.title}</h3>
+                        <p class="news-date">
+                            <i class="fa fa-calendar"></i>
+                            <fmt:formatDate value="${news.createdAt}" pattern="MMMM d, yyyy" />
+                        </p>
+                        <div class="news-content">
+                            ${fn:substring(news.content, 0, 200)}...
+                        </div>
+                        <a href="news?id=${news.id}" class="btn-read-more">
+                            Read More <i class="fa fa-arrow-right"></i>
+                        </a>
                     </div>
-                    <a href="news?id=${news.id}" class="btn-read-more">
-                        Read More <i class="fa fa-arrow-right"></i>
-                    </a>
-                </div>
-            </c:forEach>
-        </c:if>
-        <c:if test="${empty allNewsList}">
-            <div class="empty-state">
-                <i class="fa fa-newspaper-o"></i>
-                <p>No news available at the moment. Check back soon for updates!</p>
-            </div>
-        </c:if>
-        <div class="pagination">
-            <c:if test="${totalPages > 1}">
-                <ul class="pagination-list">
-                    <c:forEach var="i" begin="1" end="${totalPages}">
-                        <li class="${i == currentPage ? 'active' : ''}">
-                            <a href="list-news?page=${i}">${i}</a>
-                        </li>
-                    </c:forEach>
-                </ul>
+                </c:forEach>
             </c:if>
-        </div>
+            <c:if test="${empty allNewsList}">
+                <div class="empty-state">
+                    <i class="fa fa-newspaper-o"></i>
+                    <p>No news available at the moment. Check back soon for updates!</p>
+                </div>
+            </c:if>
+            <div class="pagination">
+                <c:if test="${totalPages > 1}">
+                    <ul class="pagination-list">
+                        <li class="${currentPage == 1 ? 'disabled' : ''}">
+                            <button type="submit" name="page" value="${currentPage - 1}" ${currentPage == 1 ? 'disabled' : ''}>
+                                Previous
+                            </button>
+                        </li>
+                        <li class="active">
+                            <button type="submit" disabled>
+                                Page ${currentPage} of ${totalPages}
+                            </button>
+                        </li>
+                        <li class="${currentPage == totalPages ? 'disabled' : ''}">
+                            <button type="submit" name="page" value="${currentPage + 1}" ${currentPage == totalPages ? 'disabled' : ''}>
+                                Next
+                            </button>
+                        </li>
+                    </ul>
+                </c:if>
+            </div>
+        </form>
     </div>
 
     <%@ include file="components/Footer.jsp" %>
