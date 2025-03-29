@@ -1,5 +1,6 @@
 package controller;
 
+import dal.VoucherDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -8,11 +9,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.User;
+import model.Voucher;
 
 @WebServlet(name = "ConfirmBookingServlet", urlPatterns = {"/ConfirmBookingServlet"})
 public class ConfirmBookingServlet extends HttpServlet {
@@ -51,6 +55,9 @@ public class ConfirmBookingServlet extends HttpServlet {
         String[] luggageOptions = request.getParameterValues("luggageOption");
         String amount = request.getParameter("totalAmount");
         String numSeats = request.getParameter("numSeats");
+        String voucherCode = request.getParameter("voucherCode");
+        VoucherDAO vdao = new VoucherDAO();
+
         List<Map<String, Object>> transactions = new ArrayList<>();
         if (seatNames != null) {
             for (int i = 0; i < seatNames.length; i++) {
@@ -66,8 +73,31 @@ public class ConfirmBookingServlet extends HttpServlet {
                 transactions.add(transaction);
             }
         }
+
+        if (voucherCode != null) {
+            Voucher voucher = vdao.getVoucherByCode(voucherCode);
+            // Kiểm tra nếu voucher là null (không tìm thấy) hoặc số lượng bằng 0
+            if (voucher.getQuantity() == 0) {
+                request.setAttribute("amount", amount);
+                request.setAttribute("novoucher", "Voucher has expired");
+            } else if (voucher == null) {
+                request.setAttribute("amount", amount);
+                request.setAttribute("novoucher", "Voucher no exist!");
+            } else {
+                try {
+                    BigDecimal amountBD = new BigDecimal(amount);
+                    amountBD = amountBD.subtract(voucher.getDiscountAmount());
+                    BigDecimal roundedAmount = amountBD.setScale(0, RoundingMode.DOWN);
+                    String amountStr = roundedAmount.toString();
+                    request.setAttribute("amount", amountStr);
+                    session.setAttribute("voucherCode", voucherCode);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         request.getSession().setAttribute("transactions", transactions);
-        request.setAttribute("amount", amount);
         request.setAttribute("numSeats", numSeats);
         request.setAttribute("userId", userId);
         request.getRequestDispatcher("/ConfirmBooking.jsp").forward(request, response);

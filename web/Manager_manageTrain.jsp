@@ -12,6 +12,18 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/managetraincss.css">
+        <style>
+            .custom-alert {
+                background-color: #fff;
+                transition: all 0.3s ease;
+            }
+            .custom-alert:hover {
+                transform: translateY(-2px);
+            }
+            .btn-close:focus {
+                box-shadow: none;
+            }
+        </style>
     </head>
     <body>
         <aside class="sidebar">
@@ -50,12 +62,31 @@
                         <span>Account</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                        <a href="./logout" class="nav-link text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                </li>
             </ul>
         </aside>
 
         <main class="content">
             <h2 class="page-title"><i class="fas fa-subway"></i> Train Management</h2>
-            <h3><c:if test="${message != null}">${message}</c:if></h3>
+            <c:if test="${not empty message}">
+                    <div class="alert custom-alert shadow-sm border-start border-success border-4 rounded-3 p-3 mb-4" id="difAlert">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-3">
+                                <i class="fas fa-check-circle text-success fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="fw-bold mb-1 text-success">Success</h5>
+                                <p class="mb-0 text-secondary">${message}</p>
+                            </div>
+                            <button type="button" class="btn-close" onclick="document.getElementById('difAlert').remove()" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </c:if>
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Train Fleet</h5>
@@ -257,6 +288,16 @@
         </main>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function closeSuccessAlert() {
+                    document.getElementById("successAlert").style.display = "none";
+                }
+                setTimeout(() => {
+                    const successAlert = document.getElementById("successAlert");
+                    if (successAlert)
+                        successAlert.style.display = "none";
+                }, 3000);
+        </script>        
     </body>
 </html>
 

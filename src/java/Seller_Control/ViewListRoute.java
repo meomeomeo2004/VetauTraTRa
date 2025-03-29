@@ -48,11 +48,32 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         int b = a.getId();
         List<Route> list = dao.getListRouteBySeller(b);
         request.setAttribute("listroute", list);
-        String editerror = (String) request.getAttribute("erro");
+        
+        String editerror = (String) session.getAttribute("erro");
+        String delete = (String) session.getAttribute("deletesucess");
+        String update = (String) session.getAttribute("update");
+        String updatestatus = (String) session.getAttribute("updatestatus");
+        String addsuces = (String) session.getAttribute("addsuces");
+        session.removeAttribute("erro");
+        session.removeAttribute("deletesucess");
+        session.removeAttribute("update");
+        session.removeAttribute("updatestatus");
+        session.removeAttribute("addsuces");
         if (editerror != null) {
         request.setAttribute("editerror", editerror);
         }
-
+        if (delete != null) {
+        request.setAttribute("deletesuc", delete);
+        }
+        if (update != null) {
+        request.setAttribute("update", update);
+        }
+        if (updatestatus != null) {
+        request.setAttribute("updatestatus", updatestatus);
+        }
+        if (addsuces != null) {
+        request.setAttribute("addsuces", addsuces);
+        }
         request.getRequestDispatcher("manageroute.jsp").forward(request, response);
 }
 

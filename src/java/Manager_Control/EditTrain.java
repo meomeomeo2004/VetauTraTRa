@@ -122,6 +122,7 @@ public class EditTrain extends HttpServlet {
         }
         
         if (allInserted) {
+            session.setAttribute("message", "Edit Train Sucessful");
             response.sendRedirect("listtrain");
         } else {
             request.setAttribute("errorMessage", "Cập nhật cabin/seat thất bại, vui lòng thử lại.");

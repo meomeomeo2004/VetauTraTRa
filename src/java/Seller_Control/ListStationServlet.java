@@ -56,6 +56,22 @@ public class ListStationServlet extends HttpServlet {
         List<Train> listT = dao.getListTrainBySellerId(b);
         request.setAttribute("liststation", listS);
         request.setAttribute("listtrain", listT);
+        String mess = (String) session.getAttribute("error");
+        String messa = (String) session.getAttribute("dif");
+        String exist = (String) session.getAttribute("exist");
+        session.removeAttribute("error");
+        session.removeAttribute("dif");
+        session.removeAttribute("exist");
+        
+        if(mess != null){
+            request.setAttribute("abc", mess);
+        }
+        if(messa != null){
+            request.setAttribute("differ", messa);
+        }
+        if(exist != null){
+            request.setAttribute("exist", exist);
+        }
         request.getRequestDispatcher("addroute.jsp").forward(request, response);
     } 
 

@@ -30,7 +30,7 @@ public class StatusUpdaterListener implements ServletContextListener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 0, 1, TimeUnit.MINUTES); // Chạy mỗi 1 phút
+        },  0, 10, TimeUnit.MINUTES); // Chạy mỗi 1 phút
     }
 
     @Override

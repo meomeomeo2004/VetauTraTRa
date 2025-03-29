@@ -34,14 +34,32 @@ public class ListNews extends HttpServlet {
             }
         }
 
-        int totalNewsCount = newsDAO.getTotalNewsCount();
-        int totalPages = (int) Math.ceil((double) totalNewsCount / pageSize);
+        String title = request.getParameter("title");
+        String createdAt = request.getParameter("createdAt");
 
-        List<News> newsList = newsDAO.getNewsPaged(page, pageSize);
+        List<News> newsList;
+        int totalNewsCount;
+
+        if ((title != null && !title.trim().isEmpty()) || (createdAt != null && !createdAt.trim().isEmpty())) {
+            totalNewsCount = newsDAO.getFilteredNewsCount(title, createdAt);
+            int totalPages = (int) Math.ceil((double) totalNewsCount / pageSize);
+
+            newsList = newsDAO.filterNews(title, createdAt, page, pageSize);
+
+            request.setAttribute("title", title);
+            request.setAttribute("createdAt", createdAt);
+            request.setAttribute("totalPages", totalPages);
+        } else {
+            totalNewsCount = newsDAO.getTotalNewsCount();
+            int totalPages = (int) Math.ceil((double) totalNewsCount / pageSize);
+
+            newsList = newsDAO.getNewsPaged(page, pageSize);
+            request.setAttribute("totalPages", totalPages);
+        }
 
         request.setAttribute("allNewsList", newsList);
         request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("totalNewsCount", totalNewsCount);
 
         request.getRequestDispatcher("listNews.jsp").forward(request, response);
     }

@@ -1,11 +1,7 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <!doctype html>
 <html lang="en">
     <head>
@@ -14,356 +10,479 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="image/favicon.png" type="image/png">
         <title>TraTra</title>
-        <!-- Bootstrap CSS -->
+
+        <!-- Include your existing styles -->
         <%@include file="components/Style.jsp" %>
+
+        <!-- Include the new modern styles -->
+        <link rel="stylesheet" href="css/modern-style.css">
+
+        <!-- Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+        <!-- Flatpickr for date picking -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     </head>
     <body>
         <!--================Header Area =================-->
         <%@include file="components/Header.jsp" %>
         <!--================Header Area =================-->
 
-        <!--================Banner Area =================-->
-        <section class="banner_area">
-            <div class="booking_table d_flex align-items-center">
-                <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
-                <div class="container">
-                    <div class="banner_content text-center">
-                        <h6>Live to experience</h6>
-                        <h2>Pack up and go</h2>
-                        <p>At least once in your life, you must see the place you want to see and go to the place you want to go<br> 
-                            See through the train window and go by train gears.</p>
-                        <a href="#" class="btn theme_btn button_hover">Get Started</a>
-                    </div>
+        <!--================Hero Section =================-->
+        <section class="hero-section">
+            <div class="hero-background" style="background-image: url('image/banner_bg.jpg');"></div>
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <h6 class="hero-subtitle">LIVE TO EXPERIENCE</h6>
+                    <h2 class="hero-title">Pack up and go</h2>
+                    <p class="hero-description">
+                        At least once in your life, you must see the place you want to see and go to the place you want to go.
+                        See through the train window and go by train gears.
+                    </p>
+                    <a href="#" class="btn-primary">Get Started</a>
                 </div>
             </div>
-            <form action="Search" method="post" onsubmit="updateHiddenInputs()">
-            <div class="hotel_booking_area position">
-                <div class="container">
-                    <div class="hotel_booking_table">
-                        <div class="col-md-3">
-                            <h2>Search<br> Ticket</h2>
+        </section>
+
+        <!--================Search Form Section =================-->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-card">
+                    <div class="search-grid">
+                        <div class="search-sidebar">
+                            <h2 class="search-title">SEARCH TICKET</h2>
+                            <p class="search-subtitle">Find your perfect journey</p>
                         </div>
-                        <div class="col-md-9">
-                            <div class="boking_table">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="book_tabel_item">
-                                            <div class="input-group">
-                                                <input type="text" id="departure_station" class="form-control" placeholder="Departure station">
-                                                    <input type="hidden" name="departureStation" id="departureStationHidden">
-                                                </div>
-                                                <div class="input-group">
-                                                    <input type="text" id="arrival_station" class="form-control" placeholder="Arrival station">
-                                                    <input type="hidden" name="arrivalStation" id="arrivalStationHidden">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="book_tabel_item">
-                                                <div class="form-group">
-                                                    <div class='input-group date' id='datetimepicker11'>
-                                                        <input type='text' class="form-control" id="departure_date" placeholder="Departure Date">
-                                                        <input type="hidden" name="departureDate" id="departureDateHidden">
-                                                        <span class="input-group-addon">
-                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class='input-group date' id='datetimepicker1'>
-                                                        <input type='text' class="form-control" id="arrival_date" placeholder="Arrival Date">
-                                                        <input type="hidden" name="arrivalDate" id="arrivalDateHidden">
-                                                        <span class="input-group-addon">
-                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="book_tabel_item">
-                                                <div class="input-group">
-                                                    <select id="trip_type" class="wide">
-                                                        <option data-display="Type">Type</option>
-                                                        <option value="oneWay">One way</option>
-                                                        <option value="roundTrip">Round trip</option>
-                                                    </select>
-                                                    <input type="hidden" name="tripType" id="tripTypeHidden">
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="book_now_btn button_hover mt-3">Search</button>
-                                            </div>
+
+                        <div class="search-form-container">
+                            <form action="Search" method="post" id="ticketSearchForm">
+                                <c:if test="${not empty requestScope.error}">
+                                    <div class="error-message">
+                                        <c:out value="${requestScope.error}"/>
+                                    </div>
+                                </c:if>
+
+                                <div class="form-grid">
+                                    <!-- Departure Station -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="departure_station">Departure Station</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-map-marker-alt input-icon"></i>
+                                            <input type="text" id="departure_station" class="form-control" placeholder="Enter departure station" required>
+                                            <input type="hidden" name="departureStation" id="departureStationHidden">
                                         </div>
                                     </div>
+
+                                    <!-- Arrival Station -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="arrival_station">Arrival Station</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-map-marker-alt input-icon"></i>
+                                            <input type="text" id="arrival_station" class="form-control" placeholder="Enter arrival station" required>
+                                            <input type="hidden" name="arrivalStation" id="arrivalStationHidden">
+                                        </div>
+                                    </div>
+
+                                    <!-- Trip Type -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="trip_type">Trip Type</label>
+                                        <select id="trip_type" class="form-select">
+                                            <option value="" disabled selected>Select trip type</option>
+                                            <option value="oneWay">One way</option>
+                                            <option value="roundTrip">Round trip</option>
+                                        </select>
+                                        <input type="hidden" name="tripType" id="tripTypeHidden">
+                                    </div>
+
+                                    <!-- Departure Date -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="departure_date">Departure Date</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-calendar input-icon"></i>
+                                            <input type="text" id="departure_date" class="form-control" placeholder="Select departure date">
+                                            <input type="hidden" name="departureDate" id="departureDateHidden">
+                                        </div>
+                                    </div>
+
+                                    <!-- Return Date -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="arrival_date">Return Date</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-calendar input-icon"></i>
+                                            <input type="text" id="arrival_date" class="form-control" placeholder="Select return date">
+                                            <input type="hidden" name="arrivalDate" id="arrivalDateHidden">
+                                        </div>
+                                    </div>
+
+                                    <!-- Search Button -->
+                                    <div class="form-group">
+                                        <label class="form-label" style="visibility: hidden;">Search</label>
+                                        <button type="submit" class="btn-search">SEARCH</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </section>
-        <!--================Banner Area =================-->
 
-        <!--================ Accomodation Area  =================-->
-        <section class="accomodation_area section_gap">
+        <!--================Destinations Section =================-->
+        <section class="section">
             <div class="container">
-                <div class="section_title text-center">
-                    <h2 class="title_color">Hotel Accomodation</h2>
-                    <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, </p>
+                <div class="section-title-container">
+                    <h2 class="section-title">Popular Destinations</h2>
+                    <p class="section-description">
+                        Discover the most popular train destinations across the country. 
+                        Experience breathtaking views and unforgettable journeys.
+                    </p>
                 </div>
-                <div class="row mb_30">
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="accomodation_item text-center">
-                            <div class="hotel_img">
-                                <img src="image/room1.jpg" alt="">
-                                <a href="#" class="btn theme_btn button_hover">Book Now</a>
-                            </div>
-                            <a href="#"><h4 class="sec_h4">Double Deluxe Room</h4></a>
-                            <h5>$250<small>/night</small></h5>
+
+                <div class="destinations-grid">
+                    <!-- Destination 1 -->
+                    <div class="destination-card">
+                        <img src="image/destinations/hanoi.jpg" alt="Hanoi" class="destination-image">
+                        <div class="destination-overlay">
+                            <h3 class="destination-name">Hanoi</h3>
+                            <a href="#" class="btn-outline">Explore</a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="accomodation_item text-center">
-                            <div class="hotel_img">
-                                <img src="image/room2.jpg" alt="">
-                                <a href="#" class="btn theme_btn button_hover">Book Now</a>
-                            </div>
-                            <a href="#"><h4 class="sec_h4">Single Deluxe Room</h4></a>
-                            <h5>$200<small>/night</small></h5>
+
+                    <!-- Destination 2 -->
+                    <div class="destination-card">
+                        <img src="image/destinations/ho-chi-minh.jpg" alt="Ho Chi Minh City" class="destination-image">
+                        <div class="destination-overlay">
+                            <h3 class="destination-name">Ho Chi Minh City</h3>
+                            <a href="#" class="btn-outline">Explore</a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="accomodation_item text-center">
-                            <div class="hotel_img">
-                                <img src="image/room3.jpg" alt="">
-                                <a href="#" class="btn theme_btn button_hover">Book Now</a>
-                            </div>
-                            <a href="#"><h4 class="sec_h4">Honeymoon Suit</h4></a>
-                            <h5>$750<small>/night</small></h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="accomodation_item text-center">
-                            <div class="hotel_img">
-                                <img src="image/room4.jpg" alt="">
-                                <a href="#" class="btn theme_btn button_hover">Book Now</a>
-                            </div>
-                            <a href="#"><h4 class="sec_h4">Economy Double</h4></a>
-                            <h5>$200<small>/night</small></h5>
+
+                    <!-- Destination 3 -->
+                    <div class="destination-card">
+                        <img src="image/destinations/da-nang.jpg" alt="Da Nang" class="destination-image">
+                        <div class="destination-overlay">
+                            <h3 class="destination-name">Da Nang</h3>
+                            <a href="#" class="btn-outline">Explore</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <!--================ Accomodation Area  =================-->
 
-        <!--================ Facilities Area  =================-->
-        <section class="facilities_area section_gap">
-            <div class="overlay bg-parallax" data-stellar-ratio="0.8" data-stellar-vertical-offset="0" data-background="">
-            </div>
+        <!--================Features Section =================-->
+        <section class="features-section">
             <div class="container">
-                <div class="section_title text-center">
-                    <h2 class="title_w">Royal Facilities</h2>
-                    <p>Who are in extremely love with eco friendly system.</p>
+                <div class="section-title-container">
+                    <h2 class="section-title">Why Choose TraTra</h2>
+                    <p class="section-description">
+                        We provide the best train travel experience with comfortable seats, 
+                        scenic routes, and excellent service.
+                    </p>
                 </div>
-                <div class="row mb_30">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="facilities_item">
-                            <h4 class="sec_h4"><i class="lnr lnr-dinner"></i>Restaurant</h4>
-                            <p>Usage of the Internet is becoming more common due to rapid advancement of technology and power.</p>
+
+                <div class="features-grid">
+                    <!-- Feature 1 -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt fa-3x"></i>
                         </div>
+                        <h3 class="feature-title">Easy Booking</h3>
+                        <p class="feature-description">Simple and fast online booking process</p>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="facilities_item">
-                            <h4 class="sec_h4"><i class="lnr lnr-bicycle"></i>Sports CLub</h4>
-                            <p>Usage of the Internet is becoming more common due to rapid advancement of technology and power.</p>
+
+                    <!-- Feature 2 -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-train fa-3x"></i>
                         </div>
+                        <h3 class="feature-title">Best Prices</h3>
+                        <p class="feature-description">Competitive prices and regular promotions</p>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="facilities_item">
-                            <h4 class="sec_h4"><i class="lnr lnr-shirt"></i>Swimming Pool</h4>
-                            <p>Usage of the Internet is becoming more common due to rapid advancement of technology and power.</p>
+
+                    <!-- Feature 3 -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset fa-3x"></i>
                         </div>
+                        <h3 class="feature-title">24/7 Support</h3>
+                        <p class="feature-description">Customer support available all day, every day</p>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="facilities_item">
-                            <h4 class="sec_h4"><i class="lnr lnr-car"></i>Rent a Car</h4>
-                            <p>Usage of the Internet is becoming more common due to rapid advancement of technology and power.</p>
+
+                    <!-- Feature 4 -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-couch fa-3x"></i>
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="facilities_item">
-                            <h4 class="sec_h4"><i class="lnr lnr-construction"></i>Gymnesium</h4>
-                            <p>Usage of the Internet is becoming more common due to rapid advancement of technology and power.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="facilities_item">
-                            <h4 class="sec_h4"><i class="lnr lnr-coffee-cup"></i>Bar</h4>
-                            <p>Usage of the Internet is becoming more common due to rapid advancement of technology and power.</p>
-                        </div>
+                        <h3 class="feature-title">Comfortable Travel</h3>
+                        <p class="feature-description">Modern trains with all necessary amenities</p>
                     </div>
                 </div>
             </div>
         </section>
-        <!--================ Facilities Area  =================-->
 
-        <!--================ About History Area  =================-->
-        <section class="about_history_area section_gap">
+        <!--================Footer =================-->
+        <footer class="footer">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-6 d_flex align-items-center">
-                        <div class="about_content ">
-                            <h2 class="title title_color">About Us <br>Our History<br>Mission & Vision</h2>
-                            <p>inappropriate behavior is often laughed off as Ã¢ÂÂboys will be boys,Ã¢ÂÂ women face higher conduct standards especially in the workplace. ThatÃ¢ÂÂs why itÃ¢ÂÂs crucial that, as women, our behavior on the job is beyond reproach. inappropriate behavior is often laughed.</p>
-                            <a href="#" class="button_hover theme_btn_two">Request Custom Price</a>
-                        </div>
+                <div class="footer-grid">
+                    <div>
+                        <h3 class="footer-brand">TraTra</h3>
+                        <p class="footer-description">
+                            Your reliable partner for train travel. Explore the country with comfort and style.
+                        </p>
                     </div>
-                    <div class="col-md-6">
-                        <img class="img-fluid" src="image/about_bg.jpg" alt="img">
+
+                    <div>
+                        <h4 class="footer-heading">Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
                     </div>
+
+                    <div>
+                        <h4 class="footer-heading">Popular Routes</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">Hanoi - Ho Chi Minh</a></li>
+                            <li><a href="#">Hanoi - Da Nang</a></li>
+                            <li><a href="#">Ho Chi Minh - Nha Trang</a></li>
+                            <li><a href="#">Da Nang - Hue</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="footer-heading">Contact Us</h4>
+                        <address class="footer-address">
+                            <p>123 Train Street</p>
+                            <p>Hanoi, Vietnam</p>
+                            <p>Email: info@tratra.com</p>
+                            <p>Phone: +84 123 456 789</p>
+                        </address>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>&copy; <%= new java.util.Date().getYear() + 1900 %> TraTra. All rights reserved.</p>
                 </div>
             </div>
-        </section>
-        <!--================ About History Area  =================-->
+        </footer>
 
-        <!--================ Testimonial Area  =================-->
-        <section class="testimonial_area section_gap">
-            <div class="container">
-                <div class="section_title text-center">
-                    <h2 class="title_color">Testimonial from our Clients</h2>
-                    <p>The French Revolution constituted for the conscience of the dominant aristocratic class a fall from </p>
-                </div>
-                <div class="testimonial_slider owl-carousel">
-                    <div class="media testimonial_item">
-                        <img class="rounded-circle" src="image/testtimonial-1.jpg" alt="">
-                        <div class="media-body">
-                            <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                            <a href="#"><h4 class="sec_h4">Fanny Spencer</h4></a>
-                            <div class="star">
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star-half-o"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media testimonial_item">
-                        <img class="rounded-circle" src="image/testtimonial-1.jpg" alt="">
-                        <div class="media-body">
-                            <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                            <a href="#"><h4 class="sec_h4">Fanny Spencer</h4></a>
-                            <div class="star">
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star-half-o"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media testimonial_item">
-                        <img class="rounded-circle" src="image/testtimonial-1.jpg" alt="">
-                        <div class="media-body">
-                            <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                            <a href="#"><h4 class="sec_h4">Fanny Spencer</h4></a>
-                            <div class="star">
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star-half-o"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media testimonial_item">
-                        <img class="rounded-circle" src="image/testtimonial-1.jpg" alt="">
-                        <div class="media-body">
-                            <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                            <a href="#"><h4 class="sec_h4">Fanny Spencer</h4></a>
-                            <div class="star">
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                                <a href="#"><i class="fa fa-star-half-o"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!--================ Testimonial Area  =================-->
-
-        <!--================ Latest Blog Area  =================-->
-        <section class="latest_blog_area section_gap">
-            <div class="container">
-                <div class="section_title text-center">
-                    <h2 class="title_color">latest posts from blog</h2>
-                    <p>The French Revolution constituted for the conscience of the dominant aristocratic class a fall from </p>
-                </div>
-                <div class="row mb_30">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="single-recent-blog-post">
-                            <div class="thumb">
-                                <img class="img-fluid" src="image/blog/blog-1.jpg" alt="post">
-                            </div>
-                            <div class="details">
-                                <div class="tags">
-                                    <a href="#" class="button_hover tag_btn">Travel</a>
-                                    <a href="#" class="button_hover tag_btn">Life Style</a>
-                                </div>
-                                <a href="#"><h4 class="sec_h4">Low Cost Advertising</h4></a>
-                                <p>Acres of DiamondsÃ¢ÂÂ¦ youÃ¢ÂÂve read the famous story, or at least had it related to you. A farmer.</p>
-                                <h6 class="date title_color">31st January,2018</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="single-recent-blog-post">
-                            <div class="thumb">
-                                <img class="img-fluid" src="image/blog/blog-2.jpg" alt="post">
-                            </div>
-                            <div class="details">
-                                <div class="tags">
-                                    <a href="#" class="button_hover tag_btn">Travel</a>
-                                    <a href="#" class="button_hover tag_btn">Life Style</a>
-                                </div>
-                                <a href="#"><h4 class="sec_h4">Creative Outdoor Ads</h4></a>
-                                <p>Self-doubt and fear interfere with our ability to achieve or set goals. Self-doubt and fear are</p>
-                                <h6 class="date title_color">31st January,2018</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="single-recent-blog-post">
-                            <div class="thumb">
-                                <img class="img-fluid" src="image/blog/blog-3.jpg" alt="post">
-                            </div>
-                            <div class="details">
-                                <div class="tags">
-                                    <a href="#" class="button_hover tag_btn">Travel</a>
-                                    <a href="#" class="button_hover tag_btn">Life Style</a>
-                                </div>
-                                <a href="#"><h4 class="sec_h4">It S Classified How To Utilize Free</h4></a>
-                                <p>Why do you want to motivate yourself? Actually, just answering that question fully can </p>
-                                <h6 class="date title_color">31st January,2018</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!--================ Recent Area  =================-->
-
-        <!--================ start footer Area  =================-->
-        <%@include file="components/Footer.jsp" %>
-        <!--================ End footer Area  =================-->
-
-
-        <!-- Optional JavaScript -->
+        <!-- Include your existing scripts -->
         <%@include file="components/Script.jsp" %>
+
+        <!-- Flatpickr for date picking -->
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+        <!-- Your custom JavaScript -->
+        <script>
+            // Biến lưu trữ các ga hợp lệ
+            let validDepartureStations = [];
+            let validArrivalStations = [];
+
+            // Hàm kiểm tra ga hợp lệ
+            function validateStation(stationName, validStationList) {
+                return validStationList.includes(stationName);
+            }
+
+            // Hàm kiểm tra ga đi và ga đến
+            function validateStations() {
+                const departureStation = $("#departure_station").val().trim();
+                const arrivalStation = $("#arrival_station").val().trim();
+
+                // Kiểm tra ga đi
+                if (!validateStation(departureStation, validDepartureStations)) {
+                    alert("Please enter a valid departure station");
+                    $("#departure_station").focus();
+                    return false;
+                }
+
+                // Kiểm tra ga đến
+                if (!validateStation(arrivalStation, validArrivalStations)) {
+                    alert("Please enter a valid arrival station");
+                    $("#arrival_station").focus();
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Autocomplete cho Departure Station
+            $("#departure_station").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/tratra/Search",
+                        method: "GET",
+                        data: {
+                            query: request.term
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log("Departure Station Data:", data);
+                            if (data && data.length > 0) {
+                                validDepartureStations = data.map(function (station) {
+                                    return station.name;
+                                });
+                                response(validDepartureStations);
+                            } else {
+                                response([]);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("AJAX error for Departure Station: " + status + " - " + error);
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    console.log("Selected Departure Station: " + ui.item.value);
+                    $(this).val(ui.item.value);
+                    return true;
+                }
+            }).on('input', function () {
+                const stationName = $(this).val();
+                if (!validateStation(stationName, validDepartureStations)) {
+                    console.log("Invalid Departure Station:", stationName);
+                }
+            });
+
+            // Autocomplete cho Arrival Station
+            $("#arrival_station").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/tratra/Search",
+                        method: "GET",
+                        data: {
+                            query: request.term
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log("Arrival Station Data:", data);
+                            if (data && data.length > 0) {
+                                validArrivalStations = data.map(function (station) {
+                                    return station.name;
+                                });
+                                response(validArrivalStations);
+                            } else {
+                                response([]);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("AJAX error for Arrival Station: " + status + " - " + error);
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    console.log("Selected Arrival Station: " + ui.item.value);
+                    $(this).val(ui.item.value);
+                    return true;
+                }
+            }).on('input', function () {
+                const stationName = $(this).val();
+                if (!validateStation(stationName, validArrivalStations)) {
+                    console.log("Invalid Arrival Station:", stationName);
+                }
+            });
+
+            // Hàm cập nhật các input ẩn
+            function updateHiddenInputs() {
+                const departureStation = document.getElementById('departure_station').value.trim();
+                const arrivalStation = document.getElementById('arrival_station').value.trim();
+                const departureDate = document.getElementById('departure_date').value;
+                const arrivalDate = document.getElementById('arrival_date').value;
+                const tripType = document.getElementById('trip_type').value;
+
+                if (departureStation === arrivalStation) {
+                    alert('Departure and arrival stations cannot be the same');
+                    return false;
+                }
+
+                if (!tripType) {
+                    alert('Please select type');
+                    document.getElementById('trip_type').focus();
+                    return false;
+                }
+
+                if (!departureDate) {
+                    alert('Please select departure date');
+                    document.getElementById('departure_date').focus();
+                    return false;
+                }
+
+                if (tripType === 'roundTrip' && !arrivalDate) {
+                    alert('Please select return date');
+                    document.getElementById('arrival_date').focus();
+                    return false;
+                }
+
+                document.getElementById('departureStationHidden').value = departureStation;
+                document.getElementById('arrivalStationHidden').value = arrivalStation;
+                document.getElementById('departureDateHidden').value = departureDate;
+                document.getElementById('arrivalDateHidden').value = arrivalDate || '';
+                document.getElementById('tripTypeHidden').value = tripType;
+
+                return true;
+            }
+
+            // Sự kiện submit duy nhất
+            document.getElementById('ticketSearchForm').addEventListener('submit', function (event) {
+                if (!validateStations() || !updateHiddenInputs()) {
+                    event.preventDefault(); // Ngăn form submit nếu validation thất bại
+                }
+            });
+
+            // Initialize Flatpickr date pickers
+            const departurePicker = flatpickr("#departure_date", {
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                onChange: function (selectedDates, dateStr) {
+                    // Update minDate of Arrival Date when Departure Date is selected
+                    arrivalPicker.set('minDate', dateStr);
+
+                    // If trip type is round trip, adjust arrival date if needed
+                    const tripType = document.getElementById('trip_type').value;
+                    if (tripType === 'roundTrip') {
+                        const arrivalDate = arrivalPicker.input.value;
+                        if (arrivalDate && new Date(arrivalDate) < new Date(dateStr)) {
+                            arrivalPicker.setDate(new Date(dateStr.replace(/-/g, '/')).setDate(new Date(dateStr).getDate() + 1), true);
+                        }
+                    }
+                }
+            });
+
+            const arrivalPicker = flatpickr("#arrival_date", {
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                onChange: function (selectedDates, dateStr) {
+                    const tripType = document.getElementById('trip_type').value;
+
+                    // Only validate for round trip
+                    if (tripType === 'roundTrip') {
+                        const departureDate = departurePicker.input.value;
+                        if (departureDate && new Date(dateStr) < new Date(departureDate)) {
+                            // Set arrival date to the same day as departure if earlier
+                            arrivalPicker.setDate(new Date(departureDate), true);
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('trip_type').addEventListener('change', function () {
+                const tripType = this.value;
+                const arrivalDateInput = document.getElementById('arrival_date');
+
+                if (tripType === 'oneWay') {
+                    // Disable and clear arrival date for one-way trip
+                    arrivalDateInput.disabled = true;
+                    arrivalDateInput.value = '';
+                    arrivalPicker.clear();
+                } else {
+                    // Enable arrival date for round trip
+                    arrivalDateInput.disabled = false;
+                }
+            });
+        </script>
     </body>
 </html>

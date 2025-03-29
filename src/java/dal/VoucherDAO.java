@@ -27,7 +27,9 @@ public class VoucherDAO extends DBContext {
     public List<Voucher> getAllVoucher() {
         List<Voucher> vouchers = new ArrayList<>();
         String sql = """
-                    select * from voucher """;
+                    SELECT * FROM voucher 
+                    WHERE status = 1 AND quantity > 0
+                     """;
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
@@ -48,6 +50,51 @@ public class VoucherDAO extends DBContext {
         }
         return vouchers;
     }
+
+    public List<Voucher> getVouchersPaged(int page, int pageSize) {
+        List<Voucher> vouchers = new ArrayList<>();
+        String sql = """
+                SELECT * FROM voucher
+                WHERE status = 1 AND quantity > 0
+                ORDER BY id DESC
+                LIMIT ?, ?
+                """;
+        try {
+            int offset = (page - 1) * pageSize;
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, offset);
+            pre.setInt(2, pageSize);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Voucher voucher = Voucher.builder()
+                    .id(rs.getInt("id"))
+                    .code(rs.getString("code"))
+                    .discountAmount(rs.getBigDecimal("discount_amount"))
+                    .validFrom(rs.getTimestamp("valid_from"))
+                    .validTo(rs.getTimestamp("valid_to") != null ? rs.getTimestamp("valid_to") : null)
+                    .status(rs.getInt("status"))
+                    .createdBy(rs.getInt("created_by"))
+                    .build();
+                vouchers.add(voucher);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return vouchers;
+    }
+
+    public int getTotalVoucherCount() {
+        String sql = "SELECT COUNT(*) AS total FROM voucher WHERE status = 1";
+        try (PreparedStatement pre = connection.prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
     
     public List<Voucher> getVoucherBySellerId(int sellerid){
         List<Voucher> list = new ArrayList<>();
@@ -159,6 +206,41 @@ public class VoucherDAO extends DBContext {
         DAOforAdmin dao = new DAOforAdmin();
         dao.recordChange("Delete Voucher", user_id, "Seller");
  
+    }
+    public Voucher getVoucherByCode(String code) {
+        String sql = "SELECT * FROM voucher WHERE code = ? AND status = 1 AND quantity > 0";
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setString(1, code);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                return new Voucher(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getBigDecimal(3),
+                        rs.getTimestamp(4),
+                        rs.getTimestamp(5),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getInt(8));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;  // Trả về null nếu không tìm thấy
+    }
+    
+    
+    public void updatequantity(String vouchercode){
+        String sql = """
+                     UPDATE Voucher
+                     SET quantity = quantity - 1
+                     WHERE code = ? AND quantity > 0;
+                     """;
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setString(1, vouchercode);
+            pre.executeUpdate();           
+        } catch (SQLException ex) {
+         
+        }
     }
     public static void main(String[] args) {
         VoucherDAO dao = new VoucherDAO();

@@ -12,7 +12,7 @@ public class NewsDAO extends DBContext {
 
     public List<News> getAllNews() {
         List<News> newsList = new ArrayList<>();
-        String sql = "SELECT id, title, content, created_at, status FROM news";
+        String sql = "SELECT id, title, content, created_at, status FROM news where status = 1";
         try (PreparedStatement pre = connection.prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
 
             while (rs.next()) {
@@ -85,6 +85,77 @@ public class NewsDAO extends DBContext {
     public int getTotalNewsCount() {
         String sql = "SELECT COUNT(*) AS total FROM news";
         try (PreparedStatement pre = connection.prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public List<News> filterNews(String title, String createdAt, int page, int pageSize) {
+        List<News> newsList = new ArrayList<>();
+        String sql = "SELECT id, title, content, created_at, status FROM news WHERE status = 1";
+
+        if (title != null && !title.trim().isEmpty()) {
+            sql += " AND LOWER(title) LIKE ?";
+        }
+        if (createdAt != null && !createdAt.trim().isEmpty()) {
+            sql += " AND CAST(created_at AS DATE) = ?";
+        }
+        sql += " ORDER BY created_at DESC LIMIT ?, ?";
+
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            int paramIndex = 1;
+            if (title != null && !title.trim().isEmpty()) {
+                pre.setString(paramIndex++, "%" + title.toLowerCase() + "%");
+            }
+            if (createdAt != null && !createdAt.trim().isEmpty()) {
+                pre.setString(paramIndex++, createdAt);
+            }
+            int offset = (page - 1) * pageSize;
+            pre.setInt(paramIndex++, offset);
+            pre.setInt(paramIndex, pageSize);
+
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Timestamp createdAtTimestamp = rs.getTimestamp("created_at");
+                News news = News.builder()
+                    .id(rs.getInt("id"))
+                    .title(rs.getString("title"))
+                    .content(rs.getString("content"))
+                    .createdAt(createdAtTimestamp)
+                    .status(rs.getInt("status"))
+                    .build();
+                newsList.add(news);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return newsList;
+    }
+
+    public int getFilteredNewsCount(String title, String createdAt) {
+        String sql = "SELECT COUNT(*) AS total FROM news WHERE status = 1";
+
+        if (title != null && !title.trim().isEmpty()) {
+            sql += " AND LOWER(title) LIKE ?";
+        }
+        if (createdAt != null && !createdAt.trim().isEmpty()) {
+            sql += " AND CAST(created_at AS DATE) = ?";
+        }
+
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            int paramIndex = 1;
+            if (title != null && !title.trim().isEmpty()) {
+                pre.setString(paramIndex++, "%" + title.toLowerCase() + "%");
+            }
+            if (createdAt != null && !createdAt.trim().isEmpty()) {
+                pre.setString(paramIndex, createdAt);
+            }
+
+            ResultSet rs = pre.executeQuery();
             if (rs.next()) {
                 return rs.getInt("total");
             }

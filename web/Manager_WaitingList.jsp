@@ -149,6 +149,12 @@
                             <span>Account</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="./logout" class="nav-link text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                </li>
                 </ul>
             </aside>
 
