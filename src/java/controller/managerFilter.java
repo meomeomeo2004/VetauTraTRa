@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import model.User;
 
-@WebFilter(urlPatterns = {"/ManagerHomePage.jsp"})
+@WebFilter(urlPatterns = {"/ManagerHomePage.jsp","/listtrain","/manager-profile"})
 public class managerFilter implements Filter {
 
     @Override
