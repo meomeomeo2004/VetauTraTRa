@@ -10,7 +10,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.TicketDetail;
+import model.User;
 
 @WebServlet(name = "EditTicket", urlPatterns = {"/staff_page/editTicket"})
 public class EditTicket extends HttpServlet {
@@ -69,9 +71,11 @@ public class EditTicket extends HttpServlet {
 
             int ticketId = Integer.parseInt(idRaw);
             int luggageType = Integer.parseInt(luggageTypeRaw);
+            HttpSession session = request.getSession();
+            User acc = (User) session.getAttribute("account");
 
             TicketDAO t_dao = new TicketDAO();
-            t_dao.updateTicketDetail(ticketId, luggageType, phoneNumber, fullName, address);
+            t_dao.updateTicketDetail(ticketId, luggageType, phoneNumber, fullName, address, acc.getId());
 
             TicketDetail updatedTicket = t_dao.getTicketDetailById(ticketId);
             request.getSession().setAttribute("ticket", updatedTicket);
