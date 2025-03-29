@@ -162,7 +162,6 @@
                                     <select class="form-select" id="status" name="status" required>
                                         <option value="1" ${voucher.status == '1' ? 'selected' : ''}>Active</option>
                                         <option value="0" ${voucher.status == '0' ? 'selected' : ''}>Upcoming</option>
-                                        <option value="2" ${voucher.status == '2' ? 'selected' : ''}>Expired</option>
                                     </select>
                                 </div>
                             </div>                           

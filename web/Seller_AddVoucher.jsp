@@ -45,7 +45,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="Seller_ManageVoucher.jsp" class="nav-link active">
+                        <a href="ViewListVoucher" class="nav-link active">
                             <i class="fas fa-ticket-alt"></i>
                             <span>Voucher</span>
                         </a>
@@ -69,20 +69,21 @@
                 <h2 class="page-title">Add New Voucher</h2>
 
                 <!-- Error Notification -->
-                <c:if test="${not empty requestScope.error}">
+                <c:if test="${not empty requestScope.exist}">
                     <div class="alert-notification p-3 d-flex align-items-center" id="errorAlert">
                         <div class="alert-icon">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h5 class="mb-1">Operation Failed</h5>
-                            <p class="mb-0">${requestScope.error}</p>
+                            <p class="mb-0">${requestScope.exist}</p>
                         </div>
                         <div class="close-btn" onclick="closeErrorAlert()">
                             <i class="fas fa-times"></i>
                         </div>
                     </div>
                 </c:if>
+                
 
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -245,7 +246,27 @@
                                             codeInput.parentNode.appendChild(generateButton);
                                         }
                                     });
+                                    
+                                    // Function to close the code exist alert
+                                    function closeCodeExistAlert() {
+                                        const alert = document.getElementById('codeExistAlert');
+                                        if (alert) {
+                                            alert.style.opacity = '0';
+                                            alert.style.transition = 'opacity 0.5s';
+                                            setTimeout(function () {
+                                                alert.style.display = 'none';
+                                            }, 500);
+                                        }
+                                    }
+
+                                    // Auto-dismiss the code exist alert after 5 seconds
+                                    if (document.getElementById('codeExistAlert')) {
+                                        setTimeout(function () {
+                                            closeCodeExistAlert();
+                                        }, 5000);
+                                    }
         </script>
 
     </body>
 </html>
+

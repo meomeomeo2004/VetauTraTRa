@@ -16,7 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.List;
 import model.User;
+import model.Voucher;
 
 /**
  *
@@ -73,6 +75,14 @@ public class VoucherAdd extends HttpServlet {
         User c = (User) session.getAttribute("account");
         int user_id = c.getId();
         VoucherDAO dao = new VoucherDAO();
+        List<Voucher> listv = dao.getVoucherBySellerId(user_id);
+        for(Voucher voucher : listv){
+            if(voucher.getCode().equals(code)){
+                request.setAttribute("exist", "Code already exists. Please create another code!");
+                request.getRequestDispatcher("Seller_AddVoucher.jsp").forward(request, response);
+                return;
+            }
+        }
         dao.sellerAddVoucher(code, discount, validFrom, validTo, quantity, user_id);
         
         // (Tùy chọn) Lưu thông báo thành công vào session

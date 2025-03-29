@@ -109,7 +109,7 @@
                                         <option value="all">All</option>
                                         <option value="1">Active</option>
                                         <option value="2">Expired</option>
-                                        <option value="0">Inactive</option>
+                                        <option value="0">Coming</option>
                                     </select>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                                                         <span class="badge bg-danger">Expired</span>
                                                     </c:when>
                                                     <c:when test="${v.status == '0'}">
-                                                        <span class="badge bg-warning">Inactive</span>
+                                                        <span class="badge bg-warning">Coming</span>
                                                     </c:when>
                                                 </c:choose>
                                             </td>
