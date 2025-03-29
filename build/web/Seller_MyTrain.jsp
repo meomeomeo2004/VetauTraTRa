@@ -12,6 +12,18 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/mytrain.css">
+        <style>
+            .custom-alert {
+                background-color: #fff;
+                transition: all 0.3s ease;
+            }
+            .custom-alert:hover {
+                transform: translateY(-2px);
+            }
+            .btn-close:focus {
+                box-shadow: none;
+            }
+        </style>
     </head>
     <body>
         <header class="header">
@@ -67,7 +79,20 @@
 
             <main class="content">
                 <h2 class="page-title">Train Management</h2>
-
+                <c:if test="${not empty trainstatus}">
+                    <div class="alert custom-alert shadow-sm border-start border-success border-4 rounded-3 p-3 mb-4" id="difAlert">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-3">
+                                <i class="fas fa-check-circle text-success fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="fw-bold mb-1 text-success">Success</h5>
+                                <p class="mb-0 text-secondary">${trainstatus}</p>
+                            </div>
+                            <button type="button" class="btn-close" onclick="document.getElementById('difAlert').remove()" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </c:if>
                 <div class="stats-container">
                     <div class="stat-card">
                         <div class="stat-icon active">
@@ -271,6 +296,14 @@
                     });
                 }
             });
+            function closeSuccessAlert() {
+                    document.getElementById("successAlert").style.display = "none";
+                }
+                setTimeout(() => {
+                    const successAlert = document.getElementById("successAlert");
+                    if (successAlert)
+                        successAlert.style.display = "none";
+                }, 3000);
         </script>
     </body>
 </html>

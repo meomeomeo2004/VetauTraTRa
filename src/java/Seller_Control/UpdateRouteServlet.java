@@ -51,8 +51,8 @@ public class UpdateRouteServlet extends HttpServlet {
             String mess = "The train is booked and cannot be edited";
             int ticketid = dao.checkTicketInRoute(rouid);
             if(ticketid != -1 && ticketid != 0){
-                request.setAttribute("erro", mess);
-                request.getRequestDispatcher("viewlistroute").forward(request, response);
+                session.setAttribute("erro", mess);
+                response.sendRedirect("viewlistroute");
                 return;
             } 
             Route a = dao.getRoutebyCode(rouid);
@@ -129,10 +129,11 @@ public class UpdateRouteServlet extends HttpServlet {
                     departureDateTime, arrivalDateTime,
                     departureStation, arrivalStation,
                     routeId,b);
-
+            String update = "Update Sucessful";
+            session.setAttribute("update", update);
             // Chuyển hướng về trang danh sách (thành công)
             response.sendRedirect("viewlistroute");
-
+            
         } catch (Exception e) {
             // Bắt lỗi parse date time hoặc bất kỳ lỗi nào
             e.printStackTrace();

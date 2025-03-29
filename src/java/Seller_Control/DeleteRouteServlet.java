@@ -45,6 +45,7 @@ public class DeleteRouteServlet extends HttpServlet {
         String rotid = request.getParameter("routeid");
         int a = Integer.parseInt(rotid);
         dao.deleteRouteByCode(a,b);
+        session.setAttribute("deletesucess", "Delete Route Successful");
         response.sendRedirect("viewlistroute");
     } 
 
