@@ -233,6 +233,10 @@ public class DAOforAdmin extends DBContext {
             sql = "SELECT * FROM view\n"
                     + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 29 DAY) AND NOW()";
         }
+        if (duration.equalsIgnoreCase("2month")) {
+            sql = "SELECT * FROM view\n"
+                    + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 59 DAY) AND NOW()";
+        }
         if (duration.equalsIgnoreCase("year")) {
             sql = "SELECT * FROM view\n"
                     + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 364 DAY) AND NOW()";
@@ -283,6 +287,10 @@ public class DAOforAdmin extends DBContext {
             sql = "select * from Logincounter\n"
                     + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 29 DAY) AND NOW()";
         }
+        if (duration.equalsIgnoreCase("2month")) {
+            sql = "select * from Logincounter\n"
+                    + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 59 DAY) AND NOW()";
+        }
         if (duration.equalsIgnoreCase("year")) {
             sql = "select * from Logincounter\n"
                     + "WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 364 DAY) AND NOW()";
@@ -322,6 +330,9 @@ public class DAOforAdmin extends DBContext {
         if (duration.equalsIgnoreCase("month")) {
             sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 29 DAY) AND NOW()";
         }
+        if (duration.equalsIgnoreCase("2month")) {
+            sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 59 DAY) AND NOW()";
+        }
         if (duration.equalsIgnoreCase("year")) {
             sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 364 DAY) AND NOW()";
         }
@@ -358,6 +369,9 @@ public class DAOforAdmin extends DBContext {
         }
         if (duration.equalsIgnoreCase("month")) {
             sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 29 DAY) AND NOW()";
+        }
+        if (duration.equalsIgnoreCase("2month")) {
+            sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 59 DAY) AND NOW()";
         }
         if (duration.equalsIgnoreCase("year")) {
             sql += " AND ticket.booking_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 364 DAY) AND NOW()";

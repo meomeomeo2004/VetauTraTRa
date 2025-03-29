@@ -70,10 +70,10 @@ public class AdminDashboard extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAOforAdmin dao = new DAOforAdmin();
-        List<View> v = dao.getView("month");
-        List<LoginCounter> lc = dao.getLoginCounter("month");
-        List<SellerRevenue> sr = dao.getSellerRevenue("month");
-        List<SellerTicketSale> sts = dao.getSellerTicketSale("month");
+        List<View> v = dao.getView("2month");
+        List<LoginCounter> lc = dao.getLoginCounter("2month");
+        List<SellerRevenue> sr = dao.getSellerRevenue("2month");
+        List<SellerTicketSale> sts = dao.getSellerTicketSale("2month");
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime oneMonthAgo = today.minusMonths(1);
         LocalDateTime twoMonthAgo = today.minusMonths(2);
@@ -140,10 +140,10 @@ public class AdminDashboard extends HttpServlet {
         } else {
             revenuePercent = ((double) recentSale / olderSale - 1) * 100;
         }
-        request.setAttribute("sale", recentSale);
+        request.setAttribute("sale", recentSale/1000);
         request.setAttribute("salePercent", formatter.format(Math.abs(revenuePercent)));
         request.setAttribute("saleSign", (revenuePercent > 0) ? 1 : 0);
-        request.setAttribute("saleDiff", Math.abs(recentSale - olderSale));
+        request.setAttribute("saleDiff", Math.abs(recentSale - olderSale)/1000);
         
         List<SellerTicketSale> recentTicket = new ArrayList<>();
         List<SellerTicketSale> olderTicket = new ArrayList<>();

@@ -196,7 +196,7 @@ public class SellerDashboard extends HttpServlet {
         } else {
             rate = ((double) recentRe / olderRe - 1) * 100;
         }
-        request.setAttribute("reThisMonth", recentRe);
+        request.setAttribute("reThisMonth", recentRe/1000);
         request.setAttribute("reThisMonthPercent", formatter.format(Math.abs(rate)));
         request.setAttribute("reThisMonthSign", (rate > 0) ? 1 : 0);
 

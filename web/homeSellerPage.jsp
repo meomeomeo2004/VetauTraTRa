@@ -539,7 +539,7 @@
                             </div>
                             <div class="stats-info">
                                 <div class="stats-label">Total Revenue</div>
-                                <h3 class="stats-value">$<c:out value="${requestScope.reThisMonth}"/></h3>
+                                <h3 class="stats-value">$<c:out value="${requestScope.reThisMonth}"/>K</h3>
                                 <div class="stats-change positive">
                                     <c:choose>
                                         <c:when test="${requestScope.reThisMonthSign eq '1'}">
