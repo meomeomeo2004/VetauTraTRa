@@ -205,6 +205,27 @@ public class VoucherDAO extends DBContext {
         dao.recordChange("Delete Voucher", user_id, "Seller");
  
     }
+    public Voucher getVoucherByCode(String code) {
+        String sql = "SELECT * FROM voucher WHERE code = ? AND status = 1";
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setString(1, code);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                return new Voucher(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getBigDecimal(3),
+                        rs.getTimestamp(4),
+                        rs.getTimestamp(5),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getInt(8));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;  // Trả về null nếu không tìm thấy
+    }
+    
     public static void main(String[] args) {
         VoucherDAO dao = new VoucherDAO();
         dao.deleteVoucher(2, 4);

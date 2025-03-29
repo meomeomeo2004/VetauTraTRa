@@ -1,5 +1,6 @@
 package controller;
 
+import dal.VoucherDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -8,11 +9,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.User;
+import model.Voucher;
 
 @WebServlet(name = "ConfirmBookingServlet", urlPatterns = {"/ConfirmBookingServlet"})
 public class ConfirmBookingServlet extends HttpServlet {
@@ -51,6 +55,9 @@ public class ConfirmBookingServlet extends HttpServlet {
         String[] luggageOptions = request.getParameterValues("luggageOption");
         String amount = request.getParameter("totalAmount");
         String numSeats = request.getParameter("numSeats");
+        String voucherCode = request.getParameter("voucherCode");
+        VoucherDAO vdao = new VoucherDAO();
+        Voucher voucher = vdao.getVoucherByCode(voucherCode);
         List<Map<String, Object>> transactions = new ArrayList<>();
         if (seatNames != null) {
             for (int i = 0; i < seatNames.length; i++) {
@@ -66,10 +73,15 @@ public class ConfirmBookingServlet extends HttpServlet {
                 transactions.add(transaction);
             }
         }
+        BigDecimal amountBD = new BigDecimal(amount);
+        amountBD = amountBD.subtract(voucher.getDiscountAmount());
+        BigDecimal roundedAmount = amountBD.setScale(0, RoundingMode.DOWN);
+        String amountStr = roundedAmount.toString();
         request.getSession().setAttribute("transactions", transactions);
-        request.setAttribute("amount", amount);
+        request.setAttribute("amount", amountStr);
         request.setAttribute("numSeats", numSeats);
         request.setAttribute("userId", userId);
+        session.setAttribute("voucherCode", voucherCode);
         request.getRequestDispatcher("/ConfirmBooking.jsp").forward(request, response);
     }
 

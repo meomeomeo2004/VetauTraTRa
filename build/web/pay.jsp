@@ -9,13 +9,14 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <style>
             :root {
-                --primary-color: #4361ee;
-                --primary-hover: #3a56d4;
-                --secondary-color: #f8f9fa;
+                --primary-color: #22577a;
+                --primary-hover: #1a4562;
+                --secondary-color: #ffbe0b;
+                --secondary-hover: #ffd04c;
                 --border-radius: 12px;
                 --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
                 --text-color: #333;
-                --light-gray: #e9ecef;
+                --light-gray: #f8f9fa;
                 --medium-gray: #dee2e6;
                 --success-color: #38b000;
             }
@@ -71,13 +72,14 @@
             }
 
             .route-info {
-                background-color: var(--secondary-color);
+                background-color: var(--light-gray);
                 padding: 20px;
                 border-radius: var(--border-radius);
                 margin-bottom: 20px;
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: space-between;
+                border-left: 4px solid var(--secondary-color);
             }
 
             .route-info-item {
@@ -106,12 +108,13 @@
             }
 
             .seat-item {
-                background-color: var(--secondary-color);
+                background-color: var(--light-gray);
                 border-radius: var(--border-radius);
                 padding: 20px;
                 margin-bottom: 15px;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
                 transition: all 0.3s ease;
+                border-left: 4px solid var(--primary-color);
             }
 
             .seat-item:hover {
@@ -134,6 +137,9 @@
             .seat-price {
                 color: var(--primary-color);
                 font-weight: 600;
+                background-color: var(--secondary-color);
+                padding: 5px 12px;
+                border-radius: 20px;
             }
 
             .luggage-selection {
@@ -161,11 +167,37 @@
             .form-select:focus {
                 outline: none;
                 border-color: var(--primary-color);
-                box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+                box-shadow: 0 0 0 3px rgba(34, 87, 122, 0.2);
+            }
+            
+            .voucher-section {
+                padding: 0 25px 25px;
+            }
+            
+            .voucher-section h3 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+                color: var(--primary-color);
+            }
+            
+            .form-input {
+                width: 100%;
+                padding: 12px 15px;
+                border: 1px solid var(--medium-gray);
+                border-radius: 8px;
+                font-family: 'Poppins', sans-serif;
+                font-size: 0.95rem;
+                transition: border-color 0.3s;
+            }
+            
+            .form-input:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(34, 87, 122, 0.2);
             }
 
             .total-section {
-                background-color: var(--secondary-color);
+                background-color: var(--light-gray);
                 padding: 25px;
                 border-top: 1px solid var(--medium-gray);
             }
@@ -182,6 +214,9 @@
             .amount-value {
                 color: var(--primary-color);
                 font-size: 1.5rem;
+                background-color: var(--secondary-color);
+                padding: 8px 15px;
+                border-radius: 10px;
             }
 
             .btn-confirm {
@@ -232,6 +267,9 @@
         </style>
     </head>
     <body>
+        <div class="header">
+            <h1>Payment Summary</h1>
+        </div>
         <div class="container">
             <form id="bookingForm" action="ConfirmBookingServlet" method="POST">
                 <div class="booking-details">
@@ -263,7 +301,7 @@
                             <div class="luggage-selection">
                                 <h3>Select Luggage Option</h3>
                                 <select id="luggageOption_${seat.seatName}" name="luggageOption" class="form-select" onchange="updateTotalAmount()">
-                                    <option value="0" data-price="0">No luggage</option>
+                                    <option value="4" data-price="0">No luggage</option>
                                     <c:forEach var="luggage" items="${lu}">
                                         <option value="${luggage.id}" data-price="${luggage.price}">${luggage.weight} kg - ${luggage.price} VND</option>
                                     </c:forEach>
@@ -273,14 +311,18 @@
                         </div>
                     </c:forEach>
                 </div>
-
+                
+                <div class="voucher-section">
+                    <h3>Enter Voucher Code</h3>
+                    <input type="text" id="voucherCode" name="voucherCode" class="form-input" placeholder="Enter voucher code" oninput="updateTotalAmount()">
+                </div>
+                
                 <div class="total-section">
                     <div class="total-amount">
                         <span>Total Amount:</span>
                         <span class="amount-value"><span id="totalAmount">${amount}</span> VND</span>
                     </div>
                     <input type="hidden" name="totalAmount" id="hiddenTotalAmount" value="${amount}">
-
                     <button type="submit" class="btn-confirm">
                         Confirm Payment
                     </button>
@@ -317,3 +359,4 @@
         </script>
     </body>
 </html>
+
