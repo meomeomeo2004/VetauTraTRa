@@ -153,6 +153,39 @@
                 font-size: 18px;
                 color: #666;
             }
+            .pagination {
+                text-align: center;
+                margin: 20px 0;
+            }
+
+            .pagination-list {
+                list-style: none;
+                display: inline-flex;
+                gap: 5px;
+                padding: 0;
+            }
+
+            .pagination-list li {
+                display: inline;
+            }
+
+            .pagination-list li a {
+                color: #007bff;
+                padding: 8px 12px;
+                text-decoration: none;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+
+            .pagination-list li.active a {
+                background-color: #007bff;
+                color: white;
+            }
+
+            .pagination-list li a:hover {
+                background-color: #0056b3;
+                color: white;
+            }
 
             /* Responsive adjustments */
             @media (max-width: 768px) {
@@ -177,7 +210,7 @@
         <div class="overlay bg-parallax" data-stellar-ratio="0.8" data-stellar-vertical-offset="0"></div>
         <div class="container">
             <div class="page-cover text-center">
-                <h2 class="page-cover-tittle">News Details</h2>
+                <h2 class="page-cover-tittle">List News </h2>
                 <ol class="breadcrumb">
                     <li><a href="/tratra">Home</a></li>
                     <li><a href="list-news">List News</a></li>
@@ -219,6 +252,17 @@
                 <p>No news available at the moment. Check back soon for updates!</p>
             </div>
         </c:if>
+        <div class="pagination">
+            <c:if test="${totalPages > 1}">
+                <ul class="pagination-list">
+                    <c:forEach var="i" begin="1" end="${totalPages}">
+                        <li class="${i == currentPage ? 'active' : ''}">
+                            <a href="list-news?page=${i}">${i}</a>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </c:if>
+        </div>
     </div>
 
     <%@ include file="components/Footer.jsp" %>

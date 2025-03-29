@@ -68,32 +68,22 @@ public class AddRoute extends HttpServlet {
         String arrDateTimeParam = request.getParameter("returnDateTime");    // yyyy-MM-ddTHH:mm
         String depStation = request.getParameter("departureStation");
         String arrStation = request.getParameter("arrivalStation");
-
-        // Ép kiểu trainid sang int
         int trainid = Integer.parseInt(trainidParam);
         
         try {
-            // Chuẩn bị DAO
             SellerDAO dao = new SellerDAO();
-            ManagerDAO mdao = new ManagerDAO();
-            // Định dạng phù hợp với input type="datetime-local"
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-
             // Parse chuỗi sang LocalDateTime
             LocalDateTime departureDateTime = LocalDateTime.parse(depDateTimeParam, formatter);
             LocalDateTime arrivalDateTime = LocalDateTime.parse(arrDateTimeParam, formatter);
 
             // Lấy thời gian hiện tại
             LocalDateTime now = LocalDateTime.now();
-            // Thời gian hiện tại + 2 giờ
             LocalDateTime nowPlus2h = now.plusHours(2);
 
             // (1) Kiểm tra Departure >= (hiện tại + 2 tiếng)
             if (departureDateTime.isBefore(nowPlus2h)) {
-                // Không thoả mãn -> báo lỗi, forward lại trang add
-                request.setAttribute("exist",
-                        "Departure time must be at least 2 hours from now!");
-                // forward lại trang JSP (ví dụ addRoute.jsp) để user sửa
+                request.setAttribute("exist","Departure time must be at least 2 hours from now!");
                 response.sendRedirect("liststation");
                 return;
             }
@@ -101,46 +91,37 @@ public class AddRoute extends HttpServlet {
             // (2) Kiểm tra Arrival >= Departure + 30 phút
             LocalDateTime departurePlus30m = departureDateTime.plusMinutes(30);
             if (arrivalDateTime.isBefore(departurePlus30m)) {
-                request.setAttribute("exist",
-                        "Arrival time must be at least 30 minutes after Departure!");
+                request.setAttribute("exist","Arrival time must be at least 30 minutes after Departure!");
                 response.sendRedirect("liststation");
                 return;
             }
             
-            int g = -1;
             User a = (User) session.getAttribute("account");
             int b = a.getId();
             List<Route> list = dao.getListRouteBySeller(b);
             for(Route r : list){
                 if(r.getRouteCode().equals(rcode)){
-                    g = 1;
+                    String mess = "RouteCode already exists, please enter another routecode";
+                    session.setAttribute("error", mess);
+                    response.sendRedirect("liststation");
+                    return;
                 }            
             }
-            if(g == 1){
-                String mess = "RouteCode already exists, please enter another routecode";
-                request.setAttribute("exist", mess);
-                request.getRequestDispatcher("addroute.jsp").forward(request, response);
-                return;
-            }
             if(depStation.equals(arrStation)){
-                String mess = "DepartureStation must difference ArrivalStation";
-                request.setAttribute("exist", mess);
-                request.getRequestDispatcher("addroute.jsp").forward(request, response);
+                String messa = "DepartureStation must difference ArrivalStation";
+                session.setAttribute("dif", messa);
+                response.sendRedirect("liststation");
                 return;
             }
             
-            // Nếu mọi kiểm tra đều OK -> thêm vào DB
             dao.addRoute(trainid, rcode, description,
                     depDateTimeParam, arrDateTimeParam,
                     depStation, arrStation,b);
-            
-            // Chuyển hướng về danh sách routes
+            session.setAttribute("addsuces", "Add Route " + rcode +" Successful!");
             response.sendRedirect("viewlistroute");
 
         } catch (Exception e) {
-            // Nếu parse date hoặc lỗi khác
             e.printStackTrace();
-            // Gửi thông báo lỗi
             request.setAttribute("errorMessage",
                     "An error occurred while adding the route: " + e.getMessage());
             request.getRequestDispatcher("addRoute.jsp").forward(request, response);

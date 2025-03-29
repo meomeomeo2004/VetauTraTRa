@@ -6,6 +6,7 @@ package Seller_Control;
 
 import dal.SellerDAO;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -22,8 +23,8 @@ public class RouteStatusUpdater {
     }
 
     public void updateRouteStatuses() {
-        // Lấy thời gian hiện tại theo giờ UTC rồi chuyển sang giờ Việt Nam (UTC+7)
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC).plusHours(7);
+        // Lấy thời gian hiện tại theo giờ UTC
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
 
         // Lấy danh sách route (bao gồm các route có status 0 và 1)
         List<Route> routes = sellerDAO.getListRoute();
@@ -34,22 +35,35 @@ public class RouteStatusUpdater {
                 continue;
             }
 
-            // Chuyển Timestamp sang LocalDateTime và điều chỉnh theo giờ Việt Nam
-            LocalDateTime departure = route.getDepartureTime().toLocalDateTime().plusHours(7);
-            LocalDateTime arrival = route.getArrivalTime().toLocalDateTime().plusHours(7);
+            // Chuyển Timestamp sang LocalDateTime
+            LocalDateTime departure = route.getDepartureTime().toLocalDateTime();
+            LocalDateTime arrival = route.getArrivalTime().toLocalDateTime();
 
             // Xử lý trường hợp qua đêm: nếu arrival nhỏ hơn departure, cộng thêm 1 ngày cho arrival
             if (arrival.isBefore(departure)) {
                 arrival = arrival.plusDays(1);
             }
 
-            // Nếu thời gian hiện tại nằm giữa departure và arrival (bao gồm biên)
+            // Kiểm tra và cập nhật trạng thái
             if ((!now.isBefore(departure)) && (now.isBefore(arrival) || now.isEqual(arrival))) {
                 sellerDAO.updateRouteStatus(route.getId(), 2);  // Cập nhật thành In Transit (2)
-            } // Nếu thời gian hiện tại vượt qua arrival
-            else if (now.isAfter(arrival)) {
+                System.out.println("Route ID: " + route.getRouteCode() + " - Status updated to In Transit (2)");
+            } else if (now.isAfter(arrival)) {
                 sellerDAO.updateRouteStatus(route.getId(), 3);  // Cập nhật thành Completed (3)
+                System.out.println("Route ID: " + route.getRouteCode() + " - Status updated to Completed (3)");
             }
+
+            // In thông tin log để kiểm tra
+            System.out.println("Route ID: " + route.getRouteCode());
+            System.out.println("Departure (DB): " + route.getDepartureTime());
+            System.out.println("Arrival (DB): " + route.getArrivalTime());
+            System.out.println("Departure (LocalDateTime): " + departure);
+            System.out.println("Arrival (LocalDateTime): " + arrival);
+            System.out.println("Now (UTC): " + now);
+            System.out.println("Is now before departure? " + now.isBefore(departure));
+            System.out.println("Is now before arrival? " + now.isBefore(arrival));
+            System.out.println("Is now equal to arrival? " + now.isEqual(arrival));
+            System.out.println("Current Status: " + route.getStatus());
         }
     }
 
@@ -62,6 +76,6 @@ public class RouteStatusUpdater {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 0, 1, TimeUnit.MINUTES);
+        }, 0, 10, TimeUnit.MINUTES);
     }
 }

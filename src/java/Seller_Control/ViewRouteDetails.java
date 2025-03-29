@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Route;
 import model.Train;
@@ -66,6 +67,7 @@ public class ViewRouteDetails extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        HttpSession session = request.getSession();
         try {
             // Lấy tham số từ form
             String rid = request.getParameter("routeId");
@@ -83,8 +85,9 @@ public class ViewRouteDetails extends HttpServlet {
 
             // Gọi hàm DAO để cập nhật trạng thái
             SellerDAO dao = new SellerDAO();
+            Route rou = dao.getRouteDetails(rouid);
             dao.updateRouteStatus(rouid, newStatus);
-
+            session.setAttribute("updatestatus", "Route " + rou.getRouteCode() + " to be Active");
             // Chuyển hướng về trang danh sách tàu
             response.sendRedirect("viewlistroute");
 
