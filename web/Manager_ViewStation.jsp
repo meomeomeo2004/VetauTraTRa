@@ -63,10 +63,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                        <a href="./logout" class="nav-link text-danger">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Logout</span>
-                        </a>
+                    <a href="./logout" class="nav-link text-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
                 </li>
             </ul>
         </aside>
@@ -74,19 +74,19 @@
         <main class="content">
             <h2 class="page-title"><i class="fas fa-route"></i> Station Management</h2>
             <c:if test="${not empty message}">
-                    <div class="alert custom-alert shadow-sm border-start border-success border-4 rounded-3 p-3 mb-4" id="difAlert">
-                        <div class="d-flex align-items-center">
-                            <div class="alert-icon me-3">
-                                <i class="fas fa-check-circle text-success fs-4"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="fw-bold mb-1 text-success">Success</h5>
-                                <p class="mb-0 text-secondary">${message}</p>
-                            </div>
-                            <button type="button" class="btn-close" onclick="document.getElementById('difAlert').remove()" aria-label="Close"></button>
+                <div class="alert custom-alert shadow-sm border-start border-success border-4 rounded-3 p-3 mb-4" id="difAlert">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon me-3">
+                            <i class="fas fa-check-circle text-success fs-4"></i>
                         </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-1 text-success">Success</h5>
+                            <p class="mb-0 text-secondary">${message}</p>
+                        </div>
+                        <button type="button" class="btn-close" onclick="document.getElementById('difAlert').remove()" aria-label="Close"></button>
                     </div>
-                </c:if>
+                </div>
+            </c:if>
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Station Network</h5>
@@ -101,20 +101,19 @@
                 </div>
                 <div class="card-body">
                     <div class="filter-section">
-                        <form action="FilterStation" method="get">
+                        <form action="FilterStation" method="get" id="filterForm">
                             <div class="row">
                                 <div class="col-md-4 mb-3 mb-md-0">
-                                    <label for="stationCode" class="form-label">Station Code</label>
-                                    <select name="stationCode" id="stationCode" class="form-select">
-                                        <option value="">-- All Stations --</option>
-                                        <c:forEach var="s" items="${liststation}">
-                                            <option value="${s.name}" <c:if test="${param.name eq s.name}">selected</c:if>>${s.name}</option>
-                                        </c:forEach>
-                                    </select>
+                                    <label for="stationName" class="form-label">Station Name</label>
+                                    <input type="text" name="stationName" id="stationName" class="form-control" 
+                                           placeholder="Enter station name" value="${param.stationName}">
                                 </div>
-                                <div class="col-md-4 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-primary w-100">
+                                <div class="col-md-4 d-flex align-items-end gap-2">
+                                    <button type="submit" class="btn btn-primary flex-grow-1">
                                         <i class="fas fa-search"></i> Search
+                                    </button>
+                                    <button type="button" id="resetFilter" class="btn btn-secondary">
+                                        <i class="fas fa-undo"></i> Reset
                                     </button>
                                 </div>
                             </div>
@@ -134,13 +133,13 @@
                             </thead>
                             <tbody>
                                 <c:forEach items="${liststation}" var="s">
-                                        <tr>
-                                            <td>${s.id}</td>
-                                            <td>${s.name}</td>
-                                            <td>${s.address}</td>
-                                            <td>${s.phone}</td>
-                                            <td> Contact </td>
-                                        </tr>                                  
+                                    <tr>
+                                        <td>${s.id}</td>
+                                        <td>${s.name}</td>
+                                        <td>${s.address}</td>
+                                        <td>${s.phone}</td>
+                                        <td> Contact </td>
+                                    </tr>                                  
                                 </c:forEach>
                             </tbody>
                         </table>
@@ -151,14 +150,62 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            function closeSuccessAlert() {
-                    document.getElementById("successAlert").style.display = "none";
-                }
-                setTimeout(() => {
-                    const successAlert = document.getElementById("successAlert");
-                    if (successAlert)
-                        successAlert.style.display = "none";
-                }, 3000);
+                            function closeSuccessAlert() {
+                                document.getElementById("successAlert").style.display = "none";
+                            }
+                            setTimeout(() => {
+                                const successAlert = document.getElementById("successAlert");
+                                if (successAlert)
+                                    successAlert.style.display = "none";
+                            }, 3000);
+                            // Function to filter stations by name
+                            function filterStationsByName() {
+                                // Get the input value and convert to lowercase for case-insensitive comparison
+                                const nameFilter = document.getElementById('stationName').value.toLowerCase();
+                                const table = document.querySelector('.table');
+                                const rows = table.querySelectorAll('tbody tr');
+
+                                // Loop through all table rows
+                                rows.forEach(row => {
+                                    const stationNameCell = row.cells[1]; // Station Name is in the second column (index 1)
+                                    if (stationNameCell) {
+                                        const stationName = stationNameCell.textContent.toLowerCase();
+
+                                        // Show row if the station name contains the filter text, hide it otherwise
+                                        if (stationName.includes(nameFilter)) {
+                                            row.style.display = '';
+                                        } else {
+                                            row.style.display = 'none';
+                                        }
+                                    }
+                                });
+                            }
+
+// Function to reset the filter and show all stations
+                            function resetFilter() {
+                                document.getElementById('stationName').value = '';
+                                document.getElementById('stationCode').selectedIndex = 0;
+
+                                const rows = document.querySelectorAll('.table tbody tr');
+                                rows.forEach(row => {
+                                    row.style.display = '';
+                                });
+                            }
+
+// Add event listener when the document is loaded
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // Add input event listener to the station name field for real-time filtering
+                                const stationNameInput = document.getElementById('stationName');
+                                if (stationNameInput) {
+                                    stationNameInput.addEventListener('input', filterStationsByName);
+                                }
+
+                                // Add reset button functionality
+                                const resetButton = document.getElementById('resetFilter');
+                                if (resetButton) {
+                                    resetButton.addEventListener('click', resetFilter);
+                                }
+                            });
         </script>        
     </body>
 </html>

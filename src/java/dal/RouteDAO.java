@@ -43,7 +43,7 @@ public class RouteDAO extends DBContext {
             StringBuilder sql = new StringBuilder("SELECT r.id, r.train_id, r.route_code, r.description, dep.name AS departure_station_name, arr.name AS arrival_station_name, r.departure_time, r.arrival_time, r.status "
                     + " FROM Route r "
                     + " JOIN Station dep ON r.departure_station = dep.station_code "
-                    + " JOIN Station arr ON r.arrival_station = arr.station_code WHERE r.departure_time > NOW() + INTERVAL 3 HOUR "); // 1=1 để dễ dàng thêm các điều kiện sau
+                    + " JOIN Station arr ON r.arrival_station = arr.station_code WHERE r.departure_time > NOW() + INTERVAL 3 HOUR and r.status = 1 "); // 1=1 để dễ dàng thêm các điều kiện sau
 
             if (departureStation != null && !departureStation.trim().isEmpty()) {
                 sql.append(" AND dep.name LIKE ?");
@@ -103,7 +103,7 @@ public class RouteDAO extends DBContext {
             StringBuilder sql = new StringBuilder("SELECT r.id, r.train_id, r.route_code, r.description, dep.name AS departure_station_name, arr.name AS arrival_station_name, r.departure_time, r.arrival_time, r.status "
                     + " FROM Route r "
                     + " JOIN Station dep ON r.departure_station = dep.station_code "
-                    + " JOIN Station arr ON r.arrival_station = arr.station_code WHERE r.departure_time > NOW() + INTERVAL 3 HOUR "); // 1=1 để dễ dàng thêm các điều kiện sau
+                    + " JOIN Station arr ON r.arrival_station = arr.station_code WHERE r.departure_time > NOW() + INTERVAL 3 HOUR and r.status = 1 "); // 1=1 để dễ dàng thêm các điều kiện sau
 
             if (departureStation != null && !departureStation.trim().isEmpty()) {
                 sql.append(" AND arr.name LIKE ?");

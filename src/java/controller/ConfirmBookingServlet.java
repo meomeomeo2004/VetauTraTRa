@@ -74,15 +74,16 @@ public class ConfirmBookingServlet extends HttpServlet {
             }
         }
 
-        if (voucherCode != null) {
+        if (voucherCode != null && !voucherCode.isEmpty()) {
             Voucher voucher = vdao.getVoucherByCode(voucherCode);
-            // Kiểm tra nếu voucher là null (không tìm thấy) hoặc số lượng bằng 0
-            if (voucher.getQuantity() == 0) {
-                request.setAttribute("amount", amount);
-                request.setAttribute("novoucher", "Voucher has expired");
-            } else if (voucher == null) {
+            if (voucher == null) {
                 request.setAttribute("amount", amount);
                 request.setAttribute("novoucher", "Voucher no exist!");
+                session.setAttribute("voucherCode", "");
+
+            } else if (voucher.getQuantity() == 0) {
+                request.setAttribute("amount", amount);
+                request.setAttribute("novoucher", "Voucher has expired");
             } else {
                 try {
                     BigDecimal amountBD = new BigDecimal(amount);
@@ -96,7 +97,11 @@ public class ConfirmBookingServlet extends HttpServlet {
                 }
             }
         }
-
+        if (voucherCode == null || voucherCode.isEmpty()) {
+            request.setAttribute("amount", amount);
+            session.setAttribute("voucherCode", "");
+//            request.setAttribute("novoucher", "Voucher no exist!");
+        }
         request.getSession().setAttribute("transactions", transactions);
         request.setAttribute("numSeats", numSeats);
         request.setAttribute("userId", userId);
