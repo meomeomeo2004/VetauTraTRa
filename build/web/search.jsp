@@ -5,20 +5,21 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Kết quả tìm kiếm tuyến đường</title>
+        <title>Result</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <%@include file="components/Style.jsp" %>
         <style>
             :root {
-                --primary-color: #1a73e8;
+                --primary-color: #22577a;
                 --secondary-color: #f8f9fa;
-                --accent-color: #4285f4;
-                --text-color: #202124;
-                --border-color: #dadce0;
-                --success-color: #34a853;
-                --warning-color: #fbbc05;
-                --danger-color: #ea4335;
+                --accent-color: #3a7ca5;
+                --text-color: #333333;
+                --border-color: #e0e0e0;
+                --success-color: #2a9d8f;
+                --warning-color: #e9c46a;
+                --danger-color: #e76f51;
+                --light-primary: #d6e8f2;
             }
 
             * {
@@ -40,8 +41,8 @@
                 max-width: 1200px;
                 margin: 0 auto;
                 background-color: white;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
                 overflow: hidden;
             }
 
@@ -52,8 +53,8 @@
             }
 
             .search-info {
-                background-color: var(--secondary-color);
-                padding: 15px 20px;
+                background-color: var(--light-primary);
+                padding: 20px;
                 margin-top: 10px;
                 margin-bottom: 20px;
                 border-radius: 8px;
@@ -62,14 +63,14 @@
 
             .search-info h3 {
                 color: var(--primary-color);
-                margin-bottom: 10px;
-                font-size: 16px;
+                margin-bottom: 15px;
+                font-size: 18px;
                 display: flex;
                 align-items: center;
             }
 
             .search-info h3 i {
-                margin-right: 8px;
+                margin-right: 10px;
             }
 
             .search-details {
@@ -80,60 +81,78 @@
 
             .search-detail-item {
                 background-color: white;
-                padding: 8px 12px;
-                border-radius: 6px;
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+                padding: 10px 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
                 display: flex;
                 align-items: center;
+                border-left: 3px solid var(--primary-color);
             }
 
             .search-detail-item i {
                 color: var(--primary-color);
-                margin-right: 8px;
+                margin-right: 10px;
             }
 
             .route-section {
-                padding: 20px;
-                margin-bottom: 20px;
+                padding: 25px;
+                margin-bottom: 25px;
             }
 
             .route-section h2 {
                 color: var(--primary-color);
-                font-size: 20px;
-                margin-bottom: 15px;
+                font-size: 22px;
+                margin-bottom: 20px;
                 display: flex;
                 align-items: center;
+                border-bottom: 2px solid var(--primary-color);
+                padding-bottom: 10px;
             }
 
             .route-section h2 i {
-                margin-right: 10px;
+                margin-right: 12px;
             }
 
             .route-card {
                 background-color: white;
-                border-radius: 8px;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                margin-bottom: 15px;
+                border-radius: 10px;
+                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+                margin-bottom: 20px;
                 overflow: hidden;
+                border: 1px solid var(--border-color);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .route-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             }
 
             .route-card-header {
-                background-color: var(--secondary-color);
-                padding: 12px 15px;
+                background-color: var(--primary-color);
+                padding: 15px 20px;
                 font-weight: 500;
                 border-bottom: 1px solid var(--border-color);
                 display: flex;
                 justify-content: space-between;
+                color: white;
             }
 
             .route-code {
-                color: var(--primary-color);
+                color: white;
                 font-weight: 700;
+                text-decoration: none;
+                transition: color 0.2s ease;
+            }
+
+            .route-code:hover {
+                color: var(--light-primary);
+                text-decoration: underline;
             }
 
             .route-status {
-                padding: 3px 8px;
-                border-radius: 12px;
+                padding: 4px 10px;
+                border-radius: 20px;
                 font-size: 12px;
                 font-weight: 500;
                 background-color: var(--success-color);
@@ -141,7 +160,7 @@
             }
 
             .route-card-body {
-                padding: 15px;
+                padding: 20px;
                 display: flex;
                 flex-wrap: wrap;
             }
@@ -155,20 +174,21 @@
             .station {
                 display: flex;
                 align-items: flex-start;
-                margin-bottom: 15px;
+                margin-bottom: 20px;
             }
 
             .station-icon {
-                width: 24px;
-                height: 24px;
+                width: 36px;
+                height: 36px;
                 background-color: var(--primary-color);
                 color: white;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin-right: 10px;
-                font-size: 12px;
+                margin-right: 15px;
+                font-size: 14px;
+                box-shadow: 0 2px 5px rgba(34, 87, 122, 0.3);
             }
 
             .station-details {
@@ -177,18 +197,21 @@
 
             .station-name {
                 font-weight: 500;
+                font-size: 16px;
+                color: var(--primary-color);
             }
 
             .station-time {
                 color: #5f6368;
                 font-size: 14px;
+                margin-top: 4px;
             }
 
             .route-path {
                 position: relative;
-                margin-left: 12px;
+                margin-left: 18px;
                 padding-left: 22px;
-                height: 30px;
+                height: 40px;
             }
 
             .route-path:before {
@@ -204,7 +227,7 @@
             .pagination {
                 display: flex;
                 justify-content: center;
-                margin: 20px 0;
+                margin: 25px 0;
                 padding: 10px;
             }
 
@@ -212,31 +235,41 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                width: 36px;
-                height: 36px;
+                width: 40px;
+                height: 40px;
                 margin: 0 5px;
                 background-color: white;
                 color: var(--primary-color);
                 text-decoration: none;
                 border-radius: 50%;
                 font-weight: 500;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                 transition: all 0.2s ease;
+                border: 1px solid var(--border-color);
             }
 
             .pagination a:hover {
-                background-color: var(--secondary-color);
+                background-color: var(--light-primary);
             }
 
             .pagination a.active {
                 background-color: var(--primary-color);
                 color: white;
+                border: none;
             }
 
             .empty-results {
                 text-align: center;
-                padding: 40px 20px;
-                color: #5f6368;
+                padding: 50px 20px;
+                color: var(--primary-color);
+                background-color: var(--light-primary);
+                border-radius: 8px;
+                font-size: 16px;
+            }
+
+            .empty-results i {
+                font-size: 24px;
+                margin-right: 10px;
             }
 
             @media (max-width: 768px) {
@@ -252,6 +285,10 @@
                     flex-direction: column;
                     gap: 10px;
                 }
+                
+                .route-section {
+                    padding: 15px;
+                }
             }
         </style>
     </head>
@@ -266,24 +303,30 @@
                 <h3><i class="fas fa-search"></i>Search Information</h3>
                 <div class="search-details">
                     <div class="search-detail-item">
+                        <i class="fas fa-map-marker-alt"></i>
                         <span>Departure: <strong>${departureStation}</strong></span>
                     </div>
                     <div class="search-detail-item">
+                        <i class="fas fa-flag-checkered"></i>
                         <span>Arrival: <strong>${arrivalStation}</strong></span>
                     </div>
                     <div class="search-detail-item">
+                        <i class="fas fa-calendar-alt"></i>
                         <span>Departure Date: <strong>${departureDate}</strong></span>
                     </div>
                     <c:if test="${not empty arrivalDate}">
                         <div class="search-detail-item">
+                            <i class="fas fa-calendar-check"></i>
                             <span>Return Date: <strong>${arrivalDate}</strong></span>
                         </div>
                         <div class="search-detail-item">
+                            <i class="fas fa-exchange-alt"></i>
                             <span>Trip Type: <strong>Round Trip</strong></span>
                         </div>
                     </c:if>
                     <c:if test="${empty arrivalDate}">
                         <div class="search-detail-item">
+                            <i class="fas fa-long-arrow-alt-right"></i>
                             <span>Trip Type: <strong>One Way</strong></span>
                         </div>
                     </c:if>

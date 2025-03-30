@@ -27,6 +27,9 @@ public class TransactionServlet extends HttpServlet {
 
         List<Map<String, Object>> transactions = (List<Map<String, Object>>) request.getSession().getAttribute("transactions");
         String voucherCode = request.getSession().getAttribute("voucherCode").toString();
+        if(voucherCode.isEmpty()){
+            voucherCode = null;
+        }
         request.getSession().removeAttribute("voucherCode");
         int routeId = Integer.parseInt(request.getSession().getAttribute("routeId").toString());
         long amount = (long) request.getSession().getAttribute("amount");
@@ -50,7 +53,10 @@ public class TransactionServlet extends HttpServlet {
                 Transaction latestTransaction = transactionDAO.getLatestTransactionByCustomerId(customerIdreal);
                 TicketDAO ticketDAO = new TicketDAO();
                 VoucherDAO vdao = new VoucherDAO();
-                vdao.updatequantity(voucherCode);
+                if(voucherCode != null){
+                    vdao.updatequantity(voucherCode);
+                }
+                
                 boolean ticketsCreated = ticketDAO.createTicketsForTransaction(
                         latestTransaction.getId(),
                         routeId,

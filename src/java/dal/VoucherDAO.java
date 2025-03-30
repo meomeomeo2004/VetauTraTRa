@@ -233,7 +233,7 @@ public class VoucherDAO extends DBContext {
         String sql = """
                      UPDATE Voucher
                      SET quantity = quantity - 1
-                     WHERE code = ? AND quantity > 0;
+                     WHERE code = ? AND quantity > 0
                      """;
         try (PreparedStatement pre = connection.prepareStatement(sql)) {
             pre.setString(1, vouchercode);

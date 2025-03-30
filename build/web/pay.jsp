@@ -169,17 +169,17 @@
                 border-color: var(--primary-color);
                 box-shadow: 0 0 0 3px rgba(34, 87, 122, 0.2);
             }
-            
+
             .voucher-section {
                 padding: 0 25px 25px;
             }
-            
+
             .voucher-section h3 {
                 font-size: 1.2rem;
                 margin-bottom: 10px;
                 color: var(--primary-color);
             }
-            
+
             .form-input {
                 width: 100%;
                 padding: 12px 15px;
@@ -189,7 +189,7 @@
                 font-size: 0.95rem;
                 transition: border-color 0.3s;
             }
-            
+
             .form-input:focus {
                 outline: none;
                 border-color: var(--primary-color);
@@ -303,7 +303,9 @@
                                 <select id="luggageOption_${seat.seatName}" name="luggageOption" class="form-select" onchange="updateTotalAmount()">
                                     <option value="4" data-price="0">No luggage</option>
                                     <c:forEach var="luggage" items="${lu}">
-                                        <option value="${luggage.id}" data-price="${luggage.price}">${luggage.weight} kg - ${luggage.price} VND</option>
+                                        <c:if test="${luggage.id != 4}">
+                                            <option value="${luggage.id}" data-price="${luggage.price}">${luggage.weight} kg - ${luggage.price} VND </option>
+                                        </c:if>
                                     </c:forEach>
                                 </select>
                                 <input type="hidden" name="selectedLuggage_${seat.seatName}" id="selectedLuggage_${seat.seatName}" value="0">
@@ -311,12 +313,12 @@
                         </div>
                     </c:forEach>
                 </div>
-                
+
                 <div class="voucher-section">
                     <h3>Enter Voucher Code</h3>
                     <input type="text" id="voucherCode" name="voucherCode" class="form-input" placeholder="Enter voucher code" oninput="updateTotalAmount()">
                 </div>
-                
+
                 <div class="total-section">
                     <div class="total-amount">
                         <span>Total Amount:</span>
